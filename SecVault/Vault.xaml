@@ -1,0 +1,153 @@
+﻿<Window x:Class="SecVault.Vault"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:SecVault.MVVM.ViewModel"
+        xmlns:reusableControl="clr-namespace:SecVault.MVVM.View.ReusableControl"
+        mc:Ignorable="d"
+        x:Name="Window"
+        Title="SecVault"
+        Height="700"
+        Width="1150"
+        Background="#0a0a0a"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="OnWindow_Drag">
+
+    <!-- Init DataContext -->
+    <Window.DataContext>
+        <viewModel:SecVaultViewModel />
+    </Window.DataContext>
+
+    <!-- Init Rounded Corners -->
+    <Window.Clip>
+        <RectangleGeometry
+            Rect="0,0,1150,700"
+            RadiusX="5"
+            RadiusY="5" />
+    </Window.Clip>
+
+    <!-- MainGrid -->
+    <Grid>
+        <!-- MainGrid Definitions -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="425" />
+            <ColumnDefinition Width="425" />
+        </Grid.ColumnDefinitions>
+
+        <!-- SideBar -->
+        <Grid Column="0"
+              Background="#191919">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150" />
+                <RowDefinition />
+                <RowDefinition Height="60" />
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0"
+                        Orientation="Vertical"
+                        VerticalAlignment="Center">
+
+                <!-- Logo -->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <Image Source="./Icons/icons8_secure_48px.png"
+                           Width="30"
+                           Height="30" />
+
+                    <Label Content="SecVault"
+                           Foreground="White"
+                           FontSize="18"
+                           FontFamily="Russo One"
+                           FontWeight="SemiBold" />
+                </StackPanel>
+
+                <!-- Profile -->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Stretch"
+                            Margin="25,20,0,0">
+
+                    <Ellipse Width="25"
+                             Height="25">
+
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="https://i.imgur.com/SPtBo6h.jpeg"
+                                        RenderOptions.BitmapScalingMode="HighQuality"
+                                        RenderOptions.EdgeMode="Aliased"
+                                        RenderOptions.CachingHint="Cache"
+                                        RenderOptions.CacheInvalidationThresholdMinimum="0.5" />
+                        </Ellipse.Fill>
+                    </Ellipse>
+
+                    <Label Content="JaMan"
+                           Foreground="White"
+                           FontWeight="Normal"
+                           FontFamily="Russo One"
+                           Margin="0,2,0,0" />
+
+                </StackPanel>
+
+                <!-- Separator -->
+                <Rectangle Height="1"
+                           Width="260"
+                           Fill="#333333"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Margin="0,15,0,0" />
+
+            </StackPanel>
+
+            <!-- Password Categories -->
+            <Grid Row="1" Column="0"
+                  Margin="20,0,0,0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" 
+                       Content="VAULT"
+                       Foreground="White"
+                       FontFamily="Russo One"
+                       FontWeight="ExtraLight"
+                       FontSize="10"
+                       Margin="-4,0,0,4" />
+
+                <ListView Grid.Row="1"
+                          SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                          ItemsSource="{Binding PasswordCategories}"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          ItemContainerStyle="{StaticResource PasswordCategory}" />
+
+            </Grid>
+
+            <!-- Footer -->
+            <reusableControl:IconTextButton Grid.Row="2"
+                                            Content="Settings"
+                                            HorizontalAlignment="Left"
+                                            Background="Transparent"
+                                            Foreground="#ababab"
+                                            HoverForeground="White"
+                                            HoverBackground="Transparent"
+                                            PressedBackground="Transparent"
+                                            FontSize="12"
+                                            IconSource="/SecVault;component/Icons/Setting.png"
+                                            HoverIconSource="/SecVault;component/Icons/SettingFilled.png"
+                                            Width="100"
+                                            Height="40"
+                                            Margin="10,0,0,0"
+                                            Command="{Binding ElementName=Window, Path=DataContext.ClickCommand}" />
+
+        </Grid>
+        
+    </Grid>
+
+</Window>

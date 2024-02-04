@@ -1,0 +1,22 @@
+﻿<Application x:Class="SecVault.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="Vault.xaml">
+
+    <Application.Resources>
+
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+
+                <ResourceDictionary Source="Themes/StylishScrollBar.xaml" />
+                <ResourceDictionary Source="Themes/PasswordCategory.xaml" />
+                <ResourceDictionary Source="Themes/PrimaryButtonStyle.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+
+    </Application.Resources>
+
+</Application>

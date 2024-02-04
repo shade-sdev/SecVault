@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="Icons\icons8_secure_480px.png" />
+      <None Remove="Icons\icons8_user_folder_80px.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Icons\icons8_secure_48px.png" />
+      <Content Include="Icons\icons8_secure_48px.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Icons\icons8_video_chat_80px.png" />
+      <None Remove="Icons\icons8_Magnetic_Card_32px.png" />
+      <None Remove="Icons\icons8_note_26px.png" />
+      <None Remove="Icons\icons8_shield_32px.png" />
+      <None Remove="Icons\Card.png" />
+      <Content Include="Icons\Card.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Icons\Shield.png" />
+      <Content Include="Icons\Shield.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Icons\Note.png" />
+      <Content Include="Icons\Note.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Icons\CardFilled.png" />
+      <Content Include="Icons\CardFilled.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Icons\NoteFilled.png" />
+      <Content Include="Icons\NoteFilled.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Icons\ShieldFilled.png" />
+      <Content Include="Icons\ShieldFilled.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Icons\SettingFilled.png" />
+      <Content Include="Icons\SettingFilled.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Icons\Setting.png" />
+      <Content Include="Icons\Setting.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>
