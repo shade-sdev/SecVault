@@ -39,7 +39,7 @@
             <ColumnDefinition Width="425" />
         </Grid.ColumnDefinitions>
 
-        <!-- SideBar -->
+        <!-- Section 1: SideBar -->
         <Grid Column="0"
               Background="#191919">
 
@@ -112,7 +112,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" 
+                <Label Grid.Row="0"
                        Content="VAULT"
                        Foreground="White"
                        FontFamily="Russo One"
@@ -147,7 +147,58 @@
                                             Command="{Binding ElementName=Window, Path=DataContext.ClickCommand}" />
 
         </Grid>
-        
+
+        <!-- Section 2: Password List -->
+        <Grid Column="1"
+              Background="#121212">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="100" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Search Bar -->
+            <Grid Grid.Row="0"
+                  Margin="12,0,12,10"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <reusableControl:RoundedFilledTextBox Grid.Column="0"
+                                                      Width="300"
+                                                      Height="35"
+                                                      Tag="Search Passwords"
+                                                      Foreground="#8592a5"
+                                                      Background="White"
+                                                      IconSource="/SecVault;component/Icons/Search.png" />
+
+                <reusableControl:RoundedIconButton Grid.Column="1"
+                                                   HoverBackground="#FFFB8C00"
+                                                   PressedBackground="#FFE57373"
+                                                   IconSource="/SecVault;component/Icons/Plus.png"
+                                                   HoverIconSource="/SecVault;component/Icons/Plus.png"
+                                                   Height="35"
+                                                   Width="35"
+                                                   Margin="12,0,0,0">
+                    
+                    <reusableControl:RoundedIconButton.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#FFE57373" Offset="0.0"/>
+                            <GradientStop Color="#FFFB8C00" Offset="0.5"/>
+                            <GradientStop Color="#FFFFD700" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </reusableControl:RoundedIconButton.Background>
+                    
+                </reusableControl:RoundedIconButton>
+
+            </Grid>
+
+        </Grid>
     </Grid>
 
 </Window>

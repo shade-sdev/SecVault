@@ -1,13 +1,9 @@
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using SecVault.Core;
 
 namespace SecVault.MVVM.View.ReusableControl;
 
 public partial class IconTextButton
 {
-    
     #region Font
 
     public new static readonly DependencyProperty ContentProperty =
@@ -127,5 +123,4 @@ public partial class IconTextButton
     {
         InitializeComponent();
     }
-    
 }

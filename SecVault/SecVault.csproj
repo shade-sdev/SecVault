@@ -56,4 +56,15 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Icons\Search.png" />
+      <Resource Include="Icons\Search.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Icons\Plus.png" />
+      <Resource Include="Icons\Plus.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
 </Project>

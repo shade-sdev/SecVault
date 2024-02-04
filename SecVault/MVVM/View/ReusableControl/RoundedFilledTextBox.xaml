@@ -1,0 +1,70 @@
+<TextBox x:Class="SecVault.MVVM.View.ReusableControl.RoundedFilledTextBox"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         mc:Ignorable="d"
+         d:DesignHeight="{Binding Height}"
+         d:DesignWidth="{Binding Width}"
+         Style="{DynamicResource RoundedFilledTextBoxStyle}"
+         DataContext="{Binding RelativeSource={RelativeSource Self}}">
+
+    <TextBox.Resources>
+        <ResourceDictionary>
+            <Style x:Key="RoundedFilledTextBoxStyle" TargetType="{x:Type TextBox}">
+
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Padding" Value="24,0,0,0" />
+                <Setter Property="Cursor" Value="IBeam" />
+                <Setter Property="AllowDrop" Value="True" />
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <Border Background="{TemplateBinding Background}"
+                                    CornerRadius="20"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    SnapsToDevicePixels="True">
+                                <Grid Margin="25, 3">
+                                    <ScrollViewer x:Name="PART_ContentHost"
+                                                  Focusable="False"
+                                                  HorizontalScrollBarVisibility="Hidden"
+                                                  VerticalScrollBarVisibility="Hidden" />
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
+                                                VerticalAlignment="Center">
+                                        <Image Width="20" Height="20" Source="{Binding IconSource}"
+                                               HorizontalAlignment="Left" />
+                                        <Label x:Name="WaterMarker"
+                                               FontWeight="{TemplateBinding FontWeight}"
+                                               Content="{TemplateBinding Tag}"
+                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                               Visibility="Collapsed"
+                                               Foreground="{TemplateBinding Foreground}"
+                                               Padding="5 ,0,0,0" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <ControlTemplate.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Text" Value="" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Visibility" TargetName="WaterMarker" Value="Visible" />
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+            </Style>
+        </ResourceDictionary>
+    </TextBox.Resources>
+
+</TextBox>
