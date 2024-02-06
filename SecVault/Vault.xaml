@@ -154,7 +154,7 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="100" />
-                <RowDefinition Height="100" />
+                <RowDefinition Height="60" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -185,20 +185,41 @@
                                                    Height="35"
                                                    Width="35"
                                                    Margin="12,0,0,0">
-                    
+
                     <reusableControl:RoundedIconButton.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="#FFE57373" Offset="0.0"/>
-                            <GradientStop Color="#FFFB8C00" Offset="0.5"/>
-                            <GradientStop Color="#FFFFD700" Offset="1.0"/>
+                            <GradientStop Color="#FFE57373" Offset="0.0" />
+                            <GradientStop Color="#FFFB8C00" Offset="0.5" />
+                            <GradientStop Color="#FFFFD700" Offset="1.0" />
                         </LinearGradientBrush>
                     </reusableControl:RoundedIconButton.Background>
-                    
+
                 </reusableControl:RoundedIconButton>
 
             </Grid>
 
+            <!-- Category Label & Sorting -->
+            <Grid Grid.Row="1"
+                  Margin="10,0,10,40"
+                  Height="30"
+                  VerticalAlignment="Center">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="325" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0"
+                       Foreground="White"
+                       Content="{Binding Path=SelectedCategory.Name}"
+                       ContentStringFormat="{}All {0}"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"/>
+
+            </Grid>
+
         </Grid>
+
     </Grid>
 
 </Window>
