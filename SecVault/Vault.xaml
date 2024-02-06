@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:SecVault.MVVM.ViewModel"
         xmlns:reusableControl="clr-namespace:SecVault.MVVM.View.ReusableControl"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         x:Name="Window"
         Title="SecVault"
@@ -154,12 +155,13 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="100" />
-                <RowDefinition Height="100" />
+                <RowDefinition Height="60" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <!-- Search Bar -->
             <Grid Grid.Row="0"
+                  Height="35"
                   Margin="12,0,12,10"
                   VerticalAlignment="Center"
                   HorizontalAlignment="Center">
@@ -172,6 +174,8 @@
                 <reusableControl:RoundedFilledTextBox Grid.Column="0"
                                                       Width="300"
                                                       Height="35"
+                                                      FontWeight="Normal"
+                                                      FontFamily="Russo One"
                                                       Tag="Search Passwords"
                                                       Foreground="#8592a5"
                                                       Background="White"
@@ -185,20 +189,74 @@
                                                    Height="35"
                                                    Width="35"
                                                    Margin="12,0,0,0">
-                    
+
                     <reusableControl:RoundedIconButton.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="#FFE57373" Offset="0.0"/>
-                            <GradientStop Color="#FFFB8C00" Offset="0.5"/>
-                            <GradientStop Color="#FFFFD700" Offset="1.0"/>
+                            <GradientStop Color="#FFE57373" Offset="0.0" />
+                            <GradientStop Color="#FFFB8C00" Offset="0.5" />
+                            <GradientStop Color="#FFFFD700" Offset="1.0" />
                         </LinearGradientBrush>
                     </reusableControl:RoundedIconButton.Background>
-                    
+
                 </reusableControl:RoundedIconButton>
 
             </Grid>
 
+            <!-- Category Label & Sorting -->
+            <Grid Grid.Row="1"
+                  Margin="15,-5,15,40"
+                  Height="30"
+                  VerticalAlignment="Center">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0"
+                       FontWeight="Bold"
+                       FontFamily="Russo One"
+                       FontSize="20"
+                       Foreground="White"
+                       Content="{Binding Path=SelectedCategory.Name}"
+                       ContentStringFormat="{}All {0}"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center" />
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Bottom">
+                    <Label
+                        FontWeight="100"
+                        FontFamily="Russo One"
+                        FontSize="10"
+                        Foreground="LightGray"
+                        Content="Sort By"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center" />
+
+                    <ComboBox SelectedIndex="0"
+                              Style="{StaticResource ComboBoxFlatStyle}"
+                              DisplayMemberPath="Name"
+                              SelectedValuePath="CategoryType"
+                              ItemsSource="{Binding PasswordSorts}"
+                              SelectedItem="{Binding SelectedPasswordSort}">
+                        
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding SortCommand}"
+                                                       CommandParameter="{Binding SelectedPasswordSort.CategoryType}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                        
+                    </ComboBox>
+                    
+                </StackPanel>
+
+            </Grid>
+
         </Grid>
+
     </Grid>
 
 </Window>

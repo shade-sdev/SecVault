@@ -18,7 +18,6 @@
                 <Setter Property="Cursor" Value="IBeam" />
                 <Setter Property="AllowDrop" Value="True" />
                 <Setter Property="HorizontalContentAlignment" Value="Left" />
-                <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
 
                 <Setter Property="Template">
