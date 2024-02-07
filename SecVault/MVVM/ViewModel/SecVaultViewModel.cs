@@ -1,4 +1,6 @@
+using System.Collections.ObjectModel;
 using SecVault.Core;
+using SecVault.MVVM.Model.Password;
 using SecVault.MVVM.Model.PasswordCategory;
 using SecVault.MVVM.Model.PasswordSort;
 
@@ -8,10 +10,11 @@ public class SecVaultViewModel : ObservableObject
 {
     private PasswordCategory? _selectedCategory;
     private PasswordSort? _selectedPasswordSort;
-
+    
+    public ObservableCollection<Password> Passwords { get; } = ConstantService.GetPasswords();
     public List<PasswordCategory> PasswordCategories { get; } = ConstantService.GetPasswordCategories();
     public List<PasswordSort> PasswordSorts { get; } = ConstantService.GetPasswordSorts();
-
+    
     public RelayCommand ClickCommand { get; set; }
     public RelayCommand SortCommand { get; set; }
 
@@ -42,7 +45,7 @@ public class SecVaultViewModel : ObservableObject
         ClickCommand = new RelayCommand(o => { Console.WriteLine("Jazz"); });
         SortCommand = new RelayCommand(ExecuteSortCommand);
     }
-    
+
     private void ExecuteSortCommand(object parameter)
     {
         if (parameter is PasswordSortType categoryType)

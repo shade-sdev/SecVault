@@ -13,7 +13,8 @@
                 <ResourceDictionary Source="Themes/PasswordCategory.xaml" />
                 <ResourceDictionary Source="Themes/PrimaryButtonStyle.xaml" />
                 <ResourceDictionary Source="Themes/ModernComboBox.xaml" />
-
+                <ResourceDictionary Source="Themes/PasswordItemStyle.xaml" />
+                
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>
