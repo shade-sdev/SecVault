@@ -1,6 +1,6 @@
 namespace SecVault.MVVM.Model.PasswordCategory;
 
-public enum CategoryType
+public enum PasswordCategoryType
 {
     Password,
     Card,

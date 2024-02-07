@@ -8,5 +8,5 @@ public class PasswordCategory
 
     public string? IconSelected { get; set; }
 
-    public CategoryType CategoryType { get; set; }
+    public PasswordCategoryType PasswordCategoryType { get; set; }
 }

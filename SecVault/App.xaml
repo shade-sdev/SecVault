@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Themes/StylishScrollBar.xaml" />
                 <ResourceDictionary Source="Themes/PasswordCategory.xaml" />
                 <ResourceDictionary Source="Themes/PrimaryButtonStyle.xaml" />
+                <ResourceDictionary Source="Themes/ModernComboBox.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
