@@ -65,6 +65,14 @@
       <Resource Include="Icons\Plus.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+      <None Remove="Icons\Star.png" />
+      <Resource Include="Icons\StarFilled.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Icons\StarFilled.png" />
+      <Resource Include="Icons\Star.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
     <ItemGroup>

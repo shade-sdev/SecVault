@@ -107,7 +107,7 @@ public static class ConstantService
                         Username = "Shade",
                         Email = "Shade@Shade.ga",
                         EncPassword = "Password",
-                        IsFavourite = true
+                        IsFavourite = false
                     },
                     PasswordTypeInfo = new PasswordTypeInfo
                     {

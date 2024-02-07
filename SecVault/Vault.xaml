@@ -257,7 +257,7 @@
 
             <!-- Password List View Items -->
             <Grid Grid.Row="2"
-                  Margin="15,0,15,0">
+                  Margin="15,-20,15,0">
                 <ListView Background="Transparent"
                           BorderThickness="0"
                           ItemsSource="{Binding Passwords}"
@@ -266,7 +266,6 @@
                         <Style TargetType="ListView">
                             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
                             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
-                            <Setter Property="ScrollViewer.PanningMode" Value="VerticalOnly"/>
                         </Style>
                     </ListView.Style>
                 </ListView>
