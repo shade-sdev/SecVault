@@ -73,6 +73,14 @@
       <Resource Include="Icons\Star.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+      <None Remove="Icons\Valid.png" />
+      <Resource Include="Icons\Valid.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Icons\Error.png" />
+      <Resource Include="Icons\Error.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
     <ItemGroup>

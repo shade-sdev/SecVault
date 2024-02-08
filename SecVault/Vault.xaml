@@ -264,14 +264,16 @@
                           ItemContainerStyle="{StaticResource PasswordItemStyle}">
                     <ListView.Style>
                         <Style TargetType="ListView">
-                            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
-                            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
+                            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
+                            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
                         </Style>
                     </ListView.Style>
                 </ListView>
             </Grid>
 
         </Grid>
+
+        <!-- Section 3: Password Details -->
 
     </Grid>
 

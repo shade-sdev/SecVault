@@ -10,11 +10,11 @@ public class SecVaultViewModel : ObservableObject
 {
     private PasswordCategory? _selectedCategory;
     private PasswordSort? _selectedPasswordSort;
-    
+
     public ObservableCollection<Password> Passwords { get; } = ConstantService.GetPasswords();
     public List<PasswordCategory> PasswordCategories { get; } = ConstantService.GetPasswordCategories();
     public List<PasswordSort> PasswordSorts { get; } = ConstantService.GetPasswordSorts();
-    
+
     public RelayCommand ClickCommand { get; set; }
     public RelayCommand SortCommand { get; set; }
 
