@@ -10,4 +10,5 @@ public class PasswordContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite($"Data Source={_path}");
     
     public DbSet<Password>? Passwords { get; set; }
+    
 }

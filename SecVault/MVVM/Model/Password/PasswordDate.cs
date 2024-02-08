@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace SecVault.MVVM.Model.Password;
 
+[ComplexType]
 public class PasswordDate
 {
-    public DateTime? CreatedDate { get; set; } = DateTime.Now;
+    [Column("creation_date")] public DateTime? CreatedDate { get; set; } = DateTime.Now;
 
-    public DateTime? LastUpdatedDate { get; set; }
+    [Column("last_updated_date")] public DateTime? LastUpdatedDate { get; set; } = DateTime.Now;
 }
