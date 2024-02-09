@@ -16,27 +16,22 @@ public class PasswordForm
         ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank, ValidationType.Email]
     };
 
-    public FormInput<string> Password { get; set; }
- 
+    public FormInput<string> Password { get; } = new()
+    {
+        InputName = "Password",
+        ValidMessage = "Valid Password.",
+        ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank, ValidationType.Match],
+    };
 
-    public FormInput<string> ConfirmPassword { get; set; }
+    public FormInput<string> ConfirmPassword { get; } = new()
+    {
+        InputName = "Confirm Password",
+        ValidMessage = "Password Matches.",
+        ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank, ValidationType.Match]
+    };
 
     public PasswordForm()
     {
-        Password = new FormInput<string>()
-        {
-            InputName = "Password",
-            ValidMessage = "Valid Password.",
-            ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank, ValidationType.Match]
-        };
-        
-        ConfirmPassword = new FormInput<string>()
-        {
-            InputName = "Confirm Password",
-            ValidMessage = "Password Matches.",
-            ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank, ValidationType.Match]
-        };
-
         Password.AnotherInput = ConfirmPassword;
         ConfirmPassword.AnotherInput = Password;
     }
