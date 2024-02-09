@@ -3,8 +3,10 @@ using SecVault.Core;
 
 namespace SecVault.MVVM.View.ReusableControl;
 
-public partial class FormTextBox
+public sealed partial class FormTextBox
 {
+    #region Commands
+
     public static readonly DependencyProperty CommandProperty =
         DependencyProperty.Register(nameof(Command), typeof(RelayCommand), typeof(FormTextBox));
 
@@ -13,6 +15,8 @@ public partial class FormTextBox
         get => (RelayCommand)GetValue(CommandProperty);
         set => SetValue(CommandProperty, value);
     }
+
+    #endregion
 
     #region Dimensions
 
@@ -39,11 +43,11 @@ public partial class FormTextBox
     #region Validation
 
     public static readonly DependencyProperty ValidProperty =
-        DependencyProperty.Register(nameof(Valid), typeof(bool), typeof(FormTextBox));
+        DependencyProperty.Register(nameof(Valid), typeof(bool?), typeof(FormTextBox));
 
-    public bool Valid
+    public bool? Valid
     {
-        get => (bool)GetValue(ValidProperty);
+        get => (bool?)GetValue(ValidProperty);
         set => SetValue(ValidProperty, value);
     }
 
@@ -80,6 +84,15 @@ public partial class FormTextBox
     {
         get => (string)GetValue(TextBoxContentProperty);
         set => SetValue(TextBoxContentProperty, value);
+    }
+
+    public static readonly DependencyProperty TextBoxIconProperty =
+        DependencyProperty.Register(nameof(TextBoxIcon), typeof(object), typeof(FormTextBox));
+
+    public object TextBoxIcon
+    {
+        get => GetValue(TextBoxIconProperty);
+        set => SetValue(TextBoxIconProperty, value);
     }
 
     #endregion

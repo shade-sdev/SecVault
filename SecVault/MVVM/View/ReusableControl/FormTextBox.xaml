@@ -3,19 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:moderncontrols="clr-namespace:org.russkyc.moderncontrols;assembly=Russkyc.ModernControls.WPF"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
-             d:DesignHeight="90" d:DesignWidth="300"
+             d:DesignHeight="{Binding Height}"
+             d:DesignWidth="{Binding Width}"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
              Background="Transparent">
 
     <Grid HorizontalAlignment="Left"
-          VerticalAlignment="Top"
-          Margin="0">
+          VerticalAlignment="Center">
         <Grid.RowDefinitions>
-            <RowDefinition Height="27" />
+            <RowDefinition Height="0.4*" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="27" />
+            <RowDefinition Height="0.4*" />
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0"
@@ -25,64 +26,23 @@
                Content="{Binding TextBoxLabel}"
                FontSize="12"
                Foreground="White"
-               Margin="0,3,0,0" />
+               Margin="-4,3,0,0" />
 
-        <TextBox Grid.Row="1"
-                 Height="36"
-                 Width="290"
-                 Text="{Binding TextBoxContent, Mode=TwoWay}"
-                 Margin="5,0,0,0"
-                 Style="{DynamicResource FormTextBoxStyle}">
-            <TextBox.Effect>
-                <DropShadowEffect ShadowDepth="2"
-                                  Direction="330"
-                                  Color="Black"
-                                  Opacity="0.3"
-                                  BlurRadius="4" />
-            </TextBox.Effect>
-            <TextBox.Resources>
-                <ResourceDictionary>
-                    <Style x:Key="FormTextBoxStyle" TargetType="{x:Type TextBox}">
-
-                        <Setter Property="FontFamily" Value="Roboto" />
-                        <Setter Property="FontWeight" Value="SemiBold" />
-                        <Setter Property="BorderThickness" Value="1" />
-                        <Setter Property="Padding" Value="5,0,0,0" />
-                        <Setter Property="Cursor" Value="IBeam" />
-                        <Setter Property="AllowDrop" Value="True" />
-                        <Setter Property="HorizontalContentAlignment" Value="Left" />
-                        <Setter Property="VerticalContentAlignment" Value="Center" />
-
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type TextBox}">
-                                    <Border Background="{TemplateBinding Background}"
-                                            CornerRadius="4"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            BorderBrush="LightGray"
-                                            SnapsToDevicePixels="True">
-                                        <Grid Margin="0, 3">
-                                            <ScrollViewer x:Name="PART_ContentHost"
-                                                          Focusable="False"
-                                                          HorizontalScrollBarVisibility="Hidden"
-                                                          VerticalScrollBarVisibility="Hidden" />
-                                        </Grid>
-                                    </Border>
-
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-
-                    </Style>
-                </ResourceDictionary>
-            </TextBox.Resources>
+        <moderncontrols:ModernTextBox Grid.Row="1"
+                                      Background="#292929"
+                                      Margin="0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Height="40"
+                                      Width="{Binding Width}"
+                                      Icon="{Binding TextBoxIcon}"
+                                      Text="{Binding TextBoxContent, UpdateSourceTrigger=PropertyChanged}">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="TextChanged">
-                    <b:InvokeCommandAction Command="{Binding Command}"
-                                           CommandParameter="{Binding TextBoxContent}" />
+                    <b:InvokeCommandAction Command="{Binding Command}" CommandParameter="{Binding TextBoxContent}" />
                 </b:EventTrigger>
             </b:Interaction.Triggers>
-        </TextBox>
+        </moderncontrols:ModernTextBox>
 
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal"
@@ -115,6 +75,7 @@
                    FontFamily="Roboto"
                    FontWeight="Regular"
                    Height="25"
+                   Margin="2,2,0,0"
                    Content="{Binding ValidationLabel}"
                    FontSize="10">
                 <Label.Style>

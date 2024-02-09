@@ -3,9 +3,9 @@ using System.Windows.Input;
 
 namespace SecVault.MVVM.View.Form;
 
-public partial class PasswordForm : Window
+public partial class PasswordFormView : Window
 {
-    public PasswordForm()
+    public PasswordFormView()
     {
         InitializeComponent();
     }

@@ -1,6 +1,8 @@
+using SecVault.MVVM.Model.Form;
+
 namespace SecVault.MVVM.ViewModel;
 
 public class PasswordFormViewModel
 {
-    public string? Email { get; set; }
+    public PasswordForm PasswordForm { get; set; } = new();
 }
