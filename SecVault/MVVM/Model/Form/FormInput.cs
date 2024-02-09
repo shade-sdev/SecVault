@@ -8,14 +8,14 @@ namespace SecVault.MVVM.Model.Form;
 ///
 public class FormInput<T> : ObservableObject
 {
-    private T? _textContent;
+    private T? _content;
     
-    public T? TextContent
+    public T? Content
     {
-        get => _textContent;
+        get => _content;
         set
         {
-            _textContent = value;
+            _content = value;
             AnotherInput?.ValidateCommand.Execute(null); 
         }
     }
@@ -39,13 +39,13 @@ public class FormInput<T> : ObservableObject
 
     private void TriggerValidation(object parameter)
     {
-        if (ValidationTypes.Count == 0 || TextContent is null)
+        if (ValidationTypes.Count == 0 || Content is null)
         {
             return;
         }
         
         foreach (var validationType in ValidationTypes.Where(validationType =>
-                     validationType.Validate(AnotherInput).Invoke(TextContent) == false))
+                     validationType.Validate(AnotherInput).Invoke(Content) == false))
         {
             IsValid = false;
             ExplicitMessage = validationType.GetErrorMessage(InputName ?? "Field");

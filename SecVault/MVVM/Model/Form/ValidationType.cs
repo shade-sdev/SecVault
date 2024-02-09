@@ -26,7 +26,7 @@ public static class ValidationTypeExtensions
             ValidationType.NotBlank => value => value is string val && !string.IsNullOrEmpty(val),
             ValidationType.Email => value => value is string val && Match(val, ValidEmailRegex),
             ValidationType.Match => value => value is string val
-                                             && anotherValue is { TextContent: string anotherVal }
+                                             && anotherValue is { Content: string anotherVal }
                                              && val.Equals(anotherVal),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
