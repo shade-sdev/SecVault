@@ -2,15 +2,10 @@ namespace SecVault.MVVM.Model.Form;
 
 public class PasswordForm
 {
-    public FormInput<string> Username { get; set; }
-
-    public PasswordForm()
+    public FormInput<string> Username { get; } = new()
     {
-        Username = new FormInput<string>()
-        {
-            ErrorMessage = "Invalid Username.",
-            ValidMessage = "Valid Username.",
-            Validate = content => !string.IsNullOrEmpty(content)
-        };
-    }
+        InputName = "Username",
+        ValidMessage = "Valid Username.",
+        ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank]
+    };
 }
