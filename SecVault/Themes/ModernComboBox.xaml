@@ -43,7 +43,7 @@
     </ControlTemplate>
 
     <Style x:Key="ComboBoxFlatStyle" TargetType="{x:Type ComboBox}">
-        <Setter Property="FontFamily" Value="Russo One" />
+        <Setter Property="FontFamily" Value="/SecVault;component/Resources/#Russo One" />
         <Setter Property="FontSize" Value="10" />
         <Setter Property="FontWeight" Value="200" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -73,7 +73,7 @@
                                  IsReadOnly="{TemplateBinding IsReadOnly}"
                                  Visibility="Hidden" Background="Transparent"
                                  HorizontalAlignment="Left" VerticalAlignment="Center"
-                                 FontFamily="Russo One"
+                                 FontFamily="/SecVault;component/Resources/#Russo One"
                                  Focusable="True">
                             <TextBox.Template>
                                 <ControlTemplate TargetType="TextBox">

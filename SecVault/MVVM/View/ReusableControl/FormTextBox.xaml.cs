@@ -97,6 +97,19 @@ public sealed partial class FormTextBox
 
     #endregion
 
+    #region Font
+
+    public static readonly DependencyProperty TextBoxFontFamilyProperty =
+        DependencyProperty.Register(nameof(TextBoxFontFamily), typeof(string), typeof(FormTextBox));
+
+    public string TextBoxFontFamily
+    {
+        get => (string)GetValue(TextBoxFontFamilyProperty);
+        set => SetValue(TextBoxFontFamilyProperty, value);
+    }
+
+    #endregion
+
     public FormTextBox()
     {
         InitializeComponent();

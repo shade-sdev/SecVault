@@ -1,36 +1,51 @@
+using System.Text.RegularExpressions;
+
 namespace SecVault.MVVM.Model.Form;
 
 public enum ValidationType
 {
     NotNull,
-    NotBlank
+    NotBlank,
+    Email,
+    Match
 }
 
 public static class ValidationTypeExtensions
 {
-    public static Func<T, bool> Validate<T>(this ValidationType type)
+    private const string VisaCardRegex = "^4[0-9]{12}(?:[0-9]{3})?$";
+    private const string MasterCardRegex = "^(?:5[1-5][0-9]{14})$";
+    private const string PinRegex = "^[0-9]{3,4}$";
+    private const string ValidWebsiteRegex = @"^(http(s)?://)?([\w-]+.)+[\w-]+(/[\w- ;,./?%&=]*)?$";
+    private const string ValidEmailRegex = @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[\w-]+$";
+
+    public static Func<T, bool> Validate<T>(this ValidationType type, FormInput<T>? anotherValue = null)
     {
-        switch (type)
+        return type switch
         {
-            case ValidationType.NotNull:
-                return value => value != null;
-            case ValidationType.NotBlank:
-                return value => value is string val && !string.IsNullOrEmpty(val);
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
-        }
+            ValidationType.NotNull => value => value != null,
+            ValidationType.NotBlank => value => value is string val && !string.IsNullOrEmpty(val),
+            ValidationType.Email => value => value is string val && Match(val, ValidEmailRegex),
+            ValidationType.Match => value => value is string val
+                                             && anotherValue is { TextContent: string anotherVal }
+                                             && val.Equals(anotherVal),
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
     }
-    
+
     public static string GetErrorMessage(this ValidationType type, string propertyName)
     {
-        switch (type)
+        return type switch
         {
-            case ValidationType.NotNull:
-                return $"{propertyName} must not be null.";
-            case ValidationType.NotBlank:
-                return $"{propertyName} must not be blank.";
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
-        }
+            ValidationType.NotNull => $"{propertyName} must not be null.",
+            ValidationType.NotBlank => $"{propertyName} must not be blank.",
+            ValidationType.Email => $"{propertyName} must a valid email.",
+            ValidationType.Match => $"{propertyName} does not match.",
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
+    }
+
+    private static bool Match(string value, string regex)
+    {
+        return new Regex(regex).IsMatch(value);
     }
 }

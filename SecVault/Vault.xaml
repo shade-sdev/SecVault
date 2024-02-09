@@ -65,7 +65,7 @@
                     <Label Content="SecVault"
                            Foreground="White"
                            FontSize="18"
-                           FontFamily="Russo One"
+                           FontFamily="/SecVault;component/Resources/#Russo One"
                            FontWeight="SemiBold" />
                 </StackPanel>
 
@@ -89,7 +89,7 @@
                     <Label Content="JaMan"
                            Foreground="White"
                            FontWeight="Normal"
-                           FontFamily="Russo One"
+                           FontFamily="/SecVault;component/Resources/#Russo One"
                            Margin="0,2,0,0" />
 
                 </StackPanel>
@@ -116,7 +116,7 @@
                 <Label Grid.Row="0"
                        Content="VAULT"
                        Foreground="White"
-                       FontFamily="Russo One"
+                       FontFamily="/SecVault;component/Resources/#Russo One"
                        FontWeight="ExtraLight"
                        FontSize="10"
                        Margin="-4,0,0,4" />
@@ -175,7 +175,7 @@
                                                       Width="300"
                                                       Height="35"
                                                       FontWeight="Normal"
-                                                      FontFamily="Russo One"
+                                                      FontFamily="/SecVault;component/Resources/#Russo One"
                                                       Tag="Search Passwords"
                                                       Foreground="#8592a5"
                                                       Background="White"
@@ -215,7 +215,7 @@
 
                 <Label Grid.Column="0"
                        FontWeight="Bold"
-                       FontFamily="Russo One"
+                       FontFamily="/SecVault;component/Resources/#Russo One"
                        FontSize="20"
                        Foreground="White"
                        Content="{Binding Path=SelectedCategory.Name}"
@@ -228,7 +228,7 @@
                             VerticalAlignment="Bottom">
                     <Label
                         FontWeight="100"
-                        FontFamily="Russo One"
+                        FontFamily="/SecVault;component/Resources/#Russo One"
                         FontSize="10"
                         Foreground="LightGray"
                         Content="Sort By"

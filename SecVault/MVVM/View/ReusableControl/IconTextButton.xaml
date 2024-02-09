@@ -17,7 +17,7 @@
                 <Setter Property="Background" Value="{Binding Background}" />
                 <Setter Property="Foreground" Value="{Binding Foreground}" />
                 <Setter Property="FontSize" Value="{Binding FontSize}" />
-                <Setter Property="FontFamily" Value="Russo One" />
+                <Setter Property="FontFamily" Value="/SecVault;component/Resources/#Russo One" />
                 <Setter Property="FontWeight" Value="500" />
                 <Setter Property="Padding" Value="6, 3, 6, 3" />
                 <Setter Property="BorderThickness" Value="0" />

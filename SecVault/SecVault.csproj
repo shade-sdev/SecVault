@@ -81,6 +81,14 @@
       <Resource Include="Icons\Error.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+      <None Remove="Resources\password.ttf" />
+      <Resource Include="Resources\password.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Resources\RussoOne.ttf" />
+      <Resource Include="Resources\RussoOne.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
     <ItemGroup>
