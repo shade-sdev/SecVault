@@ -22,12 +22,10 @@ public static class ValidationTypeExtensions
     {
         return type switch
         {
-            ValidationType.NotNull => value => value != null,
+            ValidationType.NotNull => value => value is not null,
             ValidationType.NotBlank => value => value is string val && !string.IsNullOrEmpty(val),
-            ValidationType.Email => value => value is string val && Match(val, ValidEmailRegex),
-            ValidationType.Match => value => value is string val
-                                             && anotherValue is { Content: string anotherVal }
-                                             && val.Equals(anotherVal),
+            ValidationType.Email => value => value is string val && RegexMatch(val, ValidEmailRegex),
+            ValidationType.Match => value => Match(value, anotherValue),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
     }
@@ -44,8 +42,23 @@ public static class ValidationTypeExtensions
         };
     }
 
-    private static bool Match(string value, string regex)
+    private static bool RegexMatch(string value, string regex)
     {
         return new Regex(regex).IsMatch(value);
+    }
+
+    private static bool Match<T>(T value, FormInput<T>? anotherValue)
+    {
+        if (value is string val
+            && anotherValue is not null
+            && anotherValue.Content is string anotherVal)
+        {
+            return val.Equals(anotherVal);
+        }
+
+        return value is not null
+               && anotherValue is not null
+               && anotherValue.Content is not null
+               && value.Equals(anotherValue);
     }
 }
