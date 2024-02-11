@@ -29,6 +29,27 @@ public class PasswordForm
         ValidMessage = "Password Matches.",
         ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank, ValidationType.Match]
     };
+    
+    public FormInput<string> Name { get; } = new()
+    {
+        InputName = "Name",
+        ValidMessage = "Valid Name.",
+        ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank]
+    };
+    
+    public FormInput<string> Url { get; } = new()
+    {
+        InputName = "Url",
+        ValidMessage = "Valid Url.",
+        ValidationTypes = [ValidationType.Url]
+    };
+    
+    public FormInput<string> IconUrl { get; } = new()
+    {
+        InputName = "Icon Url",
+        ValidMessage = "Valid Url.",
+        ValidationTypes = [ValidationType.Url]
+    };
 
     public PasswordForm()
     {

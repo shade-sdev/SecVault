@@ -25,7 +25,12 @@ public enum ValidationType
     /// <summary>
     /// Validates that the value matches another value.
     /// </summary>
-    Match
+    Match,
+    
+    /// <summary>
+    /// Validates that the value is a valid URL.
+    /// </summary>
+    Url
 }
 
 public static class ValidationTypeExtensions
@@ -52,6 +57,7 @@ public static class ValidationTypeExtensions
             ValidationType.NotNull => value => value is not null,
             ValidationType.NotBlank => value => value is string val && !string.IsNullOrEmpty(val),
             ValidationType.Email => value => value is string val && RegexMatch(val, ValidEmailRegex),
+            ValidationType.Url => value => value is string val && RegexMatch(val, ValidWebsiteRegex),
             ValidationType.Match => value => Match(value, anotherValue),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
@@ -70,6 +76,7 @@ public static class ValidationTypeExtensions
             ValidationType.NotNull => $"{propertyName} must not be null.",
             ValidationType.NotBlank => $"{propertyName} must not be blank.",
             ValidationType.Email => $"{propertyName} must a valid email.",
+            ValidationType.Url => $"{propertyName} must a valid url.",
             ValidationType.Match => $"{propertyName} does not match.",
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
