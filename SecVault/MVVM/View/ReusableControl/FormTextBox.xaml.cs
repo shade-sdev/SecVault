@@ -5,6 +5,11 @@ namespace SecVault.MVVM.View.ReusableControl;
 
 public sealed partial class FormTextBox
 {
+    public FormTextBox()
+    {
+        InitializeComponent();
+    }
+
     #region Commands
 
     public static readonly DependencyProperty CommandProperty =
@@ -109,9 +114,4 @@ public sealed partial class FormTextBox
     }
 
     #endregion
-
-    public FormTextBox()
-    {
-        InitializeComponent();
-    }
 }

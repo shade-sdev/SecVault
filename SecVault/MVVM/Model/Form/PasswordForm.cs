@@ -2,6 +2,12 @@ namespace SecVault.MVVM.Model.Form;
 
 public class PasswordForm
 {
+    public PasswordForm()
+    {
+        Password.AnotherInput        = ConfirmPassword;
+        ConfirmPassword.AnotherInput = Password;
+    }
+
     #region Password
 
     public FormInput<string> Username { get; } = new()
@@ -22,7 +28,7 @@ public class PasswordForm
     {
         InputName       = "Password",
         ValidMessage    = "Valid Password.",
-        ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank, ValidationType.Match],
+        ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank, ValidationType.Match]
     };
 
     public FormInput<string> ConfirmPassword { get; } = new()
@@ -63,14 +69,14 @@ public class PasswordForm
         ValidMessage    = "Valid Card Number.",
         ValidationTypes = [ValidationType.NotBlank, ValidationType.Card]
     };
-    
+
     public FormInput<string> Cvc { get; } = new()
     {
         InputName       = "CVC/CCV",
         ValidMessage    = "Valid CVC/CCV Number.",
         ValidationTypes = [ValidationType.NotBlank, ValidationType.Cvc]
     };
-    
+
     public FormInput<string> Pin { get; } = new()
     {
         InputName       = "Pin",
@@ -79,10 +85,4 @@ public class PasswordForm
     };
 
     #endregion
-
-    public PasswordForm()
-    {
-        Password.AnotherInput        = ConfirmPassword;
-        ConfirmPassword.AnotherInput = Password;
-    }
 }

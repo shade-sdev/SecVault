@@ -9,105 +9,105 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Icons\icons8_secure_480px.png" />
-      <None Remove="Icons\icons8_user_folder_80px.png" />
+        <None Remove="Icons\icons8_secure_480px.png"/>
+        <None Remove="Icons\icons8_user_folder_80px.png"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Icons\icons8_secure_48px.png" />
-      <Content Include="Icons\icons8_secure_48px.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Icons\icons8_video_chat_80px.png" />
-      <None Remove="Icons\icons8_Magnetic_Card_32px.png" />
-      <None Remove="Icons\icons8_note_26px.png" />
-      <None Remove="Icons\icons8_shield_32px.png" />
-      <None Remove="Icons\Card.png" />
-      <Content Include="Icons\Card.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Icons\Shield.png" />
-      <Content Include="Icons\Shield.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Icons\Note.png" />
-      <Content Include="Icons\Note.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Icons\CardFilled.png" />
-      <Content Include="Icons\CardFilled.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Icons\NoteFilled.png" />
-      <Content Include="Icons\NoteFilled.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Icons\ShieldFilled.png" />
-      <Content Include="Icons\ShieldFilled.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Icons\SettingFilled.png" />
-      <Content Include="Icons\SettingFilled.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Icons\Setting.png" />
-      <Content Include="Icons\Setting.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
+        <None Remove="Icons\icons8_secure_48px.png"/>
+        <Content Include="Icons\icons8_secure_48px.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Icons\icons8_video_chat_80px.png"/>
+        <None Remove="Icons\icons8_Magnetic_Card_32px.png"/>
+        <None Remove="Icons\icons8_note_26px.png"/>
+        <None Remove="Icons\icons8_shield_32px.png"/>
+        <None Remove="Icons\Card.png"/>
+        <Content Include="Icons\Card.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Icons\Shield.png"/>
+        <Content Include="Icons\Shield.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Icons\Note.png"/>
+        <Content Include="Icons\Note.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Icons\CardFilled.png"/>
+        <Content Include="Icons\CardFilled.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Icons\NoteFilled.png"/>
+        <Content Include="Icons\NoteFilled.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Icons\ShieldFilled.png"/>
+        <Content Include="Icons\ShieldFilled.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Icons\SettingFilled.png"/>
+        <Content Include="Icons\SettingFilled.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Icons\Setting.png"/>
+        <Content Include="Icons\Setting.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Icons\Search.png" />
-      <Resource Include="Icons\Search.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="Icons\Plus.png" />
-      <Resource Include="Icons\Plus.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="Icons\Star.png" />
-      <Resource Include="Icons\StarFilled.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="Icons\StarFilled.png" />
-      <Resource Include="Icons\Star.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="Icons\Valid.png" />
-      <Resource Include="Icons\Valid.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="Icons\Error.png" />
-      <Resource Include="Icons\Error.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="Resources\password.ttf" />
-      <Resource Include="Resources\password.ttf">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="Resources\RussoOne.ttf" />
-      <Resource Include="Resources\RussoOne.ttf">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
+        <None Remove="Icons\Search.png"/>
+        <Resource Include="Icons\Search.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Icons\Plus.png"/>
+        <Resource Include="Icons\Plus.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Icons\Star.png"/>
+        <Resource Include="Icons\StarFilled.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Icons\StarFilled.png"/>
+        <Resource Include="Icons\Star.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Icons\Valid.png"/>
+        <Resource Include="Icons\Valid.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Icons\Error.png"/>
+        <Resource Include="Icons\Error.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Resources\password.ttf"/>
+        <Resource Include="Resources\password.ttf">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Resources\RussoOne.ttf"/>
+        <Resource Include="Resources\RussoOne.ttf">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Material.Icons.WPF" Version="2.1.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
-      <PackageReference Include="Russkyc.ModernControls.WPF" Version="2.2.3" />
+        <PackageReference Include="Material.Icons.WPF" Version="2.1.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77"/>
+        <PackageReference Include="Russkyc.ModernControls.WPF" Version="2.2.3"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Migrations\" />
+        <Folder Include="Migrations\"/>
     </ItemGroup>
 
 </Project>

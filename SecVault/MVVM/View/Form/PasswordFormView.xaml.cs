@@ -11,9 +11,6 @@ public partial class PasswordFormView
 
     private void OnWindow_Drag(object sender, MouseEventArgs e)
     {
-        if (e.LeftButton == MouseButtonState.Pressed)
-        {
-            DragMove();
-        }
+        if (e.LeftButton == MouseButtonState.Pressed) DragMove();
     }
 }

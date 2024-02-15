@@ -4,6 +4,11 @@ namespace SecVault.MVVM.View.ReusableControl;
 
 public partial class IconTextButton
 {
+    public IconTextButton()
+    {
+        InitializeComponent();
+    }
+
     #region Font
 
     public new static readonly DependencyProperty ContentProperty =
@@ -28,19 +33,19 @@ public partial class IconTextButton
 
     #region Icon
 
-    public new static readonly DependencyProperty IconSourceProperty =
+    public static readonly DependencyProperty IconSourceProperty =
         DependencyProperty.Register(nameof(IconSource), typeof(string), typeof(IconTextButton));
 
-    public new string IconSource
+    public string IconSource
     {
         get => (string)GetValue(IconSourceProperty);
         set => SetValue(IconSourceProperty, value);
     }
 
-    public new static readonly DependencyProperty HoverIconSourceProperty =
+    public static readonly DependencyProperty HoverIconSourceProperty =
         DependencyProperty.Register(nameof(HoverIconSource), typeof(string), typeof(IconTextButton));
 
-    public new string HoverIconSource
+    public string HoverIconSource
     {
         get => (string)GetValue(HoverIconSourceProperty);
         set => SetValue(HoverIconSourceProperty, value);
@@ -59,19 +64,19 @@ public partial class IconTextButton
         set => SetValue(BackgroundProperty, value);
     }
 
-    public new static readonly DependencyProperty PressedBackgroundProperty =
+    public static readonly DependencyProperty PressedBackgroundProperty =
         DependencyProperty.Register(nameof(PressedBackground), typeof(string), typeof(IconTextButton));
 
-    public new string PressedBackground
+    public string PressedBackground
     {
         get => (string)GetValue(PressedBackgroundProperty);
         set => SetValue(PressedBackgroundProperty, value);
     }
 
-    public new static readonly DependencyProperty HoverBackgroundProperty =
+    public static readonly DependencyProperty HoverBackgroundProperty =
         DependencyProperty.Register(nameof(HoverBackground), typeof(string), typeof(IconTextButton));
 
-    public new string HoverBackground
+    public string HoverBackground
     {
         get => (string)GetValue(HoverBackgroundProperty);
         set => SetValue(HoverBackgroundProperty, value);
@@ -86,10 +91,10 @@ public partial class IconTextButton
         set => SetValue(ForegroundProperty, value);
     }
 
-    public new static readonly DependencyProperty HoverForegroundProperty =
+    public static readonly DependencyProperty HoverForegroundProperty =
         DependencyProperty.Register(nameof(HoverForeground), typeof(string), typeof(IconTextButton));
 
-    public new string HoverForeground
+    public string HoverForeground
     {
         get => (string)GetValue(HoverForegroundProperty);
         set => SetValue(HoverForegroundProperty, value);
@@ -118,9 +123,4 @@ public partial class IconTextButton
     }
 
     #endregion
-
-    public IconTextButton()
-    {
-        InitializeComponent();
-    }
 }

@@ -11,5 +11,4 @@ public class ObservableObject : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-        
 }

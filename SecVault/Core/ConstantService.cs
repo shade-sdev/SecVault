@@ -11,27 +11,27 @@ public static class ConstantService
     {
         return
         [
-            new PasswordCategory()
+            new PasswordCategory
             {
-                Name = "Passwords",
-                Icon = "/SecVault;component/Icons/Shield.png",
-                IconSelected = "/SecVault;component/Icons/ShieldFilled.png",
+                Name                 = "Passwords",
+                Icon                 = "/SecVault;component/Icons/Shield.png",
+                IconSelected         = "/SecVault;component/Icons/ShieldFilled.png",
                 PasswordCategoryType = PasswordCategoryType.Password
             },
 
-            new PasswordCategory()
+            new PasswordCategory
             {
-                Name = "Cards",
-                Icon = "/SecVault;component/Icons/Card.png",
-                IconSelected = "/SecVault;component/Icons/CardFilled.png",
+                Name                 = "Cards",
+                Icon                 = "/SecVault;component/Icons/Card.png",
+                IconSelected         = "/SecVault;component/Icons/CardFilled.png",
                 PasswordCategoryType = PasswordCategoryType.Card
             },
 
-            new PasswordCategory()
+            new PasswordCategory
             {
-                Name = "Notes",
-                Icon = "/SecVault;component/Icons/Note.png",
-                IconSelected = "/SecVault;component/Icons/NoteFilled.png",
+                Name                 = "Notes",
+                Icon                 = "/SecVault;component/Icons/Note.png",
+                IconSelected         = "/SecVault;component/Icons/NoteFilled.png",
                 PasswordCategoryType = PasswordCategoryType.Note
             }
         ];
@@ -41,308 +41,306 @@ public static class ConstantService
     {
         return
         [
-            new PasswordSort()
+            new PasswordSort
             {
-                Name = "Name",
+                Name         = "Name",
                 CategoryType = PasswordSortType.Name
             },
-            new PasswordSort()
+            new PasswordSort
             {
-                Name = "Username",
+                Name         = "Username",
                 CategoryType = PasswordSortType.Username
             },
-            new PasswordSort()
+            new PasswordSort
             {
-                Name = "Email",
+                Name         = "Email",
                 CategoryType = PasswordSortType.Email
             },
-            new PasswordSort()
+            new PasswordSort
             {
-                Name = "Favourite",
+                Name         = "Favourite",
                 CategoryType = PasswordSortType.Favourite
             },
-            new PasswordSort()
+            new PasswordSort
             {
-                Name = "Created",
+                Name         = "Created",
                 CategoryType = PasswordSortType.CreatedDate
             },
-            new PasswordSort()
+            new PasswordSort
             {
-                Name = "Updated",
+                Name         = "Updated",
                 CategoryType = PasswordSortType.LastUpdatedDate
-            },
+            }
         ];
     }
 
     public static ObservableCollection<Password> GetPasswords()
     {
-        return new ObservableCollection<Password>(
-            [
-                new Password()
+        return new ObservableCollection<Password>([
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
                 {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = true
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = true
                 },
-                new Password()
+                PasswordTypeInfo = new PasswordTypeInfo
                 {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = false
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
                 },
-                new Password()
+                PasswordDate = new PasswordDate
                 {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = true
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
-                },
-                new Password()
-                {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = true
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
-                },
-                new Password()
-                {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = true
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
-                },
-                new Password()
-                {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = true
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
-                },
-                new Password()
-                {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = true
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
-                },
-                new Password()
-                {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = true
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
-                },
-                new Password()
-                {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = true
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
-                },
-                new Password()
-                {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = true
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
-                },
-                new Password()
-                {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = true
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
-                },
-                new Password()
-                {
-                    PasswordInfo = new PasswordInfo
-                    {
-                        Username = "Shade",
-                        Email = "Shade@Shade.ga",
-                        EncPassword = "Password",
-                        IsFavourite = true
-                    },
-                    PasswordTypeInfo = new PasswordTypeInfo
-                    {
-                        Name = "Facebook",
-                        WebsiteSiteUrl = "https://facebook.com/favicon.ico",
-                        IconUrl = "https://facebook.com/favicon.ico",
-                        PasswordCategoryType = PasswordCategoryType.Password
-                    },
-                    PasswordDate = new PasswordDate
-                    {
-                        CreatedDate = DateTime.Now,
-                        LastUpdatedDate = DateTime.Now
-                    }
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
                 }
-            ]
-        );
+            },
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
+                {
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = false
+                },
+                PasswordTypeInfo = new PasswordTypeInfo
+                {
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
+                },
+                PasswordDate = new PasswordDate
+                {
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
+                }
+            },
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
+                {
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = true
+                },
+                PasswordTypeInfo = new PasswordTypeInfo
+                {
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
+                },
+                PasswordDate = new PasswordDate
+                {
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
+                }
+            },
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
+                {
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = true
+                },
+                PasswordTypeInfo = new PasswordTypeInfo
+                {
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
+                },
+                PasswordDate = new PasswordDate
+                {
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
+                }
+            },
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
+                {
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = true
+                },
+                PasswordTypeInfo = new PasswordTypeInfo
+                {
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
+                },
+                PasswordDate = new PasswordDate
+                {
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
+                }
+            },
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
+                {
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = true
+                },
+                PasswordTypeInfo = new PasswordTypeInfo
+                {
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
+                },
+                PasswordDate = new PasswordDate
+                {
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
+                }
+            },
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
+                {
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = true
+                },
+                PasswordTypeInfo = new PasswordTypeInfo
+                {
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
+                },
+                PasswordDate = new PasswordDate
+                {
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
+                }
+            },
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
+                {
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = true
+                },
+                PasswordTypeInfo = new PasswordTypeInfo
+                {
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
+                },
+                PasswordDate = new PasswordDate
+                {
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
+                }
+            },
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
+                {
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = true
+                },
+                PasswordTypeInfo = new PasswordTypeInfo
+                {
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
+                },
+                PasswordDate = new PasswordDate
+                {
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
+                }
+            },
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
+                {
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = true
+                },
+                PasswordTypeInfo = new PasswordTypeInfo
+                {
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
+                },
+                PasswordDate = new PasswordDate
+                {
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
+                }
+            },
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
+                {
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = true
+                },
+                PasswordTypeInfo = new PasswordTypeInfo
+                {
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
+                },
+                PasswordDate = new PasswordDate
+                {
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
+                }
+            },
+            new Password
+            {
+                PasswordInfo = new PasswordInfo
+                {
+                    Username    = "Shade",
+                    Email       = "Shade@Shade.ga",
+                    EncPassword = "Password",
+                    IsFavourite = true
+                },
+                PasswordTypeInfo = new PasswordTypeInfo
+                {
+                    Name                 = "Facebook",
+                    WebsiteSiteUrl       = "https://facebook.com/favicon.ico",
+                    IconUrl              = "https://facebook.com/favicon.ico",
+                    PasswordCategoryType = PasswordCategoryType.Password
+                },
+                PasswordDate = new PasswordDate
+                {
+                    CreatedDate     = DateTime.Now,
+                    LastUpdatedDate = DateTime.Now
+                }
+            }
+        ]);
     }
 }

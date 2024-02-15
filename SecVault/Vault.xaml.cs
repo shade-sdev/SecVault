@@ -3,7 +3,7 @@
 namespace SecVault;
 
 /// <summary>
-/// Interaction logic for MainWindow.xaml
+///     Interaction logic for MainWindow.xaml
 /// </summary>
 public partial class Vault
 {
@@ -14,9 +14,6 @@ public partial class Vault
 
     private void OnWindow_Drag(object sender, MouseEventArgs e)
     {
-        if (e.LeftButton == MouseButtonState.Pressed)
-        {
-            DragMove();
-        }
+        if (e.LeftButton == MouseButtonState.Pressed) DragMove();
     }
 }

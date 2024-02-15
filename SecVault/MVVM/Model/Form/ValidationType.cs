@@ -3,44 +3,44 @@ using System.Text.RegularExpressions;
 namespace SecVault.MVVM.Model.Form;
 
 /// <summary>
-/// Specifies the type of validation to be performed.
+///     Specifies the type of validation to be performed.
 /// </summary>
 public enum ValidationType
 {
     /// <summary>
-    /// Validates that the value is not null.
+    ///     Validates that the value is not null.
     /// </summary>
     NotNull,
 
     /// <summary>
-    /// Validates that the value is not null or empty.
+    ///     Validates that the value is not null or empty.
     /// </summary>
     NotBlank,
 
     /// <summary>
-    /// Validates that the value is a valid email address.
+    ///     Validates that the value is a valid email address.
     /// </summary>
     Email,
 
     /// <summary>
-    /// Validates that the value matches another value.
+    ///     Validates that the value matches another value.
     /// </summary>
     Match,
 
     /// <summary>
-    /// Validates that the value is a valid URL.
+    ///     Validates that the value is a valid URL.
     /// </summary>
     Url,
 
     /// <summary>
-    /// Validates that the value is a Card.
+    ///     Validates that the value is a Card.
     /// </summary>
     Card,
-    
+
     /// <summary>
-    /// Validates that the value is a CVC/CVV.
+    ///     Validates that the value is a CVC/CVV.
     /// </summary>
-    Cvc,
+    Cvc
 }
 
 public static class ValidationTypeExtensions
@@ -53,7 +53,7 @@ public static class ValidationTypeExtensions
     private const string ValidEmailRegex   = @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[\w-]+$";
 
     /// <summary>
-    /// Validates a value based on the specified <paramref name="type"/>.
+    ///     Validates a value based on the specified <paramref name="type" />.
     /// </summary>
     /// <typeparam name="T">The type of the value to validate.</typeparam>
     /// <param name="type">The type of validation to perform.</param>
@@ -75,7 +75,7 @@ public static class ValidationTypeExtensions
     }
 
     /// <summary>
-    /// Gets the error message corresponding to the specified <paramref name="type"/>.
+    ///     Gets the error message corresponding to the specified <paramref name="type" />.
     /// </summary>
     /// <param name="type">The type of validation.</param>
     /// <param name="propertyName">The name of the property being validated.</param>
@@ -90,7 +90,7 @@ public static class ValidationTypeExtensions
                    ValidationType.Url      => $"{propertyName} must a valid url.",
                    ValidationType.Match    => $"{propertyName} does not match.",
                    ValidationType.Card     => $"{propertyName} must be a valid card number.",
-                   ValidationType.Cvc     => $"{propertyName} must be a valid CVC/CVV number.",
+                   ValidationType.Cvc      => $"{propertyName} must be a valid CVC/CVV number.",
                    _                       => throw new ArgumentOutOfRangeException(nameof(type), type, null)
                };
     }
@@ -113,9 +113,7 @@ public static class ValidationTypeExtensions
         if (value is string val
             && anotherValue is not null
             && anotherValue.Content is string anotherVal)
-        {
             return val.Equals(anotherVal);
-        }
 
         return value is not null
                && anotherValue is not null
