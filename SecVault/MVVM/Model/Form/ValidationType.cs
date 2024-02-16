@@ -40,7 +40,12 @@ public enum ValidationType
     /// <summary>
     ///     Validates that the value is a CVC/CVV.
     /// </summary>
-    Cvc
+    Cvc,
+    
+    /// <summary>
+    ///     Validates that the value is less or equals to the MaxSize.
+    /// </summary>
+    MaxSize
 }
 
 public static class ValidationTypeExtensions
@@ -57,9 +62,8 @@ public static class ValidationTypeExtensions
     /// </summary>
     /// <typeparam name="T">The type of the value to validate.</typeparam>
     /// <param name="type">The type of validation to perform.</param>
-    /// <param name="anotherValue">Optional value to compare against for certain validation types.</param>
     /// <returns>A function representing the validation logic.</returns>
-    public static Func<T, bool> Validate<T>(this ValidationType type, FormInput<T>? anotherValue = null)
+    public static Func<T, bool> Validate<T>(this ValidationType type)
     {
         return type switch
                {
@@ -67,9 +71,18 @@ public static class ValidationTypeExtensions
                    ValidationType.NotBlank => value => value is string val && !string.IsNullOrEmpty(val),
                    ValidationType.Email => value => value is string val && RegexMatch(val, ValidEmailRegex),
                    ValidationType.Url => value => value is string val && RegexMatch(val, ValidWebsiteRegex),
-                   ValidationType.Match => value => Match(value, anotherValue),
                    ValidationType.Card => value => RegexAnyMatch(value?.ToString(), [VisaCardRegex, MasterCardRegex]),
                    ValidationType.Cvc => value => value is string val && RegexMatch(val, PinRegex),
+                   _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+               };
+    }
+
+    public static Func<T, bool> Validate<T>(this ValidationType type, object? anotherValue)
+    {
+        return type switch
+               {
+                   ValidationType.Match => value => Match(value, anotherValue),
+                   ValidationType.MaxSize => value => MaxSize(value, anotherValue),
                    _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
                };
     }
@@ -107,17 +120,26 @@ public static class ValidationTypeExtensions
                       .Any(regex => value != null && regex.IsMatch(value));
     }
 
+    private static bool MaxSize<T>(T? value, object? size)
+    {
+        if (value is null || size is null)
+        {
+            return false;
+        }
+
+        return value.ToString()!.Length <= Convert.ToInt32(size);
+    }
+
     // Helper method to perform match validation
-    private static bool Match<T>(T value, FormInput<T>? anotherValue)
+    private static bool Match<T>(T? value, T? anotherValue)
     {
         if (value is string val
             && anotherValue is not null
-            && anotherValue.Content is string anotherVal)
+            && anotherValue is string anotherVal)
             return val.Equals(anotherVal);
 
         return value is not null
                && anotherValue is not null
-               && anotherValue.Content is not null
                && value.Equals(anotherValue);
     }
 }

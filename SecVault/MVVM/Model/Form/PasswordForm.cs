@@ -1,11 +1,45 @@
+using System.ComponentModel;
+using SecVault.MVVM.Model.Form.Validation;
+
 namespace SecVault.MVVM.Model.Form;
 
 public class PasswordForm
 {
     public PasswordForm()
     {
-        Password.AnotherInput        = ConfirmPassword;
-        ConfirmPassword.AnotherInput = Password;
+        // Set up validators for Password and ConfirmPassword
+        Password.ValidatorAttributes.Add(new ValidatorAttribute<string>(ValidationType.NotBlank));
+        ConfirmPassword.ValidatorAttributes.Add(new ValidatorAttribute<string>(ValidationType.NotBlank));
+
+        // Subscribe to PropertyChanged event of ConfirmPassword
+        ConfirmPassword.PropertyChanged += PasswordPropertyChanged!;
+        Password.PropertyChanged        += PasswordPropertyChanged!;
+    }
+    
+    private void PasswordPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        // Check if the property changed is Content
+        if (e.PropertyName == nameof(FormInput<string>.Content))
+        {
+            if (Password.ValidatorAttributes.Count >= 2)
+            {
+                Password.ValidatorAttributes[1] = new ValidatorAttribute<string>(ValidationType.Match, ConfirmPassword.Content);
+            }
+            else
+            {
+                Password.ValidatorAttributes.Add(new ValidatorAttribute<string>(ValidationType.Match, ConfirmPassword.Content));
+            }
+            
+            if (ConfirmPassword.ValidatorAttributes.Count >= 2)
+            {
+                ConfirmPassword.ValidatorAttributes[1] = new ValidatorAttribute<string>(ValidationType.Match, Password.Content);
+            }
+            else
+            {
+                ConfirmPassword.ValidatorAttributes.Add(new ValidatorAttribute<string>(ValidationType.Match, Password.Content));
+            }
+            
+        }
     }
 
     #region Password
@@ -14,49 +48,47 @@ public class PasswordForm
     {
         InputName       = "Username",
         ValidMessage    = "Valid Username.",
-        ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank]
+        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank)]
     };
 
     public FormInput<string> Email { get; } = new()
     {
         InputName       = "Email",
         ValidMessage    = "Valid Email.",
-        ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank, ValidationType.Email]
+        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank), new ValidatorAttribute<string>(ValidationType.Email)]
     };
 
     public FormInput<string> Password { get; } = new()
     {
         InputName       = "Password",
-        ValidMessage    = "Valid Password.",
-        ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank, ValidationType.Match]
+        ValidMessage    = "Valid Password."
     };
 
     public FormInput<string> ConfirmPassword { get; } = new()
     {
         InputName       = "Confirm Password",
         ValidMessage    = "Password Matches.",
-        ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank, ValidationType.Match]
     };
 
     public FormInput<string> Name { get; } = new()
     {
         InputName       = "Name",
         ValidMessage    = "Valid Name.",
-        ValidationTypes = [ValidationType.NotNull, ValidationType.NotBlank]
+        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank)]
     };
 
     public FormInput<string> Url { get; } = new()
     {
         InputName       = "Url",
         ValidMessage    = "Valid Url.",
-        ValidationTypes = [ValidationType.Url]
+        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.Url)]
     };
 
     public FormInput<string> IconUrl { get; } = new()
     {
         InputName       = "Icon Url",
         ValidMessage    = "Valid Url.",
-        ValidationTypes = [ValidationType.Url]
+        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.Url)]
     };
 
     #endregion
@@ -67,28 +99,28 @@ public class PasswordForm
     {
         InputName       = "Card Number",
         ValidMessage    = "Valid Card Number.",
-        ValidationTypes = [ValidationType.NotBlank, ValidationType.Card]
+        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank), new ValidatorAttribute<string>(ValidationType.Card)]
     };
 
     public FormInput<string> Cvc { get; } = new()
     {
         InputName       = "CVC/CCV",
         ValidMessage    = "Valid CVC/CCV Number.",
-        ValidationTypes = [ValidationType.NotBlank, ValidationType.Cvc]
+        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank), new ValidatorAttribute<string>(ValidationType.Cvc)]
     };
 
     public FormInput<string> Pin { get; } = new()
     {
         InputName       = "Pin",
         ValidMessage    = "Valid Pin.",
-        ValidationTypes = []
+        ValidatorAttributes = []
     };
     
     public FormInput<string> Notes { get; } = new()
     {
         InputName       = "Notes",
         ValidMessage    = "Valid Note.",
-        ValidationTypes = []
+        ValidatorAttributes = []
     };
 
     #endregion

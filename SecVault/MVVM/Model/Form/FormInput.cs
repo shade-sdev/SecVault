@@ -1,4 +1,5 @@
 using SecVault.Core;
+using SecVault.MVVM.Model.Form.Validation;
 
 namespace SecVault.MVVM.Model.Form;
 
@@ -27,7 +28,6 @@ public class FormInput<T> : ObservableObject
         set
         {
             _content = value;
-            AnotherInput?.ValidateCommand.Execute(null);
         }
     }
 
@@ -35,13 +35,7 @@ public class FormInput<T> : ObservableObject
     ///     Gets or initializes the name of the input field.
     /// </summary>
     public string? InputName { get; init; }
-
-    /// <summary>
-    ///     Gets or sets another <see cref="FormInput{T}" /> instance for cross-field validation.
-    /// </summary>
-    /// <remarks>Use this property in rare cases. It must not be modified internally.</remarks>
-    public FormInput<T>? AnotherInput { get; set; } = null;
-
+    
     /// <summary>
     ///     Gets or initializes the valid message for the input field.
     /// </summary>
@@ -60,7 +54,7 @@ public class FormInput<T> : ObservableObject
     /// <summary>
     ///     Gets or initializes a list of validation types to be applied to the input field.
     /// </summary>
-    public List<ValidationType> ValidationTypes { get; init; } = [];
+    public List<ValidatorAttribute<T>> ValidatorAttributes { get; set; } = [];
 
     /// <summary>
     ///     Gets or sets the command to trigger validation of the input field.
@@ -73,14 +67,13 @@ public class FormInput<T> : ObservableObject
     /// <param name="parameter">An optional parameter for command execution.</param>
     private void TriggerValidation(object parameter)
     {
-        if (ValidationTypes.Count == 0 || Content is null) return;
+        if (ValidatorAttributes.Count == 0 || Content is null) return;
 
-        foreach (var validationType in ValidationTypes.Where(validationType =>
-                                                                 validationType.Validate(AnotherInput)
-                                                                               .Invoke(Content) == false))
+        foreach (var validatorAttribute in ValidatorAttributes.Where(validatorAttribute =>
+                                                                         validatorAttribute.IsValid(Content) == false))
         {
             IsValid         = false;
-            ExplicitMessage = validationType.GetErrorMessage(InputName ?? "Field");
+            ExplicitMessage = validatorAttribute.ValidationType.GetErrorMessage(InputName ?? "Field");
             PropertyChanges();
             return;
         }
@@ -95,6 +88,7 @@ public class FormInput<T> : ObservableObject
     /// </summary>
     private void PropertyChanges()
     {
+        OnPropertyChanged(nameof(Content));
         OnPropertyChanged(nameof(IsValid));
         OnPropertyChanged(nameof(ExplicitMessage));
     }
