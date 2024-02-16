@@ -10,84 +10,82 @@ public class PasswordForm
         // Set up validators for Password and ConfirmPassword
         Password.ValidatorAttributes.Add(new ValidatorAttribute<string>(ValidationType.NotBlank));
         ConfirmPassword.ValidatorAttributes.Add(new ValidatorAttribute<string>(ValidationType.NotBlank));
-
-        // Subscribe to PropertyChanged event of ConfirmPassword
-        ConfirmPassword.PropertyChanged += PasswordPropertyChanged!;
+        
         Password.PropertyChanged        += PasswordPropertyChanged!;
     }
-    
+
     private void PasswordPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         // Check if the property changed is Content
-        if (e.PropertyName == nameof(FormInput<string>.Content))
+        if (e.PropertyName == nameof(FormInput<string>.Content) && sender is FormInput<string> pass &&
+            pass.InputName == nameof(Password))
         {
-            if (Password.ValidatorAttributes.Count >= 2)
-            {
-                Password.ValidatorAttributes[1] = new ValidatorAttribute<string>(ValidationType.Match, ConfirmPassword.Content);
-            }
-            else
-            {
-                Password.ValidatorAttributes.Add(new ValidatorAttribute<string>(ValidationType.Match, ConfirmPassword.Content));
-            }
-            
+
             if (ConfirmPassword.ValidatorAttributes.Count >= 2)
             {
-                ConfirmPassword.ValidatorAttributes[1] = new ValidatorAttribute<string>(ValidationType.Match, Password.Content);
+                ConfirmPassword.ValidatorAttributes[1] =
+                    new ValidatorAttribute<string>(ValidationType.Match, Password.Content);
             }
             else
             {
-                ConfirmPassword.ValidatorAttributes.Add(new ValidatorAttribute<string>(ValidationType.Match, Password.Content));
+                ConfirmPassword.ValidatorAttributes.Add(new ValidatorAttribute<string>(ValidationType.Match,
+                                                                                       Password.Content));
             }
-            
+            ConfirmPassword.ValidateCommand.Execute(ConfirmPassword.Content);
         }
+        
     }
 
     #region Password
 
     public FormInput<string> Username { get; } = new()
     {
-        InputName       = "Username",
-        ValidMessage    = "Valid Username.",
+        InputName           = "Username",
+        ValidMessage        = "Valid Username.",
         ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank)]
     };
 
     public FormInput<string> Email { get; } = new()
     {
-        InputName       = "Email",
-        ValidMessage    = "Valid Email.",
-        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank), new ValidatorAttribute<string>(ValidationType.Email)]
+        InputName    = "Email",
+        ValidMessage = "Valid Email.",
+        ValidatorAttributes =
+        [
+            new ValidatorAttribute<string>(ValidationType.NotBlank),
+            new ValidatorAttribute<string>(ValidationType.Email)
+        ]
     };
 
     public FormInput<string> Password { get; } = new()
     {
-        InputName       = "Password",
-        ValidMessage    = "Valid Password."
+        InputName    = "Password",
+        ValidMessage = "Valid Password."
     };
 
     public FormInput<string> ConfirmPassword { get; } = new()
     {
-        InputName       = "Confirm Password",
-        ValidMessage    = "Password Matches.",
+        InputName    = "ConfirmPassword",
+        ValidMessage = "Password Matches.",
     };
 
     public FormInput<string> Name { get; } = new()
     {
-        InputName       = "Name",
-        ValidMessage    = "Valid Name.",
+        InputName           = "Name",
+        ValidMessage        = "Valid Name.",
         ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank)]
     };
 
     public FormInput<string> Url { get; } = new()
     {
-        InputName       = "Url",
-        ValidMessage    = "Valid Url.",
+        InputName           = "Url",
+        ValidMessage        = "Valid Url.",
         ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.Url)]
     };
 
     public FormInput<string> IconUrl { get; } = new()
     {
-        InputName       = "Icon Url",
-        ValidMessage    = "Valid Url.",
+        InputName           = "Icon Url",
+        ValidMessage        = "Valid Url.",
         ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.Url)]
     };
 
@@ -97,29 +95,35 @@ public class PasswordForm
 
     public FormInput<string> CardNumber { get; } = new()
     {
-        InputName       = "Card Number",
-        ValidMessage    = "Valid Card Number.",
-        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank), new ValidatorAttribute<string>(ValidationType.Card)]
+        InputName    = "Card Number",
+        ValidMessage = "Valid Card Number.",
+        ValidatorAttributes =
+        [
+            new ValidatorAttribute<string>(ValidationType.NotBlank), new ValidatorAttribute<string>(ValidationType.Card)
+        ]
     };
 
     public FormInput<string> Cvc { get; } = new()
     {
-        InputName       = "CVC/CCV",
-        ValidMessage    = "Valid CVC/CCV Number.",
-        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank), new ValidatorAttribute<string>(ValidationType.Cvc)]
+        InputName    = "CVC/CCV",
+        ValidMessage = "Valid CVC/CCV Number.",
+        ValidatorAttributes =
+        [
+            new ValidatorAttribute<string>(ValidationType.NotBlank), new ValidatorAttribute<string>(ValidationType.Cvc)
+        ]
     };
 
     public FormInput<string> Pin { get; } = new()
     {
-        InputName       = "Pin",
-        ValidMessage    = "Valid Pin.",
+        InputName           = "Pin",
+        ValidMessage        = "Valid Pin.",
         ValidatorAttributes = []
     };
-    
+
     public FormInput<string> Notes { get; } = new()
     {
-        InputName       = "Notes",
-        ValidMessage    = "Valid Note.",
+        InputName           = "Notes",
+        ValidMessage        = "Valid Note.",
         ValidatorAttributes = []
     };
 
