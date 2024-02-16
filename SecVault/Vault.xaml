@@ -180,7 +180,6 @@
                                                       Foreground="#8592a5"
                                                       Background="White"
                                                       IconSource="/SecVault;component/Icons/Search.png" />
-
                 <reusableControl:RoundedIconButton Grid.Column="1"
                                                    HoverBackground="#FFFB8C00"
                                                    PressedBackground="#FFE57373"

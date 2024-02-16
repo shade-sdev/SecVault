@@ -83,6 +83,13 @@ public class PasswordForm
         ValidMessage    = "Valid Pin.",
         ValidationTypes = []
     };
+    
+    public FormInput<string> Notes { get; } = new()
+    {
+        InputName       = "Notes",
+        ValidMessage    = "Valid Note.",
+        ValidationTypes = []
+    };
 
     #endregion
 }

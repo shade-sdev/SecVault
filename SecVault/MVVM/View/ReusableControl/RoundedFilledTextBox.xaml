@@ -35,8 +35,12 @@
                                                   VerticalScrollBarVisibility="Hidden" />
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
                                                 VerticalAlignment="Center">
-                                        <Image Width="20" Height="20" Source="{Binding IconSource}"
-                                               HorizontalAlignment="Left" />
+                                        <Image x:Name="Icon" 
+                                            Width="20" 
+                                               Height="20" 
+                                               Source="{Binding IconSource}"
+                                               HorizontalAlignment="Left"
+                                               Visibility="Collapsed"/>
                                         <Label x:Name="WaterMarker"
                                                FontWeight="{TemplateBinding FontWeight}"
                                                Content="{TemplateBinding Tag}"
@@ -55,6 +59,7 @@
                                         <Condition Property="Text" Value="" />
                                     </MultiTrigger.Conditions>
                                     <Setter Property="Visibility" TargetName="WaterMarker" Value="Visible" />
+                                    <Setter Property="Visibility" TargetName="Icon" Value="Visible" />
                                 </MultiTrigger>
                             </ControlTemplate.Triggers>
 

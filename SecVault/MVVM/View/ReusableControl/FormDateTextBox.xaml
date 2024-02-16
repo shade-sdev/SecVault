@@ -1,0 +1,132 @@
+<UserControl x:Class="SecVault.MVVM.View.ReusableControl.FormDateTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:moderncontrols="clr-namespace:org.russkyc.moderncontrols;assembly=Russkyc.ModernControls.WPF"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d"
+             d:DesignHeight="{Binding Height}"
+             d:DesignWidth="{Binding Width}"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             Background="Transparent">
+    
+    <Grid HorizontalAlignment="Left"
+          VerticalAlignment="Center">
+        
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.4*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0.4*" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0"
+               FontFamily="Roboto"
+               FontWeight="SemiBold"
+               Height="25"
+               Content="{Binding TextBoxLabel}"
+               FontSize="12"
+               Foreground="White"
+               Margin="-4,3,0,0" />
+
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <moderncontrols:ModernTextBox Grid.Column="0"
+                                          Background="#292929"
+                                          Margin="0,0,10,0"
+                                          FontFamily="{Binding TextBoxFontFamily}"
+                                          FontWeight="SemiBold"
+                                          IsPasswordBox="True"
+                                          FontSize="12"
+                                          Placeholder="{Binding TextOneBoxPlaceHolder}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Height="40"
+                                          Width="{Binding BoxOneWidth}"
+                                          Icon="{Binding TextOneBoxIcon}"
+                                          Text="{Binding TextBoxOneContent, UpdateSourceTrigger=PropertyChanged}">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="TextChanged">
+                        <b:InvokeCommandAction Command="{Binding Command}" CommandParameter="{Binding TextBoxOneContent}" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </moderncontrols:ModernTextBox>
+            <moderncontrols:ModernTextBox Grid.Column="1"
+                                          Background="#292929"
+                                          Margin="0"
+                                          FontFamily="{Binding TextBoxFontFamily}"
+                                          FontWeight="SemiBold"
+                                          IsPasswordBox="True"
+                                          FontSize="12"
+                                          Placeholder="{Binding TextTwoBoxPlaceHolder}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Height="40"
+                                          Width="{Binding BoxTwoWidth}"
+                                          Icon="{Binding TextTwoBoxIcon}"
+                                          Text="{Binding TextBoxTwoContent, UpdateSourceTrigger=PropertyChanged}">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="TextChanged">
+                        <b:InvokeCommandAction Command="{Binding Command}" CommandParameter="{Binding TextBoxTwoContent}" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </moderncontrols:ModernTextBox>
+        </Grid>
+        
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Margin="5,0,0,0">
+
+            <Image Width="12"
+                   Height="12"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   RenderOptions.EdgeMode="Aliased"
+                   RenderOptions.BitmapScalingMode="Fant">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Valid}" Value="True">
+                                <Setter Property="Source" Value="/Secvault;component/Icons/Valid.png" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Valid}" Value="False">
+                                <Setter Property="Source" Value="/Secvault;component/Icons/Error.png" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+
+            <Label VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   FontFamily="Roboto"
+                   FontWeight="Regular"
+                   Height="25"
+                   Margin="2,2,0,0"
+                   Content="{Binding ValidationLabel}"
+                   FontSize="10">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Valid}" Value="True">
+                                <Setter Property="Foreground" Value="LimeGreen" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Valid}" Value="False">
+                                <Setter Property="Foreground" Value="#FFDF0900" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+
+        </StackPanel>
+
+    </Grid>
+</UserControl>
