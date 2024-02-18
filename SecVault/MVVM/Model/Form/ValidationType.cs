@@ -104,6 +104,7 @@ public static class ValidationTypeExtensions
                    ValidationType.Match    => $"{propertyName} does not match.",
                    ValidationType.Card     => $"{propertyName} must be a valid card number.",
                    ValidationType.Cvc      => $"{propertyName} must be a valid CVC/CVV number.",
+                   ValidationType.MaxSize  => $"{propertyName} must be of a valid length.",
                    _                       => throw new ArgumentOutOfRangeException(nameof(type), type, null)
                };
     }

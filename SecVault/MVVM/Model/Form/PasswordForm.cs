@@ -119,6 +119,25 @@ public class PasswordForm
         ValidMessage        = "Valid Pin.",
         ValidatorAttributes = []
     };
+    
+    public FormInput<string> ExpiryMonth { get; } = new()
+    {
+        InputName           = "Expiry Month",
+        ValidMessage        = "Valid Expiry Month.",
+        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank), new ValidatorAttribute<string>(ValidationType.MaxSize, 2)]
+    };
+    
+    public FormInput<string> ExpiryYear { get; } = new()
+    {
+        InputName           = "Expiry Year",
+        ValidMessage        = "Valid Expiry Year.",
+        ValidatorAttributes = [new ValidatorAttribute<string>(ValidationType.NotBlank), new ValidatorAttribute<string>(ValidationType.MaxSize, 4)]
+    };
+    
+    public DateTime GetDateTime()
+    {
+        return new DateTime(int.Parse(ExpiryYear.Content!), int.Parse(ExpiryMonth.Content!), 1);
+    }
 
     public FormInput<string> Notes { get; } = new()
     {
@@ -128,4 +147,6 @@ public class PasswordForm
     };
 
     #endregion
+    
+    
 }

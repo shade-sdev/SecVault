@@ -1,5 +1,4 @@
 using System.Windows;
-using System.Windows.Controls;
 using SecVault.Core;
 
 namespace SecVault.MVVM.View.ReusableControl;
@@ -13,13 +12,22 @@ public partial class FormDateTextBox
 
     #region Commands
 
-    public static readonly DependencyProperty CommandProperty =
-        DependencyProperty.Register(nameof(Command), typeof(RelayCommand), typeof(FormDateTextBox));
+    public static readonly DependencyProperty CommandOneProperty =
+        DependencyProperty.Register(nameof(CommandOne), typeof(RelayCommand), typeof(FormDateTextBox));
 
-    public RelayCommand Command
+    public RelayCommand CommandOne
     {
-        get => (RelayCommand)GetValue(CommandProperty);
-        set => SetValue(CommandProperty, value);
+        get => (RelayCommand)GetValue(CommandOneProperty);
+        set => SetValue(CommandOneProperty, value);
+    }
+    
+    public static readonly DependencyProperty CommandTwoProperty =
+        DependencyProperty.Register(nameof(CommandTwo), typeof(RelayCommand), typeof(FormDateTextBox));
+
+    public RelayCommand CommandTwo
+    {
+        get => (RelayCommand)GetValue(CommandTwoProperty);
+        set => SetValue(CommandTwoProperty, value);
     }
 
     #endregion
@@ -34,7 +42,7 @@ public partial class FormDateTextBox
         get => (int)GetValue(WidthProperty);
         set => SetValue(WidthProperty, value);
     }
-    
+
     public new static readonly DependencyProperty BoxOneWidthProperty =
         DependencyProperty.Register(nameof(BoxOneWidth), typeof(int), typeof(FormDateTextBox));
 
@@ -43,7 +51,7 @@ public partial class FormDateTextBox
         get => (int)GetValue(BoxOneWidthProperty);
         set => SetValue(BoxOneWidthProperty, value);
     }
-    
+
     public new static readonly DependencyProperty BoxTwoWidthProperty =
         DependencyProperty.Register(nameof(BoxTwoWidth), typeof(int), typeof(FormDateTextBox));
 
@@ -66,35 +74,62 @@ public partial class FormDateTextBox
 
     #region Validation
 
-    public static readonly DependencyProperty ValidProperty =
-        DependencyProperty.Register(nameof(Valid), typeof(bool?), typeof(FormDateTextBox));
+    public static readonly DependencyProperty OneValidProperty =
+        DependencyProperty.Register(nameof(OneValid), typeof(bool?), typeof(FormDateTextBox));
 
-    public bool? Valid
+    public bool? OneValid
     {
-        get => (bool?)GetValue(ValidProperty);
-        set => SetValue(ValidProperty, value);
+        get => (bool?)GetValue(OneValidProperty);
+        set => SetValue(OneValidProperty, value);
+    }
+    
+    public static readonly DependencyProperty TwoValidProperty =
+        DependencyProperty.Register(nameof(TwoValid), typeof(bool?), typeof(FormDateTextBox));
+
+    public bool? TwoValid
+    {
+        get => (bool?)GetValue(TwoValidProperty);
+        set => SetValue(TwoValidProperty, value);
     }
 
     #endregion
 
     #region Labels
 
-    public static readonly DependencyProperty TextBoxLabelProperty =
-        DependencyProperty.Register(nameof(TextBoxLabel), typeof(string), typeof(FormDateTextBox));
+    public static readonly DependencyProperty TextBoxOneLabelProperty =
+        DependencyProperty.Register(nameof(TextBoxOneLabel), typeof(string), typeof(FormDateTextBox));
 
-    public string TextBoxLabel
+    public string TextBoxOneLabel
     {
-        get => (string)GetValue(TextBoxLabelProperty);
-        set => SetValue(TextBoxLabelProperty, value);
+        get => (string)GetValue(TextBoxOneLabelProperty);
+        set => SetValue(TextBoxOneLabelProperty, value);
+    }
+    
+    public static readonly DependencyProperty TextBoxTwoLabelProperty =
+        DependencyProperty.Register(nameof(TextBoxTwoLabel), typeof(string), typeof(FormDateTextBox));
+
+    public string TextBoxTwoLabel
+    {
+        get => (string)GetValue(TextBoxTwoLabelProperty);
+        set => SetValue(TextBoxTwoLabelProperty, value);
     }
 
-    public static readonly DependencyProperty ValidationLabelProperty =
-        DependencyProperty.Register(nameof(ValidationLabel), typeof(string), typeof(FormDateTextBox));
+    public static readonly DependencyProperty ValidationLabelOneProperty =
+        DependencyProperty.Register(nameof(ValidationLabelOne), typeof(string), typeof(FormDateTextBox));
 
-    public string ValidationLabel
+    public string ValidationLabelOne
     {
-        get => (string)GetValue(ValidationLabelProperty);
-        set => SetValue(ValidationLabelProperty, value);
+        get => (string)GetValue(ValidationLabelOneProperty);
+        set => SetValue(ValidationLabelOneProperty, value);
+    }
+    
+    public static readonly DependencyProperty ValidationLabelTwoProperty =
+        DependencyProperty.Register(nameof(ValidationLabelTwo), typeof(string), typeof(FormDateTextBox));
+
+    public string ValidationLabelTwo
+    {
+        get => (string)GetValue(ValidationLabelTwoProperty);
+        set => SetValue(ValidationLabelTwoProperty, value);
     }
 
     #endregion
@@ -109,7 +144,7 @@ public partial class FormDateTextBox
         get => (string)GetValue(TextBoxOneContentProperty);
         set => SetValue(TextBoxOneContentProperty, value);
     }
-    
+
     public static readonly DependencyProperty TextBoxTwoContentProperty =
         DependencyProperty.Register(nameof(TextBoxTwoContent), typeof(string), typeof(FormDateTextBox));
 
@@ -127,7 +162,7 @@ public partial class FormDateTextBox
         get => GetValue(TextBoxOneIconProperty);
         set => SetValue(TextBoxOneIconProperty, value);
     }
-    
+
     public static readonly DependencyProperty TextBoxTwoIconProperty =
         DependencyProperty.Register(nameof(TextTwoBoxIcon), typeof(object), typeof(FormDateTextBox));
 
@@ -136,7 +171,7 @@ public partial class FormDateTextBox
         get => GetValue(TextBoxTwoIconProperty);
         set => SetValue(TextBoxTwoIconProperty, value);
     }
-    
+
     public static readonly DependencyProperty TextBoxOnePlaceHolderProperty =
         DependencyProperty.Register(nameof(TextOneBoxPlaceHolder), typeof(string), typeof(FormDateTextBox));
 
@@ -145,7 +180,7 @@ public partial class FormDateTextBox
         get => (string)GetValue(TextBoxOnePlaceHolderProperty);
         set => SetValue(TextBoxOnePlaceHolderProperty, value);
     }
-    
+
     public static readonly DependencyProperty TextBoxTwoPlaceHolderProperty =
         DependencyProperty.Register(nameof(TextTwoBoxPlaceHolder), typeof(string), typeof(FormDateTextBox));
 
