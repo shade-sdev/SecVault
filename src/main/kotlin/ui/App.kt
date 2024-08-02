@@ -10,13 +10,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import ui.theme.PasswordColors
 
 @Composable
 fun App() {
 
     var text by remember { mutableStateOf("Hello, World!") }
 
-    MaterialTheme {
+    MaterialTheme(colorScheme = PasswordColors) {
         Column(
             modifier = Modifier.fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.secondaryContainer),

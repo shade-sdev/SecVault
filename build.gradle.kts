@@ -59,7 +59,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "secvault"
+            packageName = "SecVault"
             packageVersion = "1.0.0"
         }
     }
