@@ -111,7 +111,9 @@ class RegisterScreen : Screen {
                             )
                         }
                         Button(
-                            onClick = { navigator?.push(LoginScreen()) },
+                            onClick = {
+                                if (navigator?.canPop == true) navigator.pop() else navigator?.push(LoginScreen())
+                            },
                             modifier = Modifier.width(175.dp),
                             colors = ButtonColors(
                                 containerColor = secondary,
