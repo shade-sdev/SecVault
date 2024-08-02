@@ -88,7 +88,7 @@ class LoginScreen : Screen {
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Button(
-                            onClick = { },
+                            onClick = { navigator?.push(LoginSplashScreen()) },
                             modifier = Modifier.width(175.dp),
                             colors = ButtonColors(
                                 containerColor = secondary,
