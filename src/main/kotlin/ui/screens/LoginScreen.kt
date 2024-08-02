@@ -1,11 +1,9 @@
 package ui.screens
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
@@ -28,9 +26,8 @@ import ui.theme.Font
 import ui.theme.secondary
 import ui.theme.tertiary
 
-class RegisterScreen : Screen {
+class LoginScreen : Screen {
 
-    @Preview
     @Composable
     override fun Content() {
 
@@ -68,7 +65,7 @@ class RegisterScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text = "Register an account.",
+                        text = "Login into your account.",
                         color = Color.White,
                         fontFamily = Font.RussoOne,
                         fontWeight = FontWeight.Normal,
@@ -81,37 +78,17 @@ class RegisterScreen : Screen {
                         icon = Icons.Filled.AccountCircle,
                         modifier = Modifier.height(40.dp).width(360.dp)
                     )
-                    FormTextField(
-                        label = "Email",
-                        icon = Icons.Filled.Email,
+                    PasswordTextField(
+                        label = "Password",
                         modifier = Modifier.height(40.dp).width(360.dp)
                     )
                     PasswordTextField(
-                        label = "Password",
+                        label = "Master Password",
                         modifier = Modifier.height(40.dp).width(360.dp)
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Button(
                             onClick = { },
-                            modifier = Modifier.width(175.dp),
-                            colors = ButtonColors(
-                                containerColor = secondary,
-                                contentColor = Color.White,
-                                disabledContentColor = secondary,
-                                disabledContainerColor = secondary
-                            )
-                        )
-                        {
-                            Text(
-                                text = "Register",
-                                fontStyle = FontStyle.Normal,
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 12.sp,
-                                fontFamily = Font.RussoOne
-                            )
-                        }
-                        Button(
-                            onClick = { navigator?.push(LoginScreen()) },
                             modifier = Modifier.width(175.dp),
                             colors = ButtonColors(
                                 containerColor = secondary,
@@ -129,12 +106,29 @@ class RegisterScreen : Screen {
                                 fontFamily = Font.RussoOne
                             )
                         }
+                        Button(
+                            onClick = { navigator?.pop() },
+                            modifier = Modifier.width(175.dp),
+                            colors = ButtonColors(
+                                containerColor = secondary,
+                                contentColor = Color.White,
+                                disabledContentColor = secondary,
+                                disabledContainerColor = secondary
+                            )
+                        )
+                        {
+                            Text(
+                                text = "Register",
+                                fontStyle = FontStyle.Normal,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 12.sp,
+                                fontFamily = Font.RussoOne
+                            )
+                        }
                     }
                 }
             }
 
         }
-
     }
-
 }
