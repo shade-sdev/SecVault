@@ -1,4 +1,4 @@
 package ui
 
-class App {
+fun App() {
 }
