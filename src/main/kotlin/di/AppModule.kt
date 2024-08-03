@@ -4,6 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import core.DatabaseFactory
 import core.loadConfigs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.module.dsl.createdAtStart
 import org.koin.core.module.dsl.withOptions
 import org.koin.core.parameter.parametersOf
@@ -20,7 +23,11 @@ val appModule = module {
         createdAtStart()
     }
 
-    single { DatabaseFactory.create(get()) } withOptions {
+    single {
+        CoroutineScope(Dispatchers.IO).launch {
+            DatabaseFactory.create(get())
+        }
+    } withOptions {
         createdAtStart()
     }
 
