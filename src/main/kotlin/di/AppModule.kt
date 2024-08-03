@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import core.DatabaseFactory
 import core.loadConfigs
+import org.koin.core.module.dsl.createdAtStart
+import org.koin.core.module.dsl.withOptions
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
@@ -14,9 +16,13 @@ import repository.user.impl.UserRepositoryImpl
 
 val appModule = module {
 
-    single { loadConfigs() }
+    single { loadConfigs() } withOptions {
+        createdAtStart()
+    }
 
-    single { DatabaseFactory.create(get()) }
+    single { DatabaseFactory.create(get()) } withOptions {
+        createdAtStart()
+    }
 
     factory { (clazz: Class<*>) ->
         LoggerFactory.getLogger(clazz)
