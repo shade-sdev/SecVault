@@ -2,16 +2,31 @@ package di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import core.DatabaseFactory
+import core.loadConfigs
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import repository.user.UserRepository
+import repository.user.impl.UserRepositoryImpl
 
 val appModule = module {
+
+    single { loadConfigs() }
+
+    single { DatabaseFactory.create(get()) }
+
     factory { (clazz: Class<*>) ->
         LoggerFactory.getLogger(clazz)
     }
+}
+
+val repositoryModule = module {
+
+    single<UserRepository> { UserRepositoryImpl(get()) }
+
 }
 
 @Composable

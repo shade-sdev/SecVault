@@ -2,7 +2,7 @@
 
 - **di/**: Contains dependency injection setup using Koin.
     - `AppModule.kt`: Defines Koin modules for dependency injection.
-- **model/**: Contains data models and repository classes.
+- **repository/**: Contains data models and repository classes.
     - `Person.kt`: Data class representing a person.
     - `PersonRepository.kt`: Repository class for data operations.
 - **ui/**: Contains UI-related code.
@@ -40,7 +40,7 @@ applications.
 │   │   │   ├── yourapp/<br>
 │   │   │   │   ├── di/<br>
 │   │   │   │   │   └── AppModule.kt<br>
-│   │   │   │   ├── model/<br>
+│   │   │   │   ├── repository/<br>
 │   │   │   │   │   ├── Person.kt<br>
 │   │   │   │   │   └── PersonRepository.kt<br>
 │   │   │   │   ├── ui/<br>

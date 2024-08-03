@@ -1,0 +1,9 @@
+database:
+  driverClassName: "org.sqlite.JDBC"
+  jdbcUrl: "jdbc:sqlite:secvault.db"
+  username: "admin"
+  password: "admin"
+  maximumPoolSize: 10
+  isAutoCommit: true
+  isReadOnly: false
+  transactionIsolation: "TRANSACTION_SERIALIZABLE"

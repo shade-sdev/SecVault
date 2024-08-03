@@ -12,13 +12,14 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import di.appModule
-import org.koin.core.context.startKoin
+import di.repositoryModule
+import org.koin.core.context.GlobalContext.startKoin
 import ui.App
 
 fun main() = application {
 
     startKoin {
-        modules(appModule)
+        modules(appModule, repositoryModule)
     }
 
     Window(
@@ -32,7 +33,7 @@ fun main() = application {
     {
         WindowDraggableArea(
             modifier = Modifier.clip(RoundedCornerShape(10.dp))
-                .fillMaxSize()
+                    .fillMaxSize()
         )
         {
             App()
