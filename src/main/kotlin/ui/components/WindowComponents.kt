@@ -1,22 +1,23 @@
 package ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.Icon
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import ui.theme.secondary
 import kotlin.system.exitProcess
 
@@ -45,5 +46,40 @@ fun CloseButton() {
             modifier = Modifier.size(15.dp),
             tint = Color.White
         )
+    }
+}
+
+@Composable
+fun LoadingScreen(
+    modifier: Modifier = Modifier,
+    text: String = "Loading...",
+    backgroundColor: Color = Color(0xFF121212),
+    indicatorColor: Color = Color.White,
+    textColor: Color = Color.White
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(backgroundColor),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            CircularProgressIndicator(
+                color = indicatorColor,
+                trackColor = Color(0xFF1C1520),
+                strokeWidth = 6.dp,
+                strokeCap = StrokeCap.Round,
+                modifier = Modifier.size(120.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text,
+                color = textColor,
+                fontSize = 16.sp
+            )
+        }
     }
 }

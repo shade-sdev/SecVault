@@ -19,8 +19,10 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.delay
+import ui.components.LoadingScreen
 import ui.theme.Font
 import ui.theme.secondary
+import ui.theme.tertiary
 
 class LoginSplashScreen() : Screen {
 
@@ -29,10 +31,12 @@ class LoginSplashScreen() : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
+        var isLoading by remember { mutableStateOf(true) }
         var isVisible by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             delay(600)
+            isLoading = false
             isVisible = true
             delay(1500)
             navigator?.pop()
@@ -51,7 +55,14 @@ class LoginSplashScreen() : Screen {
                 horizontalAlignment = Alignment.CenterHorizontally
             )
             {
-
+                if (isLoading) {
+                    LoadingScreen(
+                        text = "Loading...",
+                        backgroundColor = tertiary,
+                        indicatorColor = Color.White,
+                        textColor = Color.White
+                    )
+                }
                 AnimatedVisibility(
                     visible = isVisible,
                     enter = slideInVertically() + fadeIn(), exit = fadeOut()
