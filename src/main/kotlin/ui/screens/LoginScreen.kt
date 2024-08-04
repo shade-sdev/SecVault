@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import core.ui.UiState
 import ui.components.*
 import ui.theme.Font
@@ -30,14 +31,44 @@ class LoginScreen : Screen {
 
     @Composable
     override fun Content() {
+
         val navigator = LocalNavigator.current
 
         val screenModel = koinScreenModel<LoginScreenModel>()
 
+        val loginState by screenModel.loginState.collectAsState()
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Your main content, e.g., the login screen
+            LoginScreenContent(screenModel, navigator)
+
+            // Overlay the notification on top of the content
+            when (val state = loginState) {
+                is UiState.Loading -> LoadingScreen()
+                is UiState.Success -> {
+                    LaunchedEffect(state) {
+                        navigator?.push(LoginSplashScreen())
+                    }
+                }
+
+                is UiState.Error -> {
+                    TopRightNotification(
+                        message = state.message,
+                        visible = true,
+                        onDismiss = { screenModel.clearError() }
+                    )
+                }
+
+                is UiState.Idle -> {}
+            }
+        }
+    }
+
+    @Composable
+    fun LoginScreenContent(screenModel: LoginScreenModel, navigator: Navigator?) {
+
         var username by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
-
-        val loginState by screenModel.loginState.collectAsState()
 
         Row(
             modifier = Modifier.fillMaxSize()
@@ -142,19 +173,6 @@ class LoginScreen : Screen {
                     }
                 }
             }
-
-            when (val state = loginState) {
-                is UiState.Loading -> LoadingScreen()
-                is UiState.Success -> {
-                    LaunchedEffect(state) {
-                        navigator?.push(LoginSplashScreen())
-                    }
-                }
-
-                is UiState.Error -> LoadingScreen()
-                is UiState.Idle -> {}
-            }
-
         }
     }
 }

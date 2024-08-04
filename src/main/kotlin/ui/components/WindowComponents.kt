@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -18,6 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
+import ui.theme.Font
 import ui.theme.secondary
 import kotlin.system.exitProcess
 
@@ -29,7 +32,7 @@ fun CloseButton() {
     Button(
         onClick = { exitProcess(0) },
         modifier = Modifier.size(30.dp)
-            .hoverable(interactionSource),
+                .hoverable(interactionSource),
         shape = RoundedCornerShape(topEnd = 10.dp),
         colors = ButtonColors(
             containerColor = if (isHovered) Color(0xFFb91919) else secondary,
@@ -59,8 +62,8 @@ fun LoadingScreen(
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .background(backgroundColor),
+                .fillMaxSize()
+                .background(backgroundColor),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -80,6 +83,57 @@ fun LoadingScreen(
                 color = textColor,
                 fontSize = 16.sp
             )
+        }
+    }
+}
+
+@Composable
+fun TopRightNotification(
+    message: String,
+    visible: Boolean,
+    onDismiss: () -> Unit,
+    durationMillis: Long = 3000
+) {
+    if (visible) {
+        Box(
+            modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+            contentAlignment = Alignment.TopEnd
+        ) {
+            Surface(
+                modifier = Modifier
+                        .fillMaxWidth(0.4f)
+                        .padding(18.dp),
+                shape = RoundedCornerShape(8.dp),
+                shadowElevation = 4.dp,
+                color = Color.Red
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.padding(PaddingValues(start = 12.dp))
+                ) {
+                    Text(
+                        text = message,
+                        fontSize = 12.sp,
+                        fontFamily = Font.RussoOne,
+                        color = Color.White
+                    )
+                    IconButton(onClick = { onDismiss() }) {
+                        Icon(
+                            Icons.Default.Close,
+                            contentDescription = "Close",
+                            tint = Color.White
+                        )
+                    }
+                }
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            delay(durationMillis)
+            onDismiss()
         }
     }
 }
