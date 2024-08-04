@@ -39,10 +39,9 @@ class LoginScreen : Screen {
         val loginState by screenModel.loginState.collectAsState()
 
         Box(modifier = Modifier.fillMaxSize()) {
-            // Your main content, e.g., the login screen
-            LoginScreenContent(screenModel, navigator)
 
-            // Overlay the notification on top of the content
+        LoginScreenContent(screenModel, navigator)
+
             when (val state = loginState) {
                 is UiState.Loading -> LoadingScreen()
                 is UiState.Success -> {
