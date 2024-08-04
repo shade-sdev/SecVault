@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import core.security.AuthenticationManager
 import core.ui.UiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +18,7 @@ class LoginScreenModel(private val authenticationManager: AuthenticationManager)
     val loginState: StateFlow<UiState<User>> = _loginState.asStateFlow()
 
     fun login(username: String, password: String) {
-        screenModelScope.launch {
+        screenModelScope.launch(Dispatchers.IO) {
             _loginState.value = UiState.Loading
             when (val result = authenticationManager.login(username, password)) {
                 is Result.Success -> _loginState.value = UiState.Success(result.data)

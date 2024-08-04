@@ -21,10 +21,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import core.AppState
 import kotlinx.coroutines.delay
 import org.koin.java.KoinJavaComponent.inject
-import ui.components.LoadingScreen
 import ui.theme.Font
 import ui.theme.secondary
-import ui.theme.tertiary
 
 class LoginSplashScreen() : Screen {
 
@@ -35,12 +33,10 @@ class LoginSplashScreen() : Screen {
         val appState by inject<AppState>(clazz = AppState::class.java)
 
         val navigator = LocalNavigator.current
-        var isLoading by remember { mutableStateOf(true) }
         var isVisible by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             delay(600)
-            isLoading = false
             isVisible = true
             delay(1500)
             //navigator?.pop()
@@ -59,14 +55,6 @@ class LoginSplashScreen() : Screen {
                 horizontalAlignment = Alignment.CenterHorizontally
             )
             {
-                if (isLoading) {
-                    LoadingScreen(
-                        text = "Loading...",
-                        backgroundColor = tertiary,
-                        indicatorColor = Color.White,
-                        textColor = Color.White
-                    )
-                }
                 AnimatedVisibility(
                     visible = isVisible,
                     enter = slideInVertically() + fadeIn(), exit = fadeOut()
