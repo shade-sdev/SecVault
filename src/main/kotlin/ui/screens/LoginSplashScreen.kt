@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.AppState
 import kotlinx.coroutines.delay
+import org.koin.java.KoinJavaComponent.inject
 import ui.components.LoadingScreen
 import ui.theme.Font
 import ui.theme.secondary
@@ -30,6 +32,8 @@ class LoginSplashScreen() : Screen {
     @Composable
     override fun Content() {
 
+        val appState by inject<AppState>(clazz = AppState::class.java)
+
         val navigator = LocalNavigator.current
         var isLoading by remember { mutableStateOf(true) }
         var isVisible by remember { mutableStateOf(false) }
@@ -39,12 +43,12 @@ class LoginSplashScreen() : Screen {
             isLoading = false
             isVisible = true
             delay(1500)
-            navigator?.pop()
+            //navigator?.pop()
         }
 
         Row(
             modifier = Modifier.fillMaxSize()
-                .background(secondary),
+                    .background(secondary),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         )
@@ -101,7 +105,7 @@ class LoginSplashScreen() : Screen {
                             tint = Color.White
                         )
                         Text(
-                            text = "Login",
+                            text = appState.getAuthenticatedUser.userName,
                             fontStyle = FontStyle.Normal,
                             fontWeight = FontWeight.Normal,
                             color = Color.White,
