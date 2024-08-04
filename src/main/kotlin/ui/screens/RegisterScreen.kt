@@ -9,7 +9,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,6 +35,10 @@ class RegisterScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
+
+        var username by remember { mutableStateOf("") }
+        var email by remember { mutableStateOf("") }
+        var password by remember { mutableStateOf("") }
 
         Row(
             modifier = Modifier.fillMaxSize()
@@ -77,16 +81,22 @@ class RegisterScreen : Screen {
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     FormTextField(
+                        value = username,
+                        onValueChange = { username = it },
                         label = "Username",
                         icon = Icons.Filled.AccountCircle,
                         modifier = Modifier.height(40.dp).width(360.dp)
                     )
                     FormTextField(
+                        value = email,
+                        onValueChange = { email = it },
                         label = "Email",
                         icon = Icons.Filled.Email,
                         modifier = Modifier.height(40.dp).width(360.dp)
                     )
                     PasswordTextField(
+                        value = password,
+                        onValueChange = { password = it },
                         label = "Password",
                         modifier = Modifier.height(40.dp).width(360.dp)
                     )

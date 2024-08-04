@@ -2,11 +2,10 @@ package di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import core.AppState
 import core.DatabaseFactory
 import core.loadConfigs
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import core.security.AuthenticationManager
 import org.koin.core.module.dsl.createdAtStart
 import org.koin.core.module.dsl.withOptions
 import org.koin.core.parameter.parametersOf
@@ -16,6 +15,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import repository.user.UserRepository
 import repository.user.impl.UserRepositoryImpl
+import viewmodel.LoginScreenModel
 
 val appModule = module {
 
@@ -23,13 +23,13 @@ val appModule = module {
         createdAtStart()
     }
 
-    single {
-        CoroutineScope(Dispatchers.IO).launch {
-            DatabaseFactory.create(get())
-        }
-    } withOptions {
+    single { DatabaseFactory.create(get()) } withOptions {
         createdAtStart()
     }
+
+    single { AppState() }
+
+    single { AuthenticationManager(get(), get()) }
 
     factory { (clazz: Class<*>) ->
         LoggerFactory.getLogger(clazz)
@@ -39,6 +39,12 @@ val appModule = module {
 val repositoryModule = module {
 
     single<UserRepository> { UserRepositoryImpl(get()) }
+
+}
+
+val viewModelModule = module {
+
+    factory { LoginScreenModel(get()) }
 
 }
 

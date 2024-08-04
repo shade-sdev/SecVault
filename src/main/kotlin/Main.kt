@@ -13,13 +13,14 @@ import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import di.appModule
 import di.repositoryModule
+import di.viewModelModule
 import org.koin.core.context.GlobalContext.startKoin
 import ui.App
 
 fun main() = application {
 
     startKoin {
-        modules(appModule, repositoryModule)
+        modules(appModule, repositoryModule, viewModelModule)
     }
 
     Window(

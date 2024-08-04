@@ -31,11 +31,12 @@ import ui.theme.secondary
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     label: String = "",
     icon: ImageVector,
 ) {
-    var user by remember { mutableStateOf("") }
     val interactionSource = remember { MutableInteractionSource() }
 
     Surface(
@@ -44,8 +45,8 @@ fun FormTextField(
         shape = RoundedCornerShape(8.dp),
     ) {
         BasicTextField(
-            value = user,
-            onValueChange = { user = it },
+            value = value,
+            onValueChange = onValueChange,
             interactionSource = interactionSource,
             modifier = Modifier
                 .fillMaxSize()
@@ -69,7 +70,7 @@ fun FormTextField(
                         fontFamily = Font.RussoOne,
                     )
                 },
-                value = user,
+                value = value,
                 trailingIcon = {
                     Icon(
                         imageVector = icon,
@@ -103,10 +104,11 @@ fun FormTextField(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     label: String = "",
 ) {
-    var password by remember { mutableStateOf("") }
     val interactionSource = remember { MutableInteractionSource() }
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -116,8 +118,8 @@ fun PasswordTextField(
         shape = RoundedCornerShape(8.dp),
     ) {
         BasicTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = value,
+            onValueChange = onValueChange,
             interactionSource = interactionSource,
             modifier = Modifier
                 .fillMaxSize()
@@ -142,7 +144,7 @@ fun PasswordTextField(
                         fontFamily = Font.RussoOne,
                     )
                 },
-                value = password,
+                value = value,
                 trailingIcon = {
                     IconToggleButton(
                         checked = passwordVisible,
