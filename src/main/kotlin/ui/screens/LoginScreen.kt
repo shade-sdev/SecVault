@@ -43,7 +43,7 @@ class LoginScreen : Screen {
         LoginScreenContent(screenModel, navigator)
 
             when (val state = loginState) {
-                is UiState.Loading -> LoadingScreen()
+                is UiState.Loading -> LoadingScreen(backgroundColor = tertiary.copy(alpha = 0.8f))
                 is UiState.Success -> {
                     LaunchedEffect(state) {
                         navigator?.push(LoginSplashScreen())
