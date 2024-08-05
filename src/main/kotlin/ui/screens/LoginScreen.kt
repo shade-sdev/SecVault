@@ -21,6 +21,7 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import core.ui.UiState
+import repository.user.User
 import ui.components.*
 import ui.theme.Font
 import ui.theme.secondary
@@ -40,7 +41,7 @@ class LoginScreen : Screen {
 
         Box(modifier = Modifier.fillMaxSize()) {
 
-        LoginScreenContent(screenModel, navigator)
+            LoginScreenContent(screenModel, navigator, loginState)
 
             when (val state = loginState) {
                 is UiState.Loading -> LoadingScreen(backgroundColor = tertiary.copy(alpha = 0.8f))
@@ -64,7 +65,11 @@ class LoginScreen : Screen {
     }
 
     @Composable
-    fun LoginScreenContent(screenModel: LoginScreenModel, navigator: Navigator?) {
+    fun LoginScreenContent(
+        screenModel: LoginScreenModel,
+        navigator: Navigator?,
+        loginState: UiState<User>
+    ) {
 
         var username by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
@@ -130,6 +135,7 @@ class LoginScreen : Screen {
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Button(
+                            enabled = loginState !is UiState.Loading,
                             onClick = { screenModel.login(username, password) },
                             modifier = Modifier.width(175.dp),
                             colors = ButtonColors(
@@ -149,6 +155,7 @@ class LoginScreen : Screen {
                             )
                         }
                         Button(
+                            enabled = loginState !is UiState.Loading,
                             onClick = {
                                 if (navigator?.canPop == true) navigator.pop() else navigator?.push(RegisterScreen())
                             },

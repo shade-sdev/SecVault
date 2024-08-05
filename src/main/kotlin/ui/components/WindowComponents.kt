@@ -103,7 +103,7 @@ fun TopRightNotification(
         ) {
             Surface(
                 modifier = Modifier
-                        .fillMaxWidth(0.4f)
+                        .fillMaxWidth(0.3f)
                         .padding(18.dp),
                 shape = RoundedCornerShape(8.dp),
                 shadowElevation = 4.dp,
@@ -116,8 +116,8 @@ fun TopRightNotification(
                 ) {
                     Text(
                         text = message,
-                        fontSize = 12.sp,
-                        fontFamily = Font.RussoOne,
+                        fontSize = 14.sp,
+                        fontFamily = Font.RobotoBold,
                         color = Color.White
                     )
                     IconButton(onClick = { onDismiss() }) {

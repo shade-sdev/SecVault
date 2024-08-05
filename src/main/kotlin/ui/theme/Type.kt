@@ -8,5 +8,5 @@ object Font {
     val Aldrich = FontFamily(Font("fonts/Aldrich-Regular.ttf"))
     val RobotoThin = FontFamily(Font("fonts/Roboto-Light.ttf"))
     val RobotoRegular = FontFamily(Font("fonts/Roboto-Regular.ttf"))
-
+    val RobotoBold = FontFamily(Font("fonts/Roboto-Bold.ttf"))
 }
