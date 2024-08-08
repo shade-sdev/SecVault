@@ -21,10 +21,6 @@ class AppState {
         userExists = exists
     }
 
-    fun userExist(): Boolean {
-        return userExists
-    }
-
     val getAuthenticatedUser: User
         get() = currentUser!!
 
