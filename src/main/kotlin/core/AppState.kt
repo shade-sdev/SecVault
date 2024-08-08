@@ -3,7 +3,10 @@ package core
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import cafe.adriel.voyager.core.screen.Screen
 import repository.user.User
+import ui.screens.LoginScreen
+import ui.screens.RegisterScreen
 
 class AppState {
 
@@ -30,5 +33,9 @@ class AppState {
 
     fun clearCurrentUser() {
         currentUser = null
+    }
+
+    fun initialScreen(): Screen {
+        return if (userExists) LoginScreen() else RegisterScreen()
     }
 }
