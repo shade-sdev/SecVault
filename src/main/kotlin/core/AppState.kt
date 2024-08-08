@@ -19,7 +19,7 @@ class AppState {
     }
 
     fun userExist(): Boolean {
-        return userExists;
+        return userExists
     }
 
     val getAuthenticatedUser: User
