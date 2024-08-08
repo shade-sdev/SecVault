@@ -16,6 +16,15 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
         }
     }
 
+    override fun hasUser(): Boolean {
+        return transaction(db) {
+            exec("SELECT EXISTS(SELECT 1 FROM USERS)") { rs ->
+                rs.next()
+                rs.getBoolean(1)
+            } == true
+        }
+    }
+
     override suspend fun findByUsernameAndPassword(username: String, password: String): Result<User> {
         return try {
             return transaction(db) {

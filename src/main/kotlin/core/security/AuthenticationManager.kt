@@ -10,6 +10,11 @@ class AuthenticationManager(
     private val userRepository: UserRepository,
     private val appState: AppState
 ) {
+
+    init {
+        appState.userExists(userRepository.hasUser())
+    }
+
     suspend fun login(username: String, password: String): Result<User> {
         delay(200)
         return when (val result = userRepository.findByUsernameAndPassword(username, password)) {

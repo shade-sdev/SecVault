@@ -27,9 +27,13 @@ val appModule = module {
         createdAtStart()
     }
 
-    single { AppState() }
+    single { AppState() } withOptions {
+        createdAtStart()
+    }
 
-    single { AuthenticationManager(get(), get()) }
+    single { AuthenticationManager(get(), get()) } withOptions {
+        createdAtStart()
+    }
 
     factory { (clazz: Class<*>) ->
         LoggerFactory.getLogger(clazz)
