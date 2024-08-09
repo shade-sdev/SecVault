@@ -43,6 +43,7 @@ class AuthenticationManager(
 
     fun logout() {
         appState.clearCurrentUser()
+        TokenManager.clearToken()
     }
 
     private fun loadUserFromToken() {
