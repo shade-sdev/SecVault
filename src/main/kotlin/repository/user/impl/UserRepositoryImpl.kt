@@ -1,7 +1,6 @@
 package repository.user.impl
 
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import repository.Result
 import repository.errors.DatabaseError
@@ -34,11 +33,11 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
         }
     }
 
-    override suspend fun findByUsernameAndPassword(username: String, password: String): Result<User> {
+    override suspend fun findByUsername(username: String): Result<User> {
         return try {
             return transaction(db) {
                 User.find {
-                    (UsersTable.userName eq username) and (UsersTable.password eq password)
+                    (UsersTable.userName eq username)
                 }.firstOrNull()
             }?.let { Result.Success(it) } ?: Result.Error("Invalid credentials")
         } catch (e: Exception) {
