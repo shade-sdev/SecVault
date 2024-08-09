@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory
 import repository.user.UserRepository
 import repository.user.impl.UserRepositoryImpl
 import viewmodel.LoginScreenModel
+import viewmodel.RegisterScreenModel
 
 val appModule = module {
 
@@ -49,6 +50,8 @@ val repositoryModule = module {
 val viewModelModule = module {
 
     factory { LoginScreenModel(get()) }
+
+    factory { RegisterScreenModel(get()) }
 
 }
 

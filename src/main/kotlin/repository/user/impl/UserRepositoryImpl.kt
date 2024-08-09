@@ -38,4 +38,20 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
         }
     }
 
+    override suspend fun createUser(username: String, email: String, password: String): Result<User> {
+        return try {
+            return transaction(db) {
+                User.new {
+                    this.userName = username
+                    this.email = email
+                    this.password = password
+                    this.createdBy = "system"
+                    this.lastUpdatedBy = "system"
+                }.let { Result.Success(it) }
+            }
+        } catch (e: Exception) {
+            Result.Error("An error occurred: ${e.message}")
+        }
+    }
+
 }

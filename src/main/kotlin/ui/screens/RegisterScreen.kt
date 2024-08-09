@@ -1,32 +1,22 @@
 package ui.screens
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
-import ui.components.CloseButton
-import ui.components.FormTextField
-import ui.components.LoginLeftContent
-import ui.components.PasswordTextField
-import ui.theme.Font
-import ui.theme.secondary
+import core.ui.UiState
+import ui.components.LoadingScreen
+import ui.components.RegisterScreenContent
+import ui.components.TopRightNotification
 import ui.theme.tertiary
+import viewmodel.RegisterScreenModel
 
 class RegisterScreen : Screen {
 
@@ -35,118 +25,32 @@ class RegisterScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
+        val screenModel = koinScreenModel<RegisterScreenModel>()
+        val registerState by screenModel.registerState.collectAsState()
 
-        var username by remember { mutableStateOf("") }
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
+        Box(modifier = Modifier.fillMaxSize()) {
 
-        Row(
-            modifier = Modifier.fillMaxSize()
-                .background(color = tertiary)
-        )
-        {
-            Box(
-                modifier = Modifier.fillMaxSize().weight(1f)
-            )
-            {
-                LoginLeftContent()
-            }
+            RegisterScreenContent(screenModel, navigator)
 
-            Column(
-                modifier = Modifier.fillMaxSize()
-                    .weight(1f)
-            )
-            {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.Top,
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    CloseButton()
-                }
-                Column(
-                    modifier = Modifier.fillMaxSize()
-                        .weight(1f)
-                        .background(color = tertiary),
-                    verticalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterVertically),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = "Register an account.",
-                        color = Color.White,
-                        fontFamily = Font.RussoOne,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Center,
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    FormTextField(
-                        value = username,
-                        onValueChange = { username = it },
-                        label = "Username",
-                        icon = Icons.Filled.AccountCircle,
-                        modifier = Modifier.height(40.dp).width(360.dp)
-                    )
-                    FormTextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = "Email",
-                        icon = Icons.Filled.Email,
-                        modifier = Modifier.height(40.dp).width(360.dp)
-                    )
-                    PasswordTextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        label = "Password",
-                        modifier = Modifier.height(40.dp).width(360.dp)
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        Button(
-                            onClick = { },
-                            modifier = Modifier.width(175.dp),
-                            colors = ButtonColors(
-                                containerColor = secondary,
-                                contentColor = Color.White,
-                                disabledContentColor = secondary,
-                                disabledContainerColor = secondary
-                            )
-                        )
-                        {
-                            Text(
-                                text = "Register",
-                                fontStyle = FontStyle.Normal,
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 12.sp,
-                                fontFamily = Font.RussoOne
-                            )
-                        }
-                        Button(
-                            onClick = {
-                                if (navigator?.canPop == true) navigator.pop() else navigator?.push(LoginScreen())
-                            },
-                            modifier = Modifier.width(175.dp),
-                            colors = ButtonColors(
-                                containerColor = secondary,
-                                contentColor = Color.White,
-                                disabledContentColor = secondary,
-                                disabledContainerColor = secondary
-                            )
-                        )
-                        {
-                            Text(
-                                text = "Login",
-                                fontStyle = FontStyle.Normal,
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 12.sp,
-                                fontFamily = Font.RussoOne
-                            )
-                        }
+            when (val state = registerState) {
+                is UiState.Loading -> LoadingScreen(backgroundColor = tertiary.copy(alpha = 0.8f))
+                is UiState.Success -> {
+                    LaunchedEffect(state) {
+                        navigator?.push(LoginScreen())
                     }
                 }
+
+                is UiState.Error -> {
+                    TopRightNotification(
+                        message = state.message,
+                        visible = true,
+                        onDismiss = { screenModel.clearError() }
+                    )
+                }
+
+                is UiState.Idle -> {}
             }
-
         }
-
     }
 
 }

@@ -9,4 +9,6 @@ interface UserRepository {
     fun hasUser(): Boolean
 
     suspend fun findByUsernameAndPassword(username: String, password: String): Result<User>
+
+    suspend fun createUser(username: String, email: String, password: String): Result<User>
 }
