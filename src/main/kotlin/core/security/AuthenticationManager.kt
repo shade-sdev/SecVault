@@ -47,10 +47,10 @@ class AuthenticationManager(
     }
 
     private fun loadUserFromToken() {
-        TokenManager.loadToken()?.let { token ->
-            jwtService.validateToken(token)
-        }?.let { id ->
-            appState.updateCurrentUser(userRepository.findById(id))
+        TokenManager.loadToken()?.let {
+            jwtService.validateToken(it)
+        }?.let {
+            appState.updateCurrentUser(userRepository.findById(it))
         }
     }
 
