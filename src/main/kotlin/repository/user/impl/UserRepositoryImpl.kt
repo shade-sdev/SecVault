@@ -4,6 +4,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import repository.Result
+import repository.errors.DatabaseError
 import repository.queries.user.UserQueries
 import repository.user.User
 import repository.user.UserRepository
@@ -34,7 +35,7 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
                 }.firstOrNull()
             }?.let { Result.Success(it) } ?: Result.Error("Invalid credentials")
         } catch (e: Exception) {
-            Result.Error("An error occurred: ${e.message}")
+            Result.Error(DatabaseError.fromException(e).extractMessage())
         }
     }
 
@@ -50,7 +51,7 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
                 }.let { Result.Success(it) }
             }
         } catch (e: Exception) {
-            Result.Error("An error occurred: ${e.message}")
+            Result.Error(DatabaseError.fromException(e).extractMessage())
         }
     }
 

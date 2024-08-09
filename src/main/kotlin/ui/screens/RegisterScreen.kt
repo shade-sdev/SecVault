@@ -4,7 +4,6 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -36,9 +35,12 @@ class RegisterScreen : Screen {
             when (val state = registerState) {
                 is UiState.Loading -> LoadingScreen(backgroundColor = tertiary.copy(alpha = 0.8f))
                 is UiState.Success -> {
-                    LaunchedEffect(state) {
-                        navigator?.push(LoginScreen())
-                    }
+                    NotificationFactory(
+                        message = "Successfully registered",
+                        visible = true,
+                        onDismiss = { screenModel.clearError() },
+                        type = NotificationType.SUCCESS
+                    )
                 }
 
                 is UiState.Error -> {

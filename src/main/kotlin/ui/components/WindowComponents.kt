@@ -135,12 +135,15 @@ fun TopRightNotification(
                     modifier = Modifier.padding(PaddingValues(start = 12.dp))
                 ) {
                     Text(
+                        modifier = Modifier.weight(0.8f),
                         text = message,
-                        fontSize = 14.sp,
-                        fontFamily = Font.RobotoBold,
-                        color = Color.White
+                        fontSize = 12.sp,
+                        fontFamily = Font.RobotoRegular,
+                        color = Color.White,
+                        lineHeight = 12.sp,
+                        maxLines = 4
                     )
-                    IconButton(onClick = onDismiss) {
+                    IconButton(onClick = onDismiss, modifier = Modifier.weight(0.2f)) {
                         Icon(
                             Icons.Default.Close,
                             contentDescription = "Close",
