@@ -11,10 +11,11 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.ui.NotificationType
 import core.ui.UiState
 import ui.components.LoadingScreen
+import ui.components.NotificationFactory
 import ui.components.RegisterScreenContent
-import ui.components.TopRightNotification
 import ui.theme.tertiary
 import viewmodel.RegisterScreenModel
 
@@ -41,10 +42,11 @@ class RegisterScreen : Screen {
                 }
 
                 is UiState.Error -> {
-                    TopRightNotification(
+                    NotificationFactory(
                         message = state.message,
                         visible = true,
-                        onDismiss = { screenModel.clearError() }
+                        onDismiss = { screenModel.clearError() },
+                        type = NotificationType.ERROR
                     )
                 }
 

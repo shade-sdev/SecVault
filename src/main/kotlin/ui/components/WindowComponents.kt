@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import core.ui.NotificationType
 import kotlinx.coroutines.delay
 import ui.theme.Font
 import ui.theme.secondary
@@ -88,10 +89,28 @@ fun LoadingScreen(
 }
 
 @Composable
+fun NotificationFactory(
+    message: String,
+    visible: Boolean,
+    onDismiss: () -> Unit,
+    type: NotificationType,
+    durationMillis: Long = 3000
+) {
+    TopRightNotification(
+        message = message,
+        visible = visible,
+        onDismiss = onDismiss,
+        backgroundColor = type.color,
+        durationMillis = durationMillis
+    )
+}
+
+@Composable
 fun TopRightNotification(
     message: String,
     visible: Boolean,
     onDismiss: () -> Unit,
+    backgroundColor: Color,
     durationMillis: Long = 3000
 ) {
     if (visible) {
@@ -103,11 +122,12 @@ fun TopRightNotification(
         ) {
             Surface(
                 modifier = Modifier
+                        .fillMaxHeight(0.12f)
                         .fillMaxWidth(0.3f)
                         .padding(18.dp),
                 shape = RoundedCornerShape(8.dp),
                 shadowElevation = 4.dp,
-                color = Color.Red
+                color = backgroundColor
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -120,7 +140,7 @@ fun TopRightNotification(
                         fontFamily = Font.RobotoBold,
                         color = Color.White
                     )
-                    IconButton(onClick = { onDismiss() }) {
+                    IconButton(onClick = onDismiss) {
                         Icon(
                             Icons.Default.Close,
                             contentDescription = "Close",
@@ -137,3 +157,4 @@ fun TopRightNotification(
         }
     }
 }
+
