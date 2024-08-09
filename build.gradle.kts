@@ -11,6 +11,7 @@ val sl4jVersion: String by project
 val logbackVersion: String by project
 val coroutineVersion: String by project
 val jacksonVersion: String by project
+val jwtVersion: String by project
 
 plugins {
     kotlin("jvm")
@@ -54,6 +55,8 @@ dependencies {
     implementation("com.fasterxml.jackson.core", "jackson-databind", jacksonVersion)
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", jacksonVersion)
     implementation("com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml", jacksonVersion)
+
+    implementation("com.auth0", "java-jwt", jwtVersion)
 
     implementation("org.slf4j", "slf4j-api", sl4jVersion)
     implementation("ch.qos.logback", "logback-classic", logbackVersion)

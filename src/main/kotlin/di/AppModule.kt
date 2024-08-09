@@ -6,6 +6,7 @@ import core.AppState
 import core.DatabaseFactory
 import core.loadConfigs
 import core.security.AuthenticationManager
+import core.security.JwtService
 import org.koin.core.module.dsl.createdAtStart
 import org.koin.core.module.dsl.withOptions
 import org.koin.core.parameter.parametersOf
@@ -32,7 +33,9 @@ val appModule = module {
         createdAtStart()
     }
 
-    single { AuthenticationManager(get(), get()) } withOptions {
+    single { JwtService(get()) }
+
+    single { AuthenticationManager(get(), get(), get()) } withOptions {
         createdAtStart()
     }
 

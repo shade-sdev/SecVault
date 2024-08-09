@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
 import repository.user.User
 import ui.screens.LoginScreen
+import ui.screens.LoginSplashScreen
 import ui.screens.RegisterScreen
 
 class AppState {
@@ -24,14 +25,17 @@ class AppState {
     val getAuthenticatedUser: User
         get() = currentUser!!
 
-    val isAuthenticated: Boolean
-        get() = currentUser != null
-
     fun clearCurrentUser() {
         currentUser = null
     }
 
-    fun initialScreen(): Screen {
-        return if (userExists) LoginScreen() else RegisterScreen()
+    fun initialScreen(): Screen = when {
+        userExists && isAuthenticated -> LoginSplashScreen()
+        userExists -> LoginScreen()
+        else -> RegisterScreen()
     }
+
+    private val isAuthenticated: Boolean
+        get() = currentUser != null
+
 }

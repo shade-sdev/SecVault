@@ -9,12 +9,19 @@ import repository.queries.user.UserQueries
 import repository.user.User
 import repository.user.UserRepository
 import repository.user.UsersTable
+import java.util.*
 
 class UserRepositoryImpl(private val db: Database) : UserRepository {
 
     override fun findAll(): List<User> {
         return transaction(db) {
             User.all().toList()
+        }
+    }
+
+    override fun findById(id: UUID): User? {
+        return transaction(db) {
+            User.findById(id)
         }
     }
 
