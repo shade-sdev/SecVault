@@ -4,6 +4,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import repository.Result
+import repository.queries.user.UserQueries
 import repository.user.User
 import repository.user.UserRepository
 import repository.user.UsersTable
@@ -18,7 +19,7 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
 
     override fun hasUser(): Boolean {
         return transaction(db) {
-            exec("SELECT EXISTS(SELECT 1 FROM USERS)") { rs ->
+            exec(UserQueries.USER_EXIST_QUERY) { rs ->
                 rs.next()
                 rs.getBoolean(1)
             } == true
