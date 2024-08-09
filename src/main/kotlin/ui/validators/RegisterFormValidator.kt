@@ -19,7 +19,7 @@ fun registerFormValidator(): FormValidator {
                         )
                     )
             )
-        )
+        ).validateAllFields()
 }
 
 enum class LoginFieldName : FormFieldName {

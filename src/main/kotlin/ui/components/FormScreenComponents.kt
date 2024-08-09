@@ -7,7 +7,6 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -159,6 +158,7 @@ fun RegisterScreenContent(
     val formValidator = remember { registerFormValidator() }
 
     val usernameField = formValidator.getField(LoginFieldName.USERNAME)
+    val isFormValid by formValidator.isValid
 
     Row(
         modifier = Modifier.fillMaxSize()
@@ -200,23 +200,29 @@ fun RegisterScreenContent(
                     textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                FormTextField(
-                    value = usernameField?.value?.value ?: "",
-                    onValueChange = { newValue ->
-                        usernameField?.value?.value = newValue
-                        formValidator.validateField(LoginFieldName.USERNAME)
-                    },
-                    label = "Username",
-                    icon = Icons.Filled.AccountCircle,
-                    modifier = Modifier.height(40.dp).width(360.dp)
-                )
-                usernameField?.error?.value?.let {
-                    Text(
-                        text = it,
-                        color = Color.Red,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(start = 16.dp)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    FormTextField(
+                        value = usernameField?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            usernameField?.value?.value = newValue
+                            formValidator.validateField(LoginFieldName.USERNAME)
+                        },
+                        label = "Username",
+                        icon = Icons.Filled.AccountCircle,
+                        modifier = Modifier.height(40.dp).width(360.dp)
                     )
+                    usernameField?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
                 }
                 FormTextField(
                     value = email,
@@ -233,17 +239,19 @@ fun RegisterScreenContent(
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Button(
-                        onClick = { },
+                        onClick = { registerScreenModel.register(usernameField!!.value.value, email, password) },
                         modifier = Modifier.width(175.dp),
+                        enabled = isFormValid,
                         colors = ButtonColors(
                             containerColor = secondary,
                             contentColor = Color.White,
                             disabledContentColor = secondary,
-                            disabledContainerColor = secondary
+                            disabledContainerColor = secondary,
                         )
                     )
                     {
                         Text(
+                            color = Color.White,
                             text = "Register",
                             fontStyle = FontStyle.Normal,
                             fontWeight = FontWeight.Normal,

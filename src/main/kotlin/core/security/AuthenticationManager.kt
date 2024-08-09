@@ -27,6 +27,17 @@ class AuthenticationManager(
         }
     }
 
+    suspend fun register(username: String, email: String, password: String): Result<User> {
+        delay(200)
+        return when (val result = userRepository.createUser(username, email, password)) {
+            is Result.Success -> {
+                Result.Success(result.data)
+            }
+
+            is Result.Error -> result
+        }
+    }
+
     fun logout() {
         appState.clearCurrentUser()
     }
