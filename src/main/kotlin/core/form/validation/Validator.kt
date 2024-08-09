@@ -9,12 +9,9 @@ class Validator {
     }
 
     fun validate(input: String): Pair<Boolean, String?> {
-        val failedRule = rules.firstOrNull { !it.condition(input) }
-        return if (failedRule != null) {
-            Pair(false, failedRule.errorMessage)
-        } else {
-            Pair(true, null)
-        }
+        return rules.firstOrNull { !it.condition(input) }
+                       ?.let { false to it.errorMessage }
+               ?: (true to null)
     }
 
 }
