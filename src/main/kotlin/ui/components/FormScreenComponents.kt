@@ -42,7 +42,7 @@ fun LoginScreenContent(
 
     Row(
         modifier = Modifier.fillMaxSize()
-            .background(color = tertiary)
+                .background(color = tertiary)
     )
     {
         Box(
@@ -54,7 +54,7 @@ fun LoginScreenContent(
 
         Column(
             modifier = Modifier.fillMaxSize()
-                .weight(1f)
+                    .weight(1f)
         )
         {
             Row(
@@ -66,8 +66,8 @@ fun LoginScreenContent(
             }
             Column(
                 modifier = Modifier.fillMaxSize()
-                    .weight(1f)
-                    .background(color = tertiary),
+                        .weight(1f)
+                        .background(color = tertiary),
                 verticalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterVertically),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -153,16 +153,17 @@ fun RegisterScreenContent(
     registerScreenModel: RegisterScreenModel,
     navigator: Navigator?
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
     val formValidator = remember { registerFormValidator() }
 
-    val usernameField = formValidator.getField(LoginFieldName.USERNAME)
+    val username = formValidator.getField(LoginFieldName.USERNAME)
+    val email = formValidator.getField(LoginFieldName.EMAIL)
+    val password = formValidator.getField(LoginFieldName.PASSWORD)
+
     val isFormValid by formValidator.isValid
 
     Row(
         modifier = Modifier.fillMaxSize()
-            .background(color = tertiary)
+                .background(color = tertiary)
     )
     {
         Box(
@@ -174,7 +175,7 @@ fun RegisterScreenContent(
 
         Column(
             modifier = Modifier.fillMaxSize()
-                .weight(1f)
+                    .weight(1f)
         )
         {
             Row(
@@ -186,8 +187,8 @@ fun RegisterScreenContent(
             }
             Column(
                 modifier = Modifier.fillMaxSize()
-                    .weight(1f)
-                    .background(color = tertiary),
+                        .weight(1f)
+                        .background(color = tertiary),
                 verticalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterVertically),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -205,16 +206,16 @@ fun RegisterScreenContent(
                     horizontalAlignment = Alignment.Start
                 ) {
                     FormTextField(
-                        value = usernameField?.value?.value ?: "",
+                        value = username?.value?.value ?: "",
                         onValueChange = { newValue ->
-                            usernameField?.value?.value = newValue
+                            username?.value?.value = newValue
                             formValidator.validateField(LoginFieldName.USERNAME)
                         },
                         label = "Username",
                         icon = Icons.Filled.AccountCircle,
                         modifier = Modifier.height(40.dp).width(360.dp)
                     )
-                    usernameField?.error?.value?.let {
+                    username?.error?.value?.let {
                         Text(
                             text = it,
                             color = Color.Red,
@@ -224,22 +225,62 @@ fun RegisterScreenContent(
                         )
                     }
                 }
-                FormTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = "Email",
-                    icon = Icons.Filled.Email,
-                    modifier = Modifier.height(40.dp).width(360.dp)
-                )
-                PasswordTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = "Password",
-                    modifier = Modifier.height(40.dp).width(360.dp)
-                )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    FormTextField(
+                        value = email?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            email?.value?.value = newValue
+                            formValidator.validateField(LoginFieldName.EMAIL)
+                        },
+                        label = "Email",
+                        icon = Icons.Filled.Email,
+                        modifier = Modifier.height(40.dp).width(360.dp)
+                    )
+                    email?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    PasswordTextField(
+                        value = password?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            password?.value?.value = newValue
+                            formValidator.validateField(LoginFieldName.PASSWORD)
+                        },
+                        label = "Password",
+                        modifier = Modifier.height(40.dp).width(360.dp)
+                    )
+                    password?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Button(
-                        onClick = { registerScreenModel.register(usernameField!!.value.value, email, password) },
+                        onClick = {
+                            registerScreenModel.register(
+                                username!!.value.value,
+                                email!!.value.value,
+                                password!!.value.value
+                            )
+                        },
                         modifier = Modifier.width(175.dp),
                         enabled = isFormValid,
                         colors = ButtonColors(

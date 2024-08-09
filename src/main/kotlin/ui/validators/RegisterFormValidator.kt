@@ -2,28 +2,38 @@ package ui.validators
 
 import core.form.FormField
 import core.form.FormFieldName
-import core.form.validation.FormValidator
-import core.form.validation.ValidationRule
-import core.form.validation.Validator
+import core.form.validation.*
 
 
 fun registerFormValidator(): FormValidator {
     return FormValidator()
-        .addField(
-            LoginFieldName.USERNAME, FormField(
-                validator = Validator()
-                    .addRule(
-                        ValidationRule(
-                            condition = { it.length >= 8 },
-                            errorMessage = "Username must be 8 characters or more"
-                        )
-                    )
+            .addField(
+                LoginFieldName.USERNAME, FormField(
+                    validator = Validator()
+                            .addRule(notNullRule(LoginFieldName.USERNAME.fieldName))
+                            .addRule(lengthRule(LoginFieldName.USERNAME.fieldName, 1))
+                )
             )
-        ).validateAllFields()
+            .addField(
+                LoginFieldName.EMAIL, FormField(
+                    validator = Validator()
+                            .addRule(notNullRule(LoginFieldName.EMAIL.fieldName))
+                            .addRule(lengthRule(LoginFieldName.EMAIL.fieldName, 1))
+                            .addRule(emailRule)
+                )
+            )
+            .addField(
+                LoginFieldName.PASSWORD, FormField(
+                    validator = Validator()
+                            .addRule(notNullRule(LoginFieldName.PASSWORD.fieldName))
+                            .addRule(passwordRule)
+                )
+            )
+            .validateAllFields()
 }
 
-enum class LoginFieldName : FormFieldName {
-    USERNAME,
-    EMAIL,
-    PASSWORD
+enum class LoginFieldName(val fieldName: String) : FormFieldName {
+    USERNAME("Username"),
+    EMAIL("Email"),
+    PASSWORD("Password");
 }
