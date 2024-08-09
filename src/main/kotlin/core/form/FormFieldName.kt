@@ -1,4 +1,3 @@
 package core.form
 
-interface FormFieldName {
-}
+interface FormFieldName
