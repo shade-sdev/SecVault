@@ -21,21 +21,15 @@ class AuthenticationManager(
     suspend fun login(username: String, password: String): Result<User> {
         delay(200)
         return userRepository.findByUsername(username).let { result ->
-            when (result) {
-                is Result.Success -> {
-                    if (BCrypt.checkpw(password, result.data.password)) {
-                        result.data.apply {
-                            appState.updateCurrentUser(this)
-                            TokenManager.saveToken(jwtService.generateToken(this))
-                        }.let { user ->
-                            Result.Success(user)
-                        }
-                    } else {
-                        Result.Error("Invalid Credentials")
-                    }
+            if (result is Result.Success && BCrypt.checkpw(password, result.data.password)) {
+                result.data.also {
+                    appState.updateCurrentUser(it)
+                    TokenManager.saveToken(jwtService.generateToken(it))
+                }.let { user ->
+                    Result.Success(user)
                 }
-
-                is Result.Error -> result
+            } else {
+                Result.Error("Invalid Credentials")
             }
         }
     }
