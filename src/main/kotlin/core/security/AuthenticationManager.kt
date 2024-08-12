@@ -34,7 +34,6 @@ class AuthenticationManager(
         }
     }
 
-
     suspend fun register(username: String, email: String, password: String): Result<User> {
         delay(200)
         return when (val result = userRepository.createUser(

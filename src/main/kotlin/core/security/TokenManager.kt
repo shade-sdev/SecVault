@@ -21,6 +21,7 @@ object TokenManager {
                 tokenFile.parentFile.mkdirs()
             }
         }
+
         tokenFile.writeText(token)
     }
 
@@ -28,8 +29,12 @@ object TokenManager {
         return if (tokenFile.exists()) tokenFile.readText() else null
     }
 
-    fun clearToken() {
-        if (tokenFile.exists()) tokenFile.delete()
+    fun clearToken(): Boolean {
+        if (tokenFile.exists()) {
+            return tokenFile.delete()
+        }
+
+        return false
     }
 
 }

@@ -7,6 +7,17 @@ val emailRule: ValidationRule = ValidationRule(
     errorMessage = "Invalid email address"
 )
 
+val passwordRule: ValidationRule = ValidationRule(
+    condition = { password ->
+        password.length >= 8 &&
+                password.any { it.isDigit() } &&
+                password.any { it.isUpperCase() } &&
+                password.any { it.isLowerCase() } &&
+                password.any { it in "!@#$%^&*()-_=+[]{}|;:'\",.<>?/~`" }
+    },
+    errorMessage = "Password must be 8+ chars, with a number, symbol, upper & lower case."
+)
+
 fun lengthRule(field: String, length: Int): ValidationRule {
     return ValidationRule(
         condition = { field.length >= length },
@@ -20,14 +31,3 @@ fun notNullRule(field: String): ValidationRule {
         errorMessage = "$field must not be null"
     )
 }
-
-val passwordRule: ValidationRule = ValidationRule(
-    condition = { password ->
-        password.length >= 8 &&
-        password.any { it.isDigit() } &&
-        password.any { it.isUpperCase() } &&
-        password.any { it.isLowerCase() } &&
-        password.any { it in "!@#$%^&*()-_=+[]{}|;:'\",.<>?/~`" }
-    },
-    errorMessage = "Password must be 8+ chars, with a number, symbol, upper & lower case."
-)
