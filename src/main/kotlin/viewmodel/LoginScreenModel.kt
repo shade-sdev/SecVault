@@ -2,6 +2,7 @@ package viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import core.Result
 import core.security.AuthenticationManager
 import core.ui.UiState
 import kotlinx.coroutines.CoroutineDispatcher
@@ -10,7 +11,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import repository.Result
 import repository.user.User
 
 class LoginScreenModel(

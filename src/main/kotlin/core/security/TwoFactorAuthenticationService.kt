@@ -11,8 +11,8 @@ import com.google.zxing.client.j2se.MatrixToImageConfig
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
 import core.Config
+import core.Result
 import core.configs.JwtConfig
-import repository.Result
 import java.awt.Color
 import java.awt.Desktop
 import java.nio.file.Files

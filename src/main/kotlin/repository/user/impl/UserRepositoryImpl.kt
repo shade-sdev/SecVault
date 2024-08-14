@@ -1,9 +1,9 @@
 package repository.user.impl
 
+import core.Result
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.Logger
-import repository.Result
 import repository.errors.DatabaseError
 import repository.queries.user.UserQueries
 import repository.user.User
