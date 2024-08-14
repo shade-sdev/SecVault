@@ -7,6 +7,7 @@ import core.DatabaseFactory
 import core.loadConfigs
 import core.security.AuthenticationManager
 import core.security.JwtService
+import core.security.TwoFactorAuthenticationService
 import org.koin.core.module.dsl.createdAtStart
 import org.koin.core.module.dsl.withOptions
 import org.koin.core.parameter.parametersOf
@@ -35,7 +36,9 @@ val appModule = module {
 
     single { JwtService(get()) }
 
-    single { AuthenticationManager(get(), get(), get()) } withOptions {
+    single { TwoFactorAuthenticationService(get()) }
+
+    single { AuthenticationManager(get(), get(), get(), get()) } withOptions {
         createdAtStart()
     }
 
@@ -46,7 +49,7 @@ val appModule = module {
 
 val repositoryModule = module {
 
-    single<UserRepository> { UserRepositoryImpl(get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get { parametersOf(UserRepository::class.java) }) }
 
 }
 

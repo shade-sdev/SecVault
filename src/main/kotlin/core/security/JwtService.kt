@@ -27,13 +27,16 @@ class JwtService(config: Config) {
                 .sign(Algorithm.HMAC512(jwtConfig.secret))
     }
 
-    fun validateToken(token: String): UUID {
-        val algorithm = Algorithm.HMAC512(jwtConfig.secret)
-        val verifer = JWT.require(algorithm)
-                .withIssuer(jwtConfig.issuer)
-                .build()
+    fun validateToken(token: String): UUID? {
+        return runCatching {
+            val algorithm = Algorithm.HMAC512(jwtConfig.secret)
+            val verifier = JWT.require(algorithm)
+                    .withIssuer(jwtConfig.issuer)
+                    .build()
 
-        return verifer.verify(token).subject.let { UUID.fromString(it) }
+            verifier.verify(token).subject?.let { UUID.fromString(it) }
+        }.getOrNull()
     }
+
 
 }

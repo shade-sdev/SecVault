@@ -11,6 +11,7 @@ object UsersTable : AuditableTable(name = "users") {
     val userName: Column<String> = varchar("user_name", 255).uniqueIndex()
     val email: Column<String> = varchar("email", 255).uniqueIndex()
     val password: Column<String> = text("password")
+    val secretKey: Column<String> = text("secret_key")
 }
 
 class User(id: EntityID<UUID>) : UUIDEntity(id) {
@@ -19,10 +20,12 @@ class User(id: EntityID<UUID>) : UUIDEntity(id) {
     var userName by UsersTable.userName
     var email by UsersTable.email
     var password by UsersTable.password
+    var secretKey by UsersTable.secretKey
 
     var creationDateTime by UsersTable.creationDateTime
     var createdBy by UsersTable.createdBy
     var lastUpdateDateTime by UsersTable.lastUpdateDateTime
     var lastUpdatedBy by UsersTable.lastUpdatedBy
     var version by UsersTable.version
+
 }

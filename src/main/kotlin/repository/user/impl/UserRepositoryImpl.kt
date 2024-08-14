@@ -2,15 +2,20 @@ package repository.user.impl
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.Logger
 import repository.Result
 import repository.errors.DatabaseError
 import repository.queries.user.UserQueries
 import repository.user.User
 import repository.user.UserRepository
 import repository.user.UsersTable
+import repository.user.projection.UserSummary
 import java.util.*
 
-class UserRepositoryImpl(private val db: Database) : UserRepository {
+class UserRepositoryImpl(
+    private val db: Database,
+    private val logger: Logger
+) : UserRepository {
 
     override fun findAll(): List<User> {
         return transaction(db) {
@@ -45,18 +50,34 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
         }
     }
 
-    override suspend fun createUser(username: String, email: String, password: String): Result<User> {
+    override suspend fun createUser(
+        username: String,
+        email: String,
+        password: String,
+        secretKey: String
+    ): Result<UserSummary> {
         return try {
             return transaction(db) {
                 User.new {
                     this.userName = username
                     this.email = email
                     this.password = password
+                    this.secretKey = secretKey
                     this.createdBy = "system"
                     this.lastUpdatedBy = "system"
-                }.let { Result.Success(it) }
+                }.let {
+                    Result.Success(
+                        UserSummary(
+                            it.id.value,
+                            it.userName,
+                            it.email,
+                            it.secretKey
+                        )
+                    )
+                }
             }
         } catch (e: Exception) {
+            logger.error(e.message, e)
             Result.Error(DatabaseError.fromException(e).extractMessage())
         }
     }

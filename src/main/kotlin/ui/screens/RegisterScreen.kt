@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import com.dokar.sonner.Toaster
+import com.dokar.sonner.rememberToasterState
 import core.ui.NotificationType
 import core.ui.UiState
 import ui.components.LoadingScreen
@@ -27,6 +30,9 @@ class RegisterScreen : Screen {
         val navigator = LocalNavigator.current
         val screenModel = koinScreenModel<RegisterScreenModel>()
         val registerState by screenModel.registerState.collectAsState()
+        val toaster = rememberToasterState()
+
+        Toaster(state = toaster, alignment = Alignment.TopEnd, darkTheme = true, showCloseButton = true)
 
         Box(modifier = Modifier.fillMaxSize()) {
 
@@ -35,6 +41,8 @@ class RegisterScreen : Screen {
             when (val state = registerState) {
                 is UiState.Loading -> LoadingScreen(backgroundColor = tertiary.copy(alpha = 0.8f))
                 is UiState.Success -> {
+                    screenModel.openQRCode(state.data)
+
                     NotificationFactory(
                         message = "Successfully registered",
                         visible = true,

@@ -6,10 +6,12 @@ import org.mindrot.jbcrypt.BCrypt
 import repository.Result
 import repository.user.User
 import repository.user.UserRepository
+import repository.user.projection.UserSummary
 
 class AuthenticationManager(
     private val userRepository: UserRepository,
     private val jwtService: JwtService,
+    private val twoFactorAuthenticationService: TwoFactorAuthenticationService,
     private val appState: AppState
 ) {
 
@@ -29,17 +31,18 @@ class AuthenticationManager(
                     Result.Success(user)
                 }
             } else {
-                Result.Error("Invalid Credentials")
+                result
             }
         }
     }
 
-    suspend fun register(username: String, email: String, password: String): Result<User> {
+    suspend fun register(username: String, email: String, password: String): Result<UserSummary> {
         delay(200)
         return when (val result = userRepository.createUser(
             username,
             email,
-            BCrypt.hashpw(password, BCrypt.gensalt())
+            BCrypt.hashpw(password, BCrypt.gensalt()),
+            twoFactorAuthenticationService.generateSecretKey().base32Encoded
         )) {
             is Result.Success -> {
                 Result.Success(result.data)
@@ -49,16 +52,22 @@ class AuthenticationManager(
         }
     }
 
+    fun openQRCode(secretKey: String, email: String) {
+        twoFactorAuthenticationService.generateQRCodeImage(secretKey, email)
+    }
+
     fun logout() {
         appState.clearCurrentUser()
         TokenManager.clearToken()
     }
 
     private fun loadUserFromToken() {
-        TokenManager.loadToken()?.let {
-            jwtService.validateToken(it)
-        }?.let {
-            appState.updateCurrentUser(userRepository.findById(it))
+        TokenManager.loadToken()?.let { token ->
+            jwtService.validateToken(token)?.let { userId ->
+                appState.updateCurrentUser(userRepository.findById(userId))
+            } ?: run {
+                this.logout()
+            }
         }
     }
 

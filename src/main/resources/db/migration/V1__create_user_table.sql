@@ -6,6 +6,7 @@ CREATE TABLE users
     user_name             TEXT NOT NULL UNIQUE,
     email                 TEXT NOT NULL UNIQUE,
     password              TEXT NOT NULL,
+    secret_key TEXT NOT NULL,
     creation_date_time    TEXT    DEFAULT (datetime('now')),
     created_by            TEXT NOT NULL,
     last_update_date_time TEXT    DEFAULT (datetime('now')),

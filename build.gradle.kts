@@ -13,6 +13,8 @@ val coroutineVersion: String by project
 val jacksonVersion: String by project
 val jwtVersion: String by project
 val bcryptVersion: String by project
+val oneTimeVersion: String by project
+val zxingVersion: String by project
 
 plugins {
     kotlin("jvm")
@@ -59,6 +61,11 @@ dependencies {
 
     implementation("com.auth0", "java-jwt", jwtVersion)
     implementation("org.mindrot", "jbcrypt", bcryptVersion)
+    implementation("com.atlassian", "onetime", oneTimeVersion)
+    implementation("com.google.zxing", "core", zxingVersion)
+    implementation("com.google.zxing", "javase", zxingVersion)
+
+    implementation("io.github.dokar3:sonner:0.3.8")
 
     implementation("org.slf4j", "slf4j-api", sl4jVersion)
     implementation("ch.qos.logback", "logback-classic", logbackVersion)

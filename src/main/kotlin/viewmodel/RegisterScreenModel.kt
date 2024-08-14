@@ -11,14 +11,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import repository.Result
-import repository.user.User
+import repository.user.projection.UserSummary
 
 class RegisterScreenModel(
-    private val authenticationManager: AuthenticationManager, private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val authenticationManager: AuthenticationManager,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ScreenModel {
 
-    private val _registerState = MutableStateFlow<UiState<User>>(UiState.Idle)
-    val registerState: StateFlow<UiState<User>> = _registerState.asStateFlow()
+    private val _registerState = MutableStateFlow<UiState<UserSummary>>(UiState.Idle)
+    val registerState: StateFlow<UiState<UserSummary>> = _registerState.asStateFlow()
 
     fun register(username: String, email: String, password: String) {
         screenModelScope.launch(dispatcher) {
@@ -28,6 +29,10 @@ class RegisterScreenModel(
                 is Result.Error -> _registerState.value = UiState.Error(result.message)
             }
         }
+    }
+
+    fun openQRCode(user: UserSummary) {
+        authenticationManager.openQRCode(user.secretKey, user.email)
     }
 
     fun clearError() {
