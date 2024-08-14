@@ -4,6 +4,7 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -11,15 +12,15 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import com.dokar.sonner.ToastType
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
-import core.ui.NotificationType
 import core.ui.UiState
 import ui.components.LoadingScreen
-import ui.components.NotificationFactory
 import ui.components.RegisterScreenContent
 import ui.theme.tertiary
 import viewmodel.RegisterScreenModel
+import kotlin.time.Duration
 
 class RegisterScreen : Screen {
 
@@ -32,7 +33,13 @@ class RegisterScreen : Screen {
         val registerState by screenModel.registerState.collectAsState()
         val toaster = rememberToasterState()
 
-        Toaster(state = toaster, alignment = Alignment.TopEnd, darkTheme = true, showCloseButton = true)
+        Toaster(
+            state = toaster,
+            alignment = Alignment.TopEnd,
+            darkTheme = true,
+            showCloseButton = true,
+            richColors = true
+        )
 
         Box(modifier = Modifier.fillMaxSize()) {
 
@@ -41,23 +48,26 @@ class RegisterScreen : Screen {
             when (val state = registerState) {
                 is UiState.Loading -> LoadingScreen(backgroundColor = tertiary.copy(alpha = 0.8f))
                 is UiState.Success -> {
-                    screenModel.openQRCode(state.data)
-
-                    NotificationFactory(
-                        message = "Successfully registered",
-                        visible = true,
-                        onDismiss = { screenModel.clearError() },
-                        type = NotificationType.SUCCESS
-                    )
+                    LaunchedEffect(toaster) {
+                        toaster.show(
+                            message = "Successfully Registered",
+                            type = ToastType.Success,
+                            duration = Duration.INFINITE
+                        )
+                        screenModel.clearError()
+                        screenModel.openQRCode(state.data)
+                    }
                 }
 
                 is UiState.Error -> {
-                    NotificationFactory(
-                        message = state.message,
-                        visible = true,
-                        onDismiss = { screenModel.clearError() },
-                        type = NotificationType.ERROR
-                    )
+                    LaunchedEffect(toaster) {
+                        toaster.show(
+                            message = state.message,
+                            type = ToastType.Error,
+                            duration = Duration.INFINITE
+                        )
+                        screenModel.clearError()
+                    }
                 }
 
                 is UiState.Idle -> {}
