@@ -51,20 +51,6 @@ class SecVaultScreenModel(
         }
     }
 
-    suspend fun loadPasswords(sort: PasswordSort) {
-        _passwordItems.value = when (val passwords = passwordRepository.findSummaries(sort)) {
-            is Result.Success -> {
-                _secVaultState.value = UiState.Success("Successfully loaded passwords")
-                passwords.data
-            }
-
-            is Result.Error -> {
-                _secVaultState.value = UiState.Error(passwords.message)
-                emptyList()
-            }
-        }
-    }
-
     fun selectMenuItem(index: Int) {
         screenModelScope.launch {
             val updatedItems = _menuItems.value.mapIndexed { i, menuItem ->
@@ -80,6 +66,20 @@ class SecVaultScreenModel(
 
     fun clearError() {
         _secVaultState.value = UiState.Idle
+    }
+
+    private suspend fun loadPasswords(sort: PasswordSort) {
+        _passwordItems.value = when (val passwords = passwordRepository.findSummaries(sort)) {
+            is Result.Success -> {
+                _secVaultState.value = UiState.Success("Successfully loaded passwords")
+                passwords.data
+            }
+
+            is Result.Error -> {
+                _secVaultState.value = UiState.Error(passwords.message)
+                emptyList()
+            }
+        }
     }
 
 }
