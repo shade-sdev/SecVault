@@ -2,18 +2,22 @@ package viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import core.models.DefaultMenuItem
 import core.models.MenuItem
+import core.models.PasswordSort
 import core.models.Result
 import core.models.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.slf4j.Logger
 import repository.password.PasswordRepository
 import repository.password.projection.PasswordSummary
 
-class SecVaultScreenModel(private val passwordRepository: PasswordRepository) : ScreenModel {
+class SecVaultScreenModel(
+    private val passwordRepository: PasswordRepository,
+    private val logger: Logger
+) : ScreenModel {
 
     private val _secVaultState = MutableStateFlow<UiState<Any>>(UiState.Idle)
     val secVaultState: StateFlow<UiState<Any>> = _secVaultState.asStateFlow()
@@ -21,11 +25,11 @@ class SecVaultScreenModel(private val passwordRepository: PasswordRepository) : 
     private val _menuItems = MutableStateFlow<List<MenuItem>>(emptyList())
     val menuItems: StateFlow<List<MenuItem>> = _menuItems.asStateFlow()
 
-    private val _filterItems = MutableStateFlow(DefaultMenuItem.entries.toList())
-    val filterItems: StateFlow<List<DefaultMenuItem>> = _filterItems.asStateFlow()
+    private val _sortItems = MutableStateFlow(PasswordSort.entries.toList())
+    val sortItems: StateFlow<List<PasswordSort>> = _sortItems.asStateFlow()
 
-    private val _selectedFilterOption = MutableStateFlow(filterItems.value.first())
-    val selectedFilterOption: StateFlow<DefaultMenuItem> = _selectedFilterOption.asStateFlow()
+    private val _selectedSortItem = MutableStateFlow(sortItems.value.first())
+    val selectedSortItem: StateFlow<PasswordSort> = _selectedSortItem.asStateFlow()
 
     private val _passwordItems = MutableStateFlow<List<PasswordSummary>>(emptyList())
     val passwordItems: StateFlow<List<PasswordSummary>> = _passwordItems.asStateFlow()
@@ -38,16 +42,25 @@ class SecVaultScreenModel(private val passwordRepository: PasswordRepository) : 
                 MenuItem("Notes", false)
             )
 
-            _passwordItems.value = when (val passwords = passwordRepository.findSummaries()) {
-                is Result.Success -> {
-                    _secVaultState.value = UiState.Success("Successfully loaded passwords")
-                    passwords.data
-                }
+            loadPasswords(PasswordSort.NAME)
 
-                is Result.Error -> {
-                    _secVaultState.value = UiState.Error(passwords.message)
-                    emptyList()
-                }
+            _selectedSortItem.collect { newFilterOption ->
+                _secVaultState.value = UiState.Loading
+                loadPasswords(newFilterOption)
+            }
+        }
+    }
+
+    suspend fun loadPasswords(sort: PasswordSort) {
+        _passwordItems.value = when (val passwords = passwordRepository.findSummaries(sort)) {
+            is Result.Success -> {
+                _secVaultState.value = UiState.Success("Successfully loaded passwords")
+                passwords.data
+            }
+
+            is Result.Error -> {
+                _secVaultState.value = UiState.Error(passwords.message)
+                emptyList()
             }
         }
     }
@@ -61,8 +74,8 @@ class SecVaultScreenModel(private val passwordRepository: PasswordRepository) : 
         }
     }
 
-    fun selectFilterItem(item: DefaultMenuItem) {
-        _selectedFilterOption.value = item
+    fun selectSortItem(item: PasswordSort) {
+        _selectedSortItem.value = item
     }
 
     fun clearError() {

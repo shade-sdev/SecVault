@@ -8,7 +8,7 @@ enum class NotificationType(val color: Color) {
     SUCCESS(Color.Green)
 }
 
-enum class DefaultMenuItem(val value: String) {
+enum class PasswordSort(val value: String) {
     NAME("Name"),
     FAVORITE("Favorite"),
     CREATED("Created"),

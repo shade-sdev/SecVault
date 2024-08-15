@@ -24,8 +24,8 @@ import viewmodel.SecVaultScreenModel
 @Composable
 fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
     var expanded by remember { mutableStateOf(false) }
-    val filterItems by screenModel.filterItems.collectAsState()
-    val selectedFilterOption by screenModel.selectedFilterOption.collectAsState()
+    val filterItems by screenModel.sortItems.collectAsState()
+    val selectedSortItem by screenModel.selectedSortItem.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -142,7 +142,7 @@ fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
                         )
                         {
                             Text(
-                                selectedFilterOption.value,
+                                selectedSortItem.value,
                                 fontFamily = Font.RussoOne,
                                 fontSize = 10.sp,
                                 color = Color.White
@@ -160,7 +160,7 @@ fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
                             ) {
                                 filterItems.forEach { selectionOption ->
                                     DropdownMenuItem(onClick = {
-                                        screenModel.selectFilterItem(selectionOption)
+                                        screenModel.selectSortItem(selectionOption)
                                         expanded = false
                                     }) {
                                         Text(
