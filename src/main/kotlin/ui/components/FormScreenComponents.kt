@@ -61,6 +61,7 @@ fun LoginScreenContent(
 
         Column(
             modifier = Modifier.fillMaxSize()
+                    .fillMaxHeight()
                     .weight(1f)
         )
         {
@@ -73,6 +74,7 @@ fun LoginScreenContent(
             }
             Column(
                 modifier = Modifier.fillMaxSize()
+                        .fillMaxHeight()
                         .weight(1f)
                         .background(color = tertiary),
                 verticalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterVertically),
@@ -106,20 +108,25 @@ fun LoginScreenContent(
                     label = "Master Password",
                     modifier = Modifier.height(40.dp).width(360.dp)
                 )
-                Text(
-                    text = "Forgot Password?",
-                    color = Color.White,
-                    fontFamily = Font.RobotoRegular,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 11.sp,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.fillMaxWidth(0.6f)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = { navigator?.push(ForgotPasswordScreen()) }
-                            )
-                )
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.width(360.dp).height(25.dp)
+                ) {
+                    Text(
+                        text = "Forgot Password?",
+                        color = Color.White,
+                        fontFamily = Font.RobotoRegular,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 11.sp,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                    onClick = { navigator?.push(ForgotPasswordScreen()) }
+                                )
+                    )
+                }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Button(
                         enabled = loginState !is UiState.Loading,
