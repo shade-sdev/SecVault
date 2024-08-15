@@ -44,10 +44,11 @@ class UserRepositoryImpl(
         return try {
             return transaction(db) {
                 User.find {
-                    (UsersTable.userName eq username)
+                    (UsersTable.userName.lowerCase() eq username.lowercase())
                 }.firstOrNull()
             }?.let { Result.Success(it) } ?: Result.Error("Invalid credentials")
         } catch (e: Exception) {
+            logger.error(e.message, e)
             Result.Error(DatabaseError.fromException(e).extractMessage())
         }
     }
@@ -60,6 +61,7 @@ class UserRepositoryImpl(
                 }.firstOrNull()
             }?.let { Result.Success(it) } ?: Result.Error("User with email not found")
         } catch (e: Exception) {
+            logger.error(e.message, e)
             Result.Error(DatabaseError.fromException(e).extractMessage())
         }
     }
@@ -88,8 +90,9 @@ class UserRepositoryImpl(
         return try {
             return transaction(db) {
                 User.new {
-                    this.userName = username
-                    this.email = email
+                    this.userName =
+                        username.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                    this.email = email.lowercase()
                     this.password = password
                     this.secretKey = secretKey
                     this.createdBy = "system"
