@@ -1,6 +1,6 @@
 package repository.user.impl
 
-import core.Result
+import core.models.Result
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.transactions.transaction

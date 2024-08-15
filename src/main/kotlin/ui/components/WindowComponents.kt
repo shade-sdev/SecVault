@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import core.ui.NotificationType
+import core.models.NotificationType
 import kotlinx.coroutines.delay
 import ui.theme.Font
 import ui.theme.secondary

@@ -11,7 +11,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import com.dokar.sonner.ToastType
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
-import core.ui.UiState
+import core.models.UiState
 import ui.components.ForgotPasswordScreenContent
 import ui.components.LoadingScreen
 import ui.theme.tertiary

@@ -1,4 +1,4 @@
-package core.ui
+package core.models
 
 sealed class UiState<out T> {
     data object Idle : UiState<Nothing>()

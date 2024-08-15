@@ -1,6 +1,6 @@
 package repository.user
 
-import core.Result
+import core.models.Result
 import repository.user.projection.UserSummary
 import java.util.*
 

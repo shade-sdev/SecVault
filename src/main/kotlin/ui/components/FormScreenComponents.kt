@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.Navigator
-import core.ui.UiState
+import core.models.UiState
 import repository.user.User
 import ui.screens.ForgotPasswordScreen
 import ui.screens.LoginScreen

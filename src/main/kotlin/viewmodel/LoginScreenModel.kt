@@ -2,9 +2,9 @@ package viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import core.Result
+import core.models.Result
+import core.models.UiState
 import core.security.AuthenticationManager
-import core.ui.UiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

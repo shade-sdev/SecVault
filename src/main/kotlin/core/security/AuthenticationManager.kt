@@ -1,7 +1,7 @@
 package core.security
 
 import core.AppState
-import core.Result
+import core.models.Result
 import kotlinx.coroutines.delay
 import org.mindrot.jbcrypt.BCrypt
 import repository.user.User
