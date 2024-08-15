@@ -6,17 +6,18 @@ import core.models.MenuItem
 import core.models.PasswordSort
 import core.models.Result
 import core.models.UiState
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.slf4j.Logger
 import repository.password.PasswordRepository
 import repository.password.projection.PasswordSummary
 
 class SecVaultScreenModel(
     private val passwordRepository: PasswordRepository,
-    private val logger: Logger
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ScreenModel {
 
     private val _secVaultState = MutableStateFlow<UiState<Any>>(UiState.Idle)
@@ -35,7 +36,7 @@ class SecVaultScreenModel(
     val passwordItems: StateFlow<List<PasswordSummary>> = _passwordItems.asStateFlow()
 
     init {
-        screenModelScope.launch {
+        screenModelScope.launch(dispatcher) {
             _secVaultState.value = UiState.Loading
             _menuItems.value = listOf(
                 MenuItem("Passwords", true),
