@@ -21,14 +21,14 @@ class SecVaultScreenModel(private val passwordRepository: PasswordRepository) : 
     private val _menuItems = MutableStateFlow<List<MenuItem>>(emptyList())
     val menuItems: StateFlow<List<MenuItem>> = _menuItems.asStateFlow()
 
-    private val _passwordItems = MutableStateFlow<List<PasswordSummary>>(emptyList())
-    val passwordItems: StateFlow<List<PasswordSummary>> = _passwordItems.asStateFlow()
-
     private val _filterItems = MutableStateFlow(DefaultMenuItem.entries.toList())
     val filterItems: StateFlow<List<DefaultMenuItem>> = _filterItems.asStateFlow()
 
     private val _selectedFilterOption = MutableStateFlow(filterItems.value.first())
     val selectedFilterOption: StateFlow<DefaultMenuItem> = _selectedFilterOption.asStateFlow()
+
+    private val _passwordItems = MutableStateFlow<List<PasswordSummary>>(emptyList())
+    val passwordItems: StateFlow<List<PasswordSummary>> = _passwordItems.asStateFlow()
 
     init {
         screenModelScope.launch {
