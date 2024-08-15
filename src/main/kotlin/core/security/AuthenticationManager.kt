@@ -56,13 +56,12 @@ class AuthenticationManager(
         delay(200)
         return when (val result = userRepository.findByEmail(email)) {
             is Result.Success -> {
+                val user = result.data
                 when (twoFactorAuthenticationService.verifySecret(result.data.secretKey, code)) {
                     is Result.Success -> {
-                        when (val updatedUser = userRepository.updatePassword(
-                            result.data,
-                            BCrypt.hashpw(newPassword, BCrypt.gensalt())
-                        )
-                        ) {
+                        when (val updatedUser = userRepository.updateUser(user) {
+                            password = BCrypt.hashpw(newPassword, BCrypt.gensalt())
+                        }) {
                             is Result.Success -> {
                                 Result.Success(updatedUser.data)
                             }

@@ -64,10 +64,10 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun updatePassword(user: User, newPassword: String): Result<User> {
+    override suspend fun updateUser(user: User, updates: User.() -> Unit): Result<User> {
         return try {
             return transaction(db) {
-                user.password = newPassword
+                user.apply(updates)
                 user.lastUpdatedBy = "system"
                 user.lastUpdateDateTime = LocalDateTime.now()
                 user.version += 1
