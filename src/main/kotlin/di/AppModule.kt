@@ -17,6 +17,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import repository.user.UserRepository
 import repository.user.impl.UserRepositoryImpl
+import viewmodel.ForgotPasswordScreenModel
 import viewmodel.LoginScreenModel
 import viewmodel.RegisterScreenModel
 
@@ -58,6 +59,8 @@ val viewModelModule = module {
     factory { LoginScreenModel(get()) }
 
     factory { RegisterScreenModel(get()) }
+
+    factory { ForgotPasswordScreenModel(get()) }
 
 }
 

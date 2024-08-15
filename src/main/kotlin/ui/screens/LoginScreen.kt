@@ -1,13 +1,10 @@
 package ui.screens
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -39,31 +36,29 @@ class LoginScreen : Screen {
             richColors = true
         )
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        LoginScreenContent(screenModel, navigator, loginState)
 
-            LoginScreenContent(screenModel, navigator, loginState)
-
-            when (val state = loginState) {
-                is UiState.Loading -> LoadingScreen(backgroundColor = tertiary.copy(alpha = 0.8f))
-                is UiState.Success -> {
-                    LaunchedEffect(state) {
-                        navigator?.push(LoginSplashScreen())
-                    }
+        when (val state = loginState) {
+            is UiState.Loading -> LoadingScreen(backgroundColor = tertiary.copy(alpha = 0.8f))
+            is UiState.Success -> {
+                LaunchedEffect(state) {
+                    navigator?.push(LoginSplashScreen())
                 }
-
-                is UiState.Error -> {
-                    LaunchedEffect(toaster) {
-                        toaster.show(
-                            message = state.message,
-                            type = ToastType.Error,
-                            duration = 5.seconds
-                        )
-                        screenModel.clearError()
-                    }
-                }
-
-                is UiState.Idle -> {}
             }
+
+            is UiState.Error -> {
+                LaunchedEffect(toaster) {
+                    toaster.show(
+                        message = state.message,
+                        type = ToastType.Error,
+                        duration = 5.seconds
+                    )
+                    screenModel.clearError()
+                }
+            }
+
+            is UiState.Idle -> {}
         }
+
     }
 }

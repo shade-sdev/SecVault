@@ -8,31 +8,31 @@ import core.form.validation.*
 fun registerFormValidator(): FormValidator {
     return FormValidator()
             .addField(
-                LoginFieldName.USERNAME, FormField(
+                RegisterFieldName.USERNAME, FormField(
                     validator = Validator()
-                            .addRule(notNullRule(LoginFieldName.USERNAME.fieldName))
-                            .addRule(lengthRule(LoginFieldName.USERNAME.fieldName, 1))
+                            .addRule(notNullRule(RegisterFieldName.USERNAME.fieldName))
+                            .addRule(lengthRule(RegisterFieldName.USERNAME.fieldName, 1))
                 )
             )
             .addField(
-                LoginFieldName.EMAIL, FormField(
+                RegisterFieldName.EMAIL, FormField(
                     validator = Validator()
-                            .addRule(notNullRule(LoginFieldName.EMAIL.fieldName))
-                            .addRule(lengthRule(LoginFieldName.EMAIL.fieldName, 1))
+                            .addRule(notNullRule(RegisterFieldName.EMAIL.fieldName))
+                            .addRule(lengthRule(RegisterFieldName.EMAIL.fieldName, 1))
                             .addRule(emailRule)
                 )
             )
             .addField(
-                LoginFieldName.PASSWORD, FormField(
+                RegisterFieldName.PASSWORD, FormField(
                     validator = Validator()
-                            .addRule(notNullRule(LoginFieldName.PASSWORD.fieldName))
+                            .addRule(notNullRule(RegisterFieldName.PASSWORD.fieldName))
                             .addRule(passwordRule)
                 )
             )
             .validateAllFields()
 }
 
-enum class LoginFieldName(val fieldName: String) : FormFieldName {
+enum class RegisterFieldName(val fieldName: String) : FormFieldName {
     USERNAME("Username"),
     EMAIL("Email"),
     PASSWORD("Password");

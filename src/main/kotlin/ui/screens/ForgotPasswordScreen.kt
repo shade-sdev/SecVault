@@ -1,6 +1,5 @@
 package ui.screens
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -13,21 +12,19 @@ import com.dokar.sonner.ToastType
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
 import core.ui.UiState
+import ui.components.ForgotPasswordScreenContent
 import ui.components.LoadingScreen
-import ui.components.RegisterScreenContent
 import ui.theme.tertiary
-import viewmodel.RegisterScreenModel
-import kotlin.time.Duration
+import viewmodel.ForgotPasswordScreenModel
+import kotlin.time.Duration.Companion.seconds
 
-class RegisterScreen : Screen {
+class ForgotPasswordScreen : Screen {
 
-    @Preview
     @Composable
     override fun Content() {
-
         val navigator = LocalNavigator.current
-        val screenModel = koinScreenModel<RegisterScreenModel>()
-        val registerState by screenModel.registerState.collectAsState()
+        val screenModel = koinScreenModel<ForgotPasswordScreenModel>()
+        val forgotPasswordState by screenModel.forgotPasswordState.collectAsState()
         val toaster = rememberToasterState()
 
         Toaster(
@@ -38,19 +35,19 @@ class RegisterScreen : Screen {
             richColors = true
         )
 
-        RegisterScreenContent(screenModel, navigator)
+        ForgotPasswordScreenContent(screenModel, navigator)
 
-        when (val state = registerState) {
+        when (val state = forgotPasswordState) {
             is UiState.Loading -> LoadingScreen(backgroundColor = tertiary.copy(alpha = 0.8f))
             is UiState.Success -> {
                 LaunchedEffect(toaster) {
                     toaster.show(
-                        message = "Successfully Registered",
+                        message = "Password has been Reset!",
                         type = ToastType.Success,
-                        duration = Duration.INFINITE
+                        duration = 5.seconds
                     )
                     screenModel.clearError()
-                    screenModel.openQRCode(state.data)
+                    if (navigator?.canPop == true) navigator.pop() else navigator?.push(LoginScreen())
                 }
             }
 
@@ -59,7 +56,7 @@ class RegisterScreen : Screen {
                     toaster.show(
                         message = state.message,
                         type = ToastType.Error,
-                        duration = Duration.INFINITE
+                        duration = 5.seconds
                     )
                     screenModel.clearError()
                 }
@@ -67,7 +64,5 @@ class RegisterScreen : Screen {
 
             is UiState.Idle -> {}
         }
-
     }
-
 }

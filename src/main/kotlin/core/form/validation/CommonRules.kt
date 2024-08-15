@@ -1,5 +1,7 @@
 package core.form.validation
 
+import java.util.*
+
 val emailRule: ValidationRule = ValidationRule(
     condition = { email ->
         email.matches(Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"))
@@ -10,10 +12,10 @@ val emailRule: ValidationRule = ValidationRule(
 val passwordRule: ValidationRule = ValidationRule(
     condition = { password ->
         password.length >= 8 &&
-                password.any { it.isDigit() } &&
-                password.any { it.isUpperCase() } &&
-                password.any { it.isLowerCase() } &&
-                password.any { it in "!@#$%^&*()-_=+[]{}|;:'\",.<>?/~`" }
+        password.any { it.isDigit() } &&
+        password.any { it.isUpperCase() } &&
+        password.any { it.isLowerCase() } &&
+        password.any { it in "!@#$%^&*()-_=+[]{}|;:'\",.<>?/~`" }
     },
     errorMessage = "Password must be 8+ chars, with a number, symbol, upper & lower case."
 )
@@ -22,6 +24,35 @@ fun lengthRule(field: String, length: Int): ValidationRule {
     return ValidationRule(
         condition = { field.length >= length },
         errorMessage = "$field must be $length characters or more"
+    )
+}
+
+fun minMaxRule(field: String, min: Int, max: Int): ValidationRule {
+    val errorMessage = when {
+        min == max -> "$field must be $max characters"
+        else -> "$field must be between $min and $max characters"
+    }
+
+    return ValidationRule(
+        condition = { it.length in min..max },
+        errorMessage = errorMessage
+    )
+}
+
+fun instanceRule(field: String, type: Class<*>): ValidationRule {
+    return ValidationRule(
+        condition = {
+            val value = when (type) {
+                Integer::class.java -> it.toIntOrNull()
+                Double::class.java -> it.toDoubleOrNull()
+                Long::class.java -> it.toLongOrNull()
+                Boolean::class.java -> it.toBoolean()
+                String::class.java -> it
+                else -> null
+            }
+            Objects.nonNull(value) && type.isInstance(value!!)
+        },
+        errorMessage = "$field must be of type ${type.simpleName}"
     )
 }
 
