@@ -20,11 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import repository.password.projection.PasswordSummary
 import ui.theme.Font
 import ui.theme.PasswordColors
 
 @Composable
-fun PasswordItem() {
+fun PasswordItem(passwordSummary: PasswordSummary) {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
 
@@ -58,7 +59,7 @@ fun PasswordItem() {
 
             Row {
                 Text(
-                    text = "Spotify",
+                    text = passwordSummary.name,
                     fontSize = 16.sp,
                     fontFamily = Font.RussoOne,
                     color = Color.White
@@ -67,7 +68,7 @@ fun PasswordItem() {
 
             Row {
                 Text(
-                    text = "shade@shade.ga",
+                    text = passwordSummary.email ?: passwordSummary.username ?: "",
                     fontSize = 12.sp,
                     fontFamily = Font.RobotoThin,
                     color = PasswordColors.outline
@@ -84,7 +85,7 @@ fun PasswordItem() {
                 imageVector = Icons.Default.Star,
                 contentDescription = "User Icon",
                 modifier = Modifier.size(38.dp),
-                tint = Color.White
+                tint = if (passwordSummary.favorite) Color.Yellow else Color.White
             )
         }
     }

@@ -19,12 +19,13 @@ import androidx.compose.ui.unit.sp
 import ui.components.RoundedFilledTextField
 import ui.theme.Font
 import ui.theme.PasswordColors
+import viewmodel.SecVaultScreenModel
 
 @Composable
-fun PasswordFilterHeader() {
-    val options = listOf("Name", "Favourite", "Created")
+fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf(options[0]) }
+    val filterItems by screenModel.filterItems.collectAsState()
+    val selectedFilterOption by screenModel.selectedFilterOption.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -140,7 +141,12 @@ fun PasswordFilterHeader() {
                             horizontalArrangement = Arrangement.End,
                         )
                         {
-                            Text(selectedOption, fontFamily = Font.RussoOne, fontSize = 10.sp, color = Color.White)
+                            Text(
+                                selectedFilterOption.value,
+                                fontFamily = Font.RussoOne,
+                                fontSize = 10.sp,
+                                color = Color.White
+                            )
                             Icon(
                                 Icons.Default.ArrowDropDown,
                                 contentDescription = "Dropdown Menu",
@@ -152,13 +158,13 @@ fun PasswordFilterHeader() {
                                 onDismissRequest = { expanded = false },
                                 modifier = Modifier.background(PasswordColors.primary)
                             ) {
-                                options.forEach { selectionOption ->
+                                filterItems.forEach { selectionOption ->
                                     DropdownMenuItem(onClick = {
-                                        selectedOption = selectionOption
+                                        screenModel.selectFilterItem(selectionOption)
                                         expanded = false
                                     }) {
                                         Text(
-                                            text = selectionOption,
+                                            text = selectionOption.value,
                                             fontFamily = Font.RussoOne,
                                             fontSize = 10.sp,
                                             color = Color.White

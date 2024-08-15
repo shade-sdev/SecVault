@@ -8,4 +8,10 @@ enum class NotificationType(val color: Color) {
     SUCCESS(Color.Green)
 }
 
+enum class DefaultMenuItem(val value: String) {
+    NAME("Name"),
+    FAVORITE("Favorite"),
+    CREATED("Created"),
+}
+
 data class MenuItem(val title: String, var selected: Boolean = false)

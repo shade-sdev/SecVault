@@ -1,16 +1,21 @@
 package ui.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
-import ui.components.secvault.passwordlayout.PasswordLayout
-import ui.components.secvault.sidebar.SideBar
-import ui.theme.PasswordColors
+import com.dokar.sonner.ToastType
+import com.dokar.sonner.Toaster
+import com.dokar.sonner.rememberToasterState
+import core.models.UiState
+import ui.components.LoadingScreen
+import ui.components.secvault.SecVaultContentScreen
+import ui.theme.tertiary
 import viewmodel.SecVaultScreenModel
+import kotlin.time.Duration.Companion.seconds
 
 class SecVaultScreen : Screen {
 
@@ -18,44 +23,37 @@ class SecVaultScreen : Screen {
     override fun Content() {
 
         val screenModel = koinScreenModel<SecVaultScreenModel>()
+        val secVaultState by screenModel.secVaultState.collectAsState()
+        val toaster = rememberToasterState()
 
-        Surface(
-            modifier = Modifier.fillMaxSize()
+        Toaster(
+            state = toaster,
+            alignment = Alignment.TopEnd,
+            darkTheme = true,
+            showCloseButton = true,
+            richColors = true
         )
-        {
-            Row {
 
-                Column(
-                    modifier = Modifier.weight(3f)
-                            .fillMaxHeight()
-                            .fillMaxWidth()
-                            .background(PasswordColors.primary)
-                )
-                {
-                    SideBar(screenModel)
-                }
+        SecVaultContentScreen(screenModel)
 
-                Column(
-                    modifier = Modifier.weight(4.5f)
-                            .fillMaxHeight()
-                            .fillMaxWidth()
-                            .background(PasswordColors.secondary)
-                )
-                {
-                    PasswordLayout()
-                }
-
-                Column(
-                    modifier = Modifier.weight(4.5f)
-                            .fillMaxHeight()
-                            .fillMaxWidth()
-                            .background(PasswordColors.tertiary)
-                )
-                {
-                    //PasswordInfo()
-                }
-
+        when (val state = secVaultState) {
+            is UiState.Loading -> LoadingScreen(backgroundColor = tertiary.copy(alpha = 0.8f))
+            is UiState.Success -> {
+                screenModel.clearError()
             }
+
+            is UiState.Error -> {
+                LaunchedEffect(toaster) {
+                    toaster.show(
+                        message = state.message,
+                        type = ToastType.Error,
+                        duration = 5.seconds
+                    )
+                    screenModel.clearError()
+                }
+            }
+
+            is UiState.Idle -> {}
         }
     }
 }
