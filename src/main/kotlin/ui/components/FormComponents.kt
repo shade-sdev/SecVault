@@ -2,13 +2,11 @@ package ui.components
 
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
@@ -26,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ui.theme.Font
+import ui.theme.PasswordColors
 import ui.theme.secondary
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -181,5 +180,68 @@ fun PasswordTextField(
                 container = {}
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun RoundedFilledTextField(
+    modifier: Modifier = Modifier,
+    placeholder: String = "",
+) {
+    var user by remember { mutableStateOf("") }
+    val interactionSource = remember { MutableInteractionSource() }
+    BasicTextField(
+        value = user,
+        onValueChange = { user = it },
+        interactionSource = interactionSource,
+        modifier = modifier,
+        textStyle = TextStyle(
+            fontFamily = Font.RussoOne,
+            color = PasswordColors.outlineVariant,
+            textAlign = TextAlign.Start,
+            fontSize = 13.sp
+        ),
+        singleLine = true
+    ) { innerTextField ->
+
+        TextFieldDefaults.DecorationBox(
+            innerTextField = innerTextField,
+            placeholder = {
+                Text(
+                    placeholder,
+                    fontSize = 13.sp,
+                    fontFamily = Font.RussoOne,
+                    modifier = Modifier.padding(PaddingValues(bottom = 3.dp))
+                )
+            },
+            value = user,
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "",
+                    tint = PasswordColors.outlineVariant,
+                    modifier = Modifier.width(20.dp).height(20.dp)
+
+                )
+            },
+            enabled = true,
+            interactionSource = interactionSource,
+            singleLine = true,
+            visualTransformation = VisualTransformation.None,
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledTextColor = Color.LightGray,
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+                focusedTextColor = PasswordColors.outlineVariant,
+                unfocusedTextColor = PasswordColors.outlineVariant,
+                focusedPlaceholderColor = PasswordColors.outlineVariant,
+                unfocusedPlaceholderColor = PasswordColors.outlineVariant
+            ),
+            shape = RoundedCornerShape(20.dp),
+            contentPadding = PaddingValues(0.dp)
+        )
     }
 }

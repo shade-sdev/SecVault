@@ -22,8 +22,8 @@ class AppState {
         userExists = exists
     }
 
-    val getAuthenticatedUser: User
-        get() = currentUser!!
+    val getAuthenticatedUser: User?
+        get() = currentUser
 
     fun clearCurrentUser() {
         currentUser = null

@@ -24,7 +24,7 @@ import org.koin.java.KoinJavaComponent.inject
 import ui.theme.Font
 import ui.theme.secondary
 
-class LoginSplashScreen() : Screen {
+class LoginSplashScreen : Screen {
 
     @Preview
     @Composable
@@ -39,7 +39,7 @@ class LoginSplashScreen() : Screen {
             delay(600)
             isVisible = true
             delay(1500)
-            //navigator?.pop()
+            navigator?.push(SecVaultScreen())
         }
 
         Row(
@@ -93,7 +93,7 @@ class LoginSplashScreen() : Screen {
                             tint = Color.White
                         )
                         Text(
-                            text = appState.getAuthenticatedUser.userName,
+                            text = appState.getAuthenticatedUser?.userName ?: "User",
                             fontStyle = FontStyle.Normal,
                             fontWeight = FontWeight.Normal,
                             color = Color.White,

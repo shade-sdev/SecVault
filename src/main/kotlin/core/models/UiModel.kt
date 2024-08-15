@@ -7,3 +7,5 @@ enum class NotificationType(val color: Color) {
     WARNING(Color(0xFFFFA000)),
     SUCCESS(Color.Green)
 }
+
+data class MenuItem(val title: String, var selected: Boolean = false)

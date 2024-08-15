@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.models.NotificationType
@@ -161,3 +162,22 @@ fun TopRightNotification(
     }
 }
 
+@Composable
+fun HorizontalSpacer(
+    thickness: Dp = 0.2.dp,
+    color: Color = Color.Gray,
+    width: Float = 0.8f,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    )
+    {
+        HorizontalDivider(
+            color = color,
+            thickness = thickness,
+            modifier = Modifier.fillMaxWidth(width)
+        )
+    }
+}

@@ -20,6 +20,7 @@ import repository.user.impl.UserRepositoryImpl
 import viewmodel.ForgotPasswordScreenModel
 import viewmodel.LoginScreenModel
 import viewmodel.RegisterScreenModel
+import viewmodel.SecVaultScreenModel
 
 val appModule = module {
 
@@ -61,6 +62,8 @@ val viewModelModule = module {
     factory { RegisterScreenModel(get()) }
 
     factory { ForgotPasswordScreenModel(get()) }
+
+    factory { SecVaultScreenModel() }
 
 }
 
