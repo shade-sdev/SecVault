@@ -54,29 +54,28 @@ class AuthenticationManager(
 
     suspend fun resetPassword(email: String, newPassword: String, code: String): Result<User> {
         delay(200)
-        return when (val result = userRepository.findByEmail(email)) {
-            is Result.Success -> {
-                val user = result.data
-                when (twoFactorAuthenticationService.verifySecret(result.data.secretKey, code)) {
-                    is Result.Success -> {
-                        when (val updatedUser = userRepository.updateUser(user) {
-                            password = BCrypt.hashpw(newPassword, BCrypt.gensalt())
-                        }) {
-                            is Result.Success -> {
-                                Result.Success(updatedUser.data)
-                            }
 
-                            is Result.Error -> Result.Error(updatedUser.message)
-                        }
-                    }
+        val userResult = userRepository.findByEmail(email)
+        if (userResult is Result.Error) {
+            return userResult
+        }
 
-                    is Result.Error -> Result.Error("Wrong OTP")
-                }
-            }
+        val user = (userResult as Result.Success).data
+        val otpVerification = twoFactorAuthenticationService.verifySecret(user.secretKey, code)
+        if (otpVerification is Result.Error) {
+            return Result.Error("Invalid One Time Password.")
+        }
 
-            is Result.Error -> result
+        val updateUserResult = userRepository.updateUser(user) {
+            password = BCrypt.hashpw(newPassword, BCrypt.gensalt())
+        }
+
+        return when (updateUserResult) {
+            is Result.Success -> Result.Success(updateUserResult.data)
+            is Result.Error -> Result.Error(updateUserResult.message)
         }
     }
+
 
     fun openQRCode(secretKey: String, email: String) {
         twoFactorAuthenticationService.generateQRCodeImage(secretKey, email)
