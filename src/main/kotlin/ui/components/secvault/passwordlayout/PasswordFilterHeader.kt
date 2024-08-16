@@ -67,7 +67,6 @@ fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
                 )
                 {
                     Icon(Icons.Outlined.Add, contentDescription = "Localized description")
-
                 }
             }
         }
