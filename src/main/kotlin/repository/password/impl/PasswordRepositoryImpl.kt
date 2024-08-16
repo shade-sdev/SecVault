@@ -19,7 +19,7 @@ class PasswordRepositoryImpl(
 ) : PasswordRepository {
 
     override suspend fun findSummaries(sort: PasswordSort): Result<List<PasswordSummary>> {
-        delay(2000)
+        delay(550)
         return try {
             return transaction(db) {
                 PasswordsTable.select(
