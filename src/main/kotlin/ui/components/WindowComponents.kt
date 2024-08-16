@@ -90,6 +90,7 @@ fun LoadingScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text,
+                fontFamily = Font.RobotoRegular,
                 color = textColor,
                 fontSize = 16.sp
             )
