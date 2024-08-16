@@ -9,7 +9,6 @@ val PasswordColors = darkColorScheme(
     onSurface = onSurface,
     outline = outline,
     outlineVariant = outlineVariant,
-    surface = surface,
     surfaceContainer = surfaceContainer,
     primaryContainer = primaryContainer,
     scrim = scrim,

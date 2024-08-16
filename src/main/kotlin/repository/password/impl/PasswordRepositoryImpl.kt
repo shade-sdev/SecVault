@@ -2,6 +2,7 @@ package repository.password.impl
 
 import core.models.PasswordSort
 import core.models.Result
+import kotlinx.coroutines.delay
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.SortOrder
@@ -18,6 +19,7 @@ class PasswordRepositoryImpl(
 ) : PasswordRepository {
 
     override suspend fun findSummaries(sort: PasswordSort): Result<List<PasswordSummary>> {
+        delay(2000)
         return try {
             return transaction(db) {
                 PasswordsTable.select(

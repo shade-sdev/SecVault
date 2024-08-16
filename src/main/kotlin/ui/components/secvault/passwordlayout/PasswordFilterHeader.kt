@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import ui.components.RoundedFilledTextField
 import ui.theme.Font
 import ui.theme.PasswordColors
+import ui.theme.orange
 import viewmodel.SecVaultScreenModel
 
 @Composable
@@ -58,10 +59,10 @@ fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
                     enabled = true,
                     modifier = Modifier.height(36.dp).width(36.dp),
                     colors = IconButtonColors(
-                        containerColor = Color(0xFFFB8C00),
+                        containerColor = orange,
                         contentColor = Color.White,
-                        disabledContentColor = Color(0xFFFB8C00),
-                        disabledContainerColor = Color(0xFFFB8C00)
+                        disabledContentColor = orange,
+                        disabledContainerColor = orange
                     )
                 )
                 {
