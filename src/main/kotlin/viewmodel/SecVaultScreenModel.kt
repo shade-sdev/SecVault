@@ -18,7 +18,7 @@ import repository.password.projection.PasswordSummary
 
 class SecVaultScreenModel(
     private val passwordRepository: PasswordRepository,
-    dispatcher: CoroutineDispatcher = Dispatchers.Default
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ScreenModel {
 
     private val _secVaultState = MutableStateFlow<UiState<Any>>(UiState.Idle)
@@ -40,7 +40,7 @@ class SecVaultScreenModel(
     val passwordItems: StateFlow<List<PasswordSummary>> = _passwordItems.asStateFlow()
 
     init {
-        screenModelScope.launch {
+        screenModelScope.launch(dispatcher) {
             _secVaultState.value = UiState.Loading
             loadPasswords(PasswordSort.NAME)
         }
