@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.slf4j.LoggerFactory
 import repository.password.PasswordRepository
 import repository.password.projection.PasswordSummary
 
@@ -46,11 +47,11 @@ class SecVaultScreenModel(
 
         screenModelScope.launch(dispatcher) {
             _selectedMenuItem.collect { newMenuItem ->
-                println(newMenuItem.value)
+                LoggerFactory.getLogger(SecVaultScreenModel::class.java).info(newMenuItem.value)
             }
         }
 
-        screenModelScope.launch {
+        screenModelScope.launch(dispatcher) {
             _selectedSortItem.collect { newFilterOption ->
                 _secVaultState.value = UiState.Loading
                 loadPasswords(newFilterOption)
