@@ -2,7 +2,7 @@ package viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import core.models.MenuItem
+import core.models.DefaultMenuItem
 import core.models.PasswordSort
 import core.models.Result
 import core.models.UiState
@@ -17,14 +17,17 @@ import repository.password.projection.PasswordSummary
 
 class SecVaultScreenModel(
     private val passwordRepository: PasswordRepository,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : ScreenModel {
 
     private val _secVaultState = MutableStateFlow<UiState<Any>>(UiState.Idle)
     val secVaultState: StateFlow<UiState<Any>> = _secVaultState.asStateFlow()
 
-    private val _menuItems = MutableStateFlow<List<MenuItem>>(emptyList())
-    val menuItems: StateFlow<List<MenuItem>> = _menuItems.asStateFlow()
+    private val _menuItems = MutableStateFlow(DefaultMenuItem.entries.toList())
+    val menuItems: StateFlow<List<DefaultMenuItem>> = _menuItems.asStateFlow()
+
+    private val _selectedMenuItem = MutableStateFlow(_menuItems.value.first())
+    val selectedMenuItem: StateFlow<DefaultMenuItem> = _selectedMenuItem.asStateFlow()
 
     private val _sortItems = MutableStateFlow(PasswordSort.entries.toList())
     val sortItems: StateFlow<List<PasswordSort>> = _sortItems.asStateFlow()
@@ -36,15 +39,18 @@ class SecVaultScreenModel(
     val passwordItems: StateFlow<List<PasswordSummary>> = _passwordItems.asStateFlow()
 
     init {
-        screenModelScope.launch(dispatcher) {
+        screenModelScope.launch {
             _secVaultState.value = UiState.Loading
-            _menuItems.value = listOf(
-                MenuItem("Passwords", true),
-                MenuItem("Notes", false)
-            )
-
             loadPasswords(PasswordSort.NAME)
+        }
 
+        screenModelScope.launch(dispatcher) {
+            _selectedMenuItem.collect { newMenuItem ->
+                println(newMenuItem.value)
+            }
+        }
+
+        screenModelScope.launch {
             _selectedSortItem.collect { newFilterOption ->
                 _secVaultState.value = UiState.Loading
                 loadPasswords(newFilterOption)
@@ -52,13 +58,8 @@ class SecVaultScreenModel(
         }
     }
 
-    fun selectMenuItem(index: Int) {
-        screenModelScope.launch {
-            val updatedItems = _menuItems.value.mapIndexed { i, menuItem ->
-                menuItem.copy(selected = i == index)
-            }
-            _menuItems.value = updatedItems
-        }
+    fun selectMenuItem(item: DefaultMenuItem) {
+        _selectedMenuItem.value = item
     }
 
     fun selectSortItem(item: PasswordSort) {

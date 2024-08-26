@@ -6,9 +6,8 @@ import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -26,7 +25,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import core.models.MenuItem
+import core.models.DefaultMenuItem
 import ui.components.HorizontalSpacer
 import ui.theme.Font
 import ui.theme.PasswordColors
@@ -35,6 +34,7 @@ import viewmodel.SecVaultScreenModel
 @Composable
 fun SideBarMenu(screenModel: SecVaultScreenModel) {
     val menuItems by screenModel.menuItems.collectAsState()
+    val selectedMenuItem by screenModel.selectedMenuItem.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -60,7 +60,7 @@ fun SideBarMenu(screenModel: SecVaultScreenModel) {
                 modifier = Modifier.fillMaxWidth()
             )
             {
-                SideBarMenuSection(menuItems, screenModel::selectMenuItem)
+                SideBarMenuSection(menuItems, selectedMenuItem, screenModel::selectMenuItem)
             }
 
             Text(
@@ -75,26 +75,24 @@ fun SideBarMenu(screenModel: SecVaultScreenModel) {
                 modifier = Modifier.fillMaxWidth()
             )
             {
-                SideBarMenuSection(menuItems, screenModel::selectMenuItem)
+                SideBarMenuSection(menuItems, selectedMenuItem, screenModel::selectMenuItem)
             }
         }
     }
 }
 
 @Composable
-fun SideBarMenuSection(menuItems: List<MenuItem>, onMenuItemClick: (Int) -> Unit) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(1),
+fun SideBarMenuSection(menuItems: List<DefaultMenuItem>, selectedMenuItem: DefaultMenuItem, onMenuClick: (DefaultMenuItem) -> Unit) {
+    LazyColumn(
         verticalArrangement = Arrangement.spacedBy(4.dp, alignment = Alignment.CenterVertically)
     )
     {
-        itemsIndexed(menuItems) { index, menuItem ->
-            SideBarMenuItem(menuItem.title,
-                            menuItem.selected,
-                            Icons.Default.Security,
-                            onClick = { onMenuItemClick(index) })
+        items(menuItems) { menuItem ->
+            SideBarMenuItem(menuItem.value,
+                menuItem.value == selectedMenuItem.value,
+                Icons.Default.Security,
+                onClick = { onMenuClick(menuItem) })
         }
-
     }
 
 }
@@ -116,15 +114,15 @@ fun SideBarMenuItem(
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-                .clickable(onClick = onClick, indication = null, interactionSource = interactionSource)
-                .hoverable(interactionSource)
-                .height(34.dp)
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(
-                    if (isHovered || selected) hoverColor else backgroundColor,
-                    shape = RoundedCornerShape(CornerSize(10.dp))
-                )
+            .clickable(onClick = onClick, indication = null, interactionSource = interactionSource)
+            .hoverable(interactionSource)
+            .height(34.dp)
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(
+                if (isHovered || selected) hoverColor else backgroundColor,
+                shape = RoundedCornerShape(CornerSize(10.dp))
+            )
 
     ) {
         Spacer(modifier = Modifier.width(2.dp))

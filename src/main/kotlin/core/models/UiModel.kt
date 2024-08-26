@@ -14,4 +14,7 @@ enum class PasswordSort(val value: String) {
     CREATED("Created"),
 }
 
-data class MenuItem(val title: String, var selected: Boolean = false)
+enum class DefaultMenuItem(val value: String) {
+    PASSWORDS("Passwords"),
+    NOTES("Notes")
+}
