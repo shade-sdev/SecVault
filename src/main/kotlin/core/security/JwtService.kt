@@ -38,5 +38,4 @@ class JwtService(config: Config) {
         }.getOrNull()
     }
 
-
 }
