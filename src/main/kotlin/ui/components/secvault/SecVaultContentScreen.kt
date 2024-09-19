@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import ui.components.secvault.passwordinfo.PasswordInfo
 import ui.components.secvault.passwordlayout.PasswordLayout
 import ui.components.secvault.sidebar.SideBar
 import ui.theme.PasswordColors
@@ -46,7 +47,7 @@ fun SecVaultContentScreen(screenModel: SecVaultScreenModel) {
                         .background(PasswordColors.tertiary)
             )
             {
-                //PasswordInfo()
+                PasswordInfo()
             }
 
         }

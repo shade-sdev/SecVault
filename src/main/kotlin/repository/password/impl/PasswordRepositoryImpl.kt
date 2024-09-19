@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.Logger
-import repository.errors.DatabaseError
+import repository.common.errors.DatabaseError
 import repository.password.PasswordRepository
 import repository.password.PasswordsTable
 import repository.password.projection.PasswordSummary

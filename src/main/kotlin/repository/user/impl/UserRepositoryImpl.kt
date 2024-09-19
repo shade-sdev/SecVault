@@ -5,12 +5,12 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.Logger
-import repository.errors.DatabaseError
-import repository.queries.user.UserQueries
+import repository.common.errors.DatabaseError
 import repository.user.User
 import repository.user.UserRepository
 import repository.user.UsersTable
 import repository.user.projection.UserSummary
+import repository.user.queries.UserQueries
 import java.time.LocalDateTime
 import java.util.*
 

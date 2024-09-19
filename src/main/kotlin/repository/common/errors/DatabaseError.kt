@@ -1,4 +1,4 @@
-package repository.errors
+package repository.common.errors
 
 sealed class DatabaseError {
     abstract fun extractMessage(): String

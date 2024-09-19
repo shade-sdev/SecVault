@@ -3,7 +3,7 @@ package repository
 import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.javatime.datetime
-import repository.expression.CurrentDateTime
+import repository.common.expression.CurrentDateTime
 import java.time.LocalDateTime
 
 abstract class AuditableTable(name: String) : UUIDTable(name) {
@@ -13,4 +13,3 @@ abstract class AuditableTable(name: String) : UUIDTable(name) {
     val lastUpdatedBy: Column<String> = varchar("last_updated_by", 255)
     val version: Column<Int> = integer("version").default(0)
 }
-

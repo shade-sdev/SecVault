@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -242,6 +244,96 @@ fun RoundedFilledTextField(
             ),
             shape = RoundedCornerShape(20.dp),
             contentPadding = PaddingValues(0.dp)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UnderLineTextFiled(
+    modifier: Modifier = Modifier,
+    label: String,
+    field: String,
+    onFieldChange: (String) -> Unit,
+    isPassword: Boolean = false,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    BasicTextField(
+        value = field,
+        onValueChange = onFieldChange,
+        interactionSource = interactionSource,
+        modifier = modifier,
+        textStyle = TextStyle(
+            fontFamily = Font.RussoOne,
+            color = Color.White,
+            textAlign = TextAlign.Start,
+            fontSize = 12.sp
+        ),
+        singleLine = true,
+        cursorBrush = SolidColor(Color.White),
+        visualTransformation = if (!isPassword || passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+    ) { innerTextField ->
+        TextFieldDefaults.DecorationBox(
+            interactionSource = interactionSource,
+            innerTextField = innerTextField,
+            enabled = true,
+            value = field,
+            singleLine = true,
+            visualTransformation = if (!isPassword || passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            label = {
+                Text(
+                    label,
+                    fontFamily = Font.RussoOne,
+                    textAlign = TextAlign.Start,
+                    fontSize = 10.sp,
+                    color = Color.Gray
+                )
+            },
+            trailingIcon = {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(2.dp, Alignment.End),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        if (isPassword) {
+                            IconToggleButton(
+                                checked = passwordVisible,
+                                onCheckedChange = { passwordVisible = it }) {
+                                Icon(
+                                    imageVector = if (passwordVisible) Icons.Default.VisibilityOff
+                                    else Icons.Default.Visibility,
+                                    contentDescription = "",
+                                    modifier = Modifier.size(width = 15.dp, height = 15.dp),
+                                    tint = Color.Gray
+                                )
+                            }
+                        }
+                    }
+                    Column {
+                        Icon(
+                            imageVector = Icons.Default.ContentCopy,
+                            contentDescription = "",
+                            tint = Color.Gray,
+                            modifier = Modifier.size(width = 15.dp, height = 15.dp)
+                        )
+                    }
+                    if (isPassword) {
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
+                }
+            },
+            contentPadding = TextFieldDefaults.contentPaddingWithLabel(0.dp),
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color(0xFF333333),
+                unfocusedIndicatorColor = Color(0xFF333333),
+                disabledTextColor = Color.LightGray,
+                unfocusedContainerColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White
+            ),
         )
     }
 }

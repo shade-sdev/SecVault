@@ -1,4 +1,4 @@
-package repository.expression
+package repository.common.expression
 
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.QueryBuilder
