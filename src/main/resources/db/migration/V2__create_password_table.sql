@@ -3,7 +3,7 @@
 CREATE TABLE passwords
 (
     id                    TEXT PRIMARY KEY,
-    user_id TEXT NOT NULL,
+    user_id               TEXT     NOT NULL,
     name                  TEXT     NOT NULL,
     username              TEXT,
     email                 TEXT,
@@ -16,6 +16,6 @@ CREATE TABLE passwords
     created_by            TEXT,
     last_update_date_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_updated_by       TEXT,
-    version INTEGER DEFAULT 1,
+    version               INTEGER           DEFAULT 1,
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
