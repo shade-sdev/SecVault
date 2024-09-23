@@ -29,16 +29,18 @@ fun QRCodeDialog(
     SecVaultDialog(
         onDismissRequest = { qrCodeDialogState.value = false },
         modifier = Modifier.fillMaxWidth()
-            .width(200.dp)
-            .height(480.dp),
+                .width(50.dp)
+                .height(400.dp),
         roundedSize = 20.dp,
         backgroundColor = tertiary
     ) {
         Column(
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
+            Spacer(Modifier.height(15.dp))
 
             Row(
                 modifier = Modifier.weight(8f),
@@ -50,6 +52,7 @@ fun QRCodeDialog(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
+                        modifier = Modifier.weight(2f),
                         color = Color.White,
                         text = "Scan QR Code",
                         fontStyle = FontStyle.Normal,
@@ -62,13 +65,16 @@ fun QRCodeDialog(
                         contentDescription = "QR Code",
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
-                            .height(320.dp)
+                                .height(300.dp)
+                                .weight(8f)
                     )
                 }
             }
 
+            Spacer(Modifier.height(15.dp))
+
             Row(
-                modifier = Modifier.weight(2f),
+                modifier = Modifier.weight(1.5f),
                 horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally)
             ) {
                 Button(
