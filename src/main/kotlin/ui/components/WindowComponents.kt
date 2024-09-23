@@ -44,7 +44,7 @@ fun CloseButton() {
     Button(
         onClick = { exitProcess(0) },
         modifier = Modifier.size(30.dp)
-            .hoverable(interactionSource),
+                .hoverable(interactionSource),
         shape = RoundedCornerShape(topEnd = 10.dp),
         colors = ButtonColors(
             containerColor = if (isHovered) Color(0xFFb91919) else secondary,
@@ -92,8 +92,8 @@ fun LoadingScreen(
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .background(backgroundColor),
+                .fillMaxSize()
+                .background(backgroundColor),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -146,15 +146,15 @@ fun TopRightNotification(
     if (visible) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+                    .fillMaxSize()
+                    .padding(16.dp),
             contentAlignment = Alignment.TopEnd
         ) {
             Surface(
                 modifier = Modifier
-                    .fillMaxHeight(0.12f)
-                    .fillMaxWidth(0.3f)
-                    .padding(18.dp),
+                        .fillMaxHeight(0.12f)
+                        .fillMaxWidth(0.3f)
+                        .padding(18.dp),
                 shape = RoundedCornerShape(8.dp),
                 shadowElevation = 4.dp,
                 color = backgroundColor
@@ -232,17 +232,17 @@ fun ShimmerShape(modifier: Modifier, shape: Shape, radius: Float?) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = modifier.clip(shape)
-                .drawBehind {
-                    val brush = Brush.linearGradient(
-                        colors = shimmerColors,
-                        start = Offset.Zero,
-                        end = Offset(x = translateAnim.value, y = translateAnim.value)
-                    )
-                    if (shape == CircleShape)
-                        drawCircle(brush = brush, radius = radius!!)
-                    else
-                        drawRect(brush = brush, size = Size(size.width, size.height))
-                }
+                    .drawBehind {
+                        val brush = Brush.linearGradient(
+                            colors = shimmerColors,
+                            start = Offset.Zero,
+                            end = Offset(x = translateAnim.value, y = translateAnim.value)
+                        )
+                        if (shape == CircleShape)
+                            drawCircle(brush = brush, radius = radius!!)
+                        else
+                            drawRect(brush = brush, size = Size(size.width, size.height))
+                    }
         )
     }
 }

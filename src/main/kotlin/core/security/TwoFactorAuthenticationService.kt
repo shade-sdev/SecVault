@@ -47,8 +47,8 @@ class TwoFactorAuthenticationService(config: Config) {
             Issuer(jwtConfig.issuer),
         ).toString()
 
-        val width = 300
-        val height = 300
+        val width = 400
+        val height = 400
 
         return runCatching {
             val writer = QRCodeWriter()

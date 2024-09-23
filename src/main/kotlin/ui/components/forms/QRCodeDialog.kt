@@ -7,11 +7,16 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,12 +25,25 @@ import ui.components.SecVaultDialog
 import ui.theme.Font
 import ui.theme.primary
 import ui.theme.tertiary
+import viewmodel.RegisterScreenModel
 
 @Composable
 fun QRCodeDialog(
     qrCodeDialogState: MutableState<Boolean>,
-    bitmapPainter: BitmapPainter
+    bitmapPainter: BitmapPainter,
+    screenModel: RegisterScreenModel
 ) {
+
+    val fileDialogState = remember { mutableStateOf(false) }
+
+    when {
+        fileDialogState.value -> {
+            val file = screenModel.showSaveDialog()
+            val awtImage = bitmapPainter.toAwtImage(LocalDensity.current, LocalLayoutDirection.current)
+            screenModel.saveQRCode(file, fileDialogState, awtImage)
+        }
+    }
+
     SecVaultDialog(
         onDismissRequest = { qrCodeDialogState.value = false },
         modifier = Modifier.fillMaxWidth()
@@ -78,7 +96,9 @@ fun QRCodeDialog(
                 horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally)
             ) {
                 Button(
-                    onClick = {},
+                    onClick = {
+                        fileDialogState.value = true
+                    },
                     modifier = Modifier.width(175.dp),
                     colors = ButtonColors(
                         containerColor = primary,

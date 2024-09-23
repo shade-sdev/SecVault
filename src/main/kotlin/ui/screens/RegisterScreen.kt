@@ -88,7 +88,8 @@ class RegisterScreen : Screen {
             qrCodeDialogState.value -> {
                 QRCodeDialog(
                     qrCodeDialogState = qrCodeDialogState,
-                    bitmapPainter = qrCodePainterState.value!!
+                    bitmapPainter = qrCodePainterState.value!!,
+                    screenModel
                 )
             }
         }
