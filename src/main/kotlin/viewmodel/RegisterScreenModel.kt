@@ -1,5 +1,6 @@
 package viewmodel
 
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import core.models.Result
@@ -31,8 +32,8 @@ class RegisterScreenModel(
         }
     }
 
-    fun openQRCode(user: UserSummary) {
-        authenticationManager.openQRCode(user.secretKey, user.email)
+    fun openQRCode(user: UserSummary): Result<BitmapPainter> {
+       return authenticationManager.openQRCode(user.secretKey, user.email)
     }
 
     fun clearError() {

@@ -1,5 +1,6 @@
 package core.security
 
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import core.AppState
 import core.models.Result
 import kotlinx.coroutines.delay
@@ -76,9 +77,8 @@ class AuthenticationManager(
         }
     }
 
-
-    fun openQRCode(secretKey: String, email: String) {
-        twoFactorAuthenticationService.generateQRCodeImage(secretKey, email)
+    fun openQRCode(secretKey: String, email: String): Result<BitmapPainter> {
+       return twoFactorAuthenticationService.generateQRCodeImage(secretKey, email)
     }
 
     fun logout() {

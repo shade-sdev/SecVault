@@ -1,5 +1,7 @@
 package core.security
 
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import com.atlassian.onetime.core.TOTP
 import com.atlassian.onetime.model.EmailAddress
 import com.atlassian.onetime.model.Issuer
@@ -14,8 +16,9 @@ import core.Config
 import core.configs.JwtConfig
 import core.models.Result
 import java.awt.Color
-import java.awt.Desktop
-import java.nio.file.Files
+import java.awt.image.BufferedImage
+import java.io.ByteArrayOutputStream
+import javax.imageio.ImageIO
 
 class TwoFactorAuthenticationService(config: Config) {
 
@@ -31,12 +34,12 @@ class TwoFactorAuthenticationService(config: Config) {
         val totpSecret = TOTPSecret.fromBase32EncodedString(secretKey)
 
         return DefaultTOTPService().verify(totpCode, totpSecret)
-                       .takeIf { it.isSuccess() }
-                       ?.let { Result.Success(true) }
-               ?: Result.Error("Invalid TOTP secret")
+            .takeIf { it.isSuccess() }
+            ?.let { Result.Success(true) }
+            ?: Result.Error("Invalid TOTP secret")
     }
 
-    fun generateQRCodeImage(secretKey: String, email: String): Result<Unit> {
+    fun generateQRCodeImage(secretKey: String, email: String): Result<BitmapPainter> {
         val topSecret = TOTPSecret.fromBase32EncodedString(secretKey)
         val otpAuthUri = DefaultTOTPService().generateTOTPUrl(
             topSecret,
@@ -52,20 +55,18 @@ class TwoFactorAuthenticationService(config: Config) {
             val bitMatrix = writer.encode(otpAuthUri, BarcodeFormat.QR_CODE, width, height)
             val config = MatrixToImageConfig(Color.BLACK.rgb, Color.WHITE.rgb)
 
-            val tempFile = Files.createTempFile("QRCode", ".png").toFile().apply {
-                deleteOnExit()
-            }
+            val bufferedImage: BufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix, config)
 
-            tempFile.outputStream().use { outputStream ->
-                MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream, config)
-            }
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            ImageIO.write(bufferedImage, "png", byteArrayOutputStream)
+            val byteArray = byteArrayOutputStream.toByteArray()
 
-            if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().open(tempFile)
-            }
+            val imageBitmap = org.jetbrains.skia.Image.makeFromEncoded(byteArray).toComposeImageBitmap()
+
+            BitmapPainter(imageBitmap)
         }.fold(
             onSuccess = {
-                Result.Success(Unit)
+                Result.Success(it)
             },
             onFailure = { e ->
                 Result.Error(e.localizedMessage ?: "Unknown error")
