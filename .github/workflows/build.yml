@@ -16,8 +16,7 @@ jobs:
     # Install JetBrains Runtime (JBR)
     - name: Download JetBrains Runtime
       run: |
-        JBR_VERSION=17.0.8-b520.12  # Replace with the desired version of JBR
-        JBR_URL="https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-$JBR_VERSION-linux-x64-binaries.tar.gz"
+        JBR_URL="https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-17.0.10-linux-x64-b1207.1.tar.gz"
         wget $JBR_URL -O jbr.tar.gz
         mkdir jbr
         tar -xzf jbr.tar.gz -C jbr --strip-components=1
