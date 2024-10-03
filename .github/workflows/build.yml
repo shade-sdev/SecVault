@@ -28,11 +28,15 @@ jobs:
     - name: Grant execution permissions for gradlew
       run: chmod +x ./gradlew  # Ensure gradlew is executable
 
-    - name: Build the app
-      run: ./gradlew packageMsi  # Explicitly run gradlew in the current directory
+    - name: Build the app and force the MSI task to run
+      run: ./gradlew packageMsi --rerun-tasks --info  # Force rerun of packageMsi task with info for debugging
+
+    - name: List output directories (for debugging)
+      run: ls -R build/compose/binaries  # Verify that MSI files are created in expected directory
 
     - name: Upload .msi artifact
       uses: actions/upload-artifact@v3
       with:
         name: secvault-msi
-        path: build/compose/binaries/main/msi/*.msi
+        path: build/compose/binaries/main/msi/*.msi  # Ensure this matches the actual path after build
+        if-no-files-found: warn
