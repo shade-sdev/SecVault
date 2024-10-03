@@ -3,7 +3,7 @@ name: Build and Release SecVault
 on:
   push:
     branches:
-      - master  # Trigger on pushes to the master branch
+      - master
 
 jobs:
   build:
@@ -19,36 +19,20 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
+    - name: Display current directory (for debugging)
+      run: pwd
+
+    - name: List files in current directory (for debugging)
+      run: ls -la
+
+    - name: Grant execution permissions for gradlew
+      run: chmod +x ./gradlew  # Ensure gradlew is executable
+
     - name: Build the app
-      run: ./gradlew packageMsi # Build for Windows .msi (for exe)
+      run: ./gradlew packageMsi  # Explicitly run gradlew in the current directory
 
     - name: Upload .msi artifact
       uses: actions/upload-artifact@v3
       with:
         name: secvault-msi
-        path: build/compose/binaries/main/msi/*.msi  # Path to the .msi file
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Download build artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: secvault-msi
-
-    - name: Delete existing release
-      run: |
-        existing_release=$(gh release view 1.0.0 --json url --jq .url || echo "none")
-        if [ "$existing_release" != "none" ]; then
-          gh release delete 1.0.0 --yes
-        fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Create new release
-      run: |
-        gh release create 1.0.0 build/compose/binaries/main/msi/*.msi --title "SecVault v1.0.0" --notes "Updated release from master branch"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        path: build/compose/binaries/main/msi/*.msi
