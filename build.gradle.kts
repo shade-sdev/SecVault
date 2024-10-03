@@ -3,7 +3,6 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 val voyagerVersion: String by project
 val exposedVersion: String by project
 val koinVersion: String by project
-val koinComposeVersion: String by project
 val sqliteVersion: String by project
 val flywayVersion: String by project
 val hikariVersion: String by project
@@ -44,7 +43,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-swing", coroutineVersion)
 
     implementation("io.insert-koin", "koin-core", koinVersion)
-    implementation("io.insert-koin", "koin-compose", koinComposeVersion)
+    implementation("io.insert-koin", "koin-compose", koinVersion)
     implementation("io.insert-koin", "koin-logger-slf4j", koinVersion)
 
     implementation("org.flywaydb", "flyway-core", flywayVersion)
