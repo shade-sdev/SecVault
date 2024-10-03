@@ -13,11 +13,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
+    # Install JetBrains Runtime (JBR)
+    - name: Download JetBrains Runtime
+      run: |
+        JBR_VERSION=17.0.8-b520.12  # Replace with the desired version of JBR
+        JBR_URL="https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-$JBR_VERSION-linux-x64-binaries.tar.gz"
+        wget $JBR_URL -O jbr.tar.gz
+        mkdir jbr
+        tar -xzf jbr.tar.gz -C jbr --strip-components=1
+
+    # Set the JAVA_HOME to point to JetBrains Runtime
+    - name: Set up JetBrains Runtime
+      run: echo "JAVA_HOME=${{ github.workspace }}/jbr" >> $GITHUB_ENV
 
     - name: Display current directory (for debugging)
       run: pwd
