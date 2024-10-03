@@ -35,10 +35,10 @@ jobs:
       run: chmod +x ./gradlew  # Ensure gradlew is executable
 
     - name: Build the app and force the MSI task to run
-      run: ./gradlew packageMsi --rerun-tasks --info  # Force rerun of packageMsi task with info for debugging
+      run: ./gradlew packageMsi --rerun-tasks --info --stacktrace
 
     - name: List output directories (for debugging)
-      run: ls -R build/compose/binaries  # Verify that MSI files are created in expected directory
+      run: ls -R build  # Verify that MSI files are created in expected directory
 
     - name: Upload .msi artifact
       uses: actions/upload-artifact@v3
