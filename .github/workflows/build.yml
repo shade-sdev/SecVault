@@ -2,8 +2,8 @@ name: Build and Release SecVault
 
 on:
   push:
-    tags:
-      - 'v*.*.*'  # Trigger workflow on version tag pushes (e.g., v1.0.0)
+    branches:
+      - master  # Trigger on pushes to the master branch
 
 jobs:
   build:
@@ -38,9 +38,17 @@ jobs:
       with:
         name: secvault-msi
 
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: build/compose/binaries/main/msi/*.msi  # Path to the .msi file
+    - name: Delete existing release
+      run: |
+        existing_release=$(gh release view 1.0.0 --json url --jq .url || echo "none")
+        if [ "$existing_release" != "none" ]; then
+          gh release delete 1.0.0 --yes
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create new release
+      run: |
+        gh release create 1.0.0 build/compose/binaries/main/msi/*.msi --title "SecVault v1.0.0" --notes "Updated release from master branch"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
