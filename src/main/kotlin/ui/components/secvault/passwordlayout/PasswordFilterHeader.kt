@@ -16,7 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.navigator.LocalNavigator
 import ui.components.RoundedFilledTextField
+import ui.screens.PasswordFormScreen
 import ui.theme.Font
 import ui.theme.PasswordColors
 import ui.theme.orange
@@ -27,6 +29,7 @@ fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
     var expanded by remember { mutableStateOf(false) }
     val filterItems by screenModel.sortItems.collectAsState()
     val selectedSortItem by screenModel.selectedSortItem.collectAsState()
+    val navigator = LocalNavigator.current
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -55,7 +58,7 @@ fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
             ) {
                 FilledIconButton(
                     shape = IconButtonDefaults.filledShape,
-                    onClick = {},
+                    onClick = {navigator?.push(PasswordFormScreen())},
                     enabled = true,
                     modifier = Modifier.height(36.dp).width(36.dp),
                     colors = IconButtonColors(
