@@ -81,7 +81,7 @@ class AuthenticationManager(
        return twoFactorAuthenticationService.generateQRCodeImage(secretKey, email)
     }
 
-    fun logout() {
+    private fun logout() {
         appState.clearCurrentUser()
         TokenManager.clearToken()
     }

@@ -23,7 +23,7 @@ object PasswordsTable : AuditableTable(name = "passwords") {
 class Password(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<Password>(PasswordsTable)
 
-    val user by User referencedOn PasswordsTable.user
+    var user by User referencedOn PasswordsTable.user
     var name by PasswordsTable.name
     var username by PasswordsTable.username
     var email by PasswordsTable.email
@@ -38,4 +38,5 @@ class Password(id: EntityID<UUID>) : UUIDEntity(id) {
     var lastUpdateDateTime by PasswordsTable.lastUpdateDateTime
     var lastUpdatedBy by PasswordsTable.lastUpdatedBy
     var version by PasswordsTable.version
+
 }

@@ -19,10 +19,7 @@ import repository.password.PasswordRepository
 import repository.password.impl.PasswordRepositoryImpl
 import repository.user.UserRepository
 import repository.user.impl.UserRepositoryImpl
-import viewmodel.ForgotPasswordScreenModel
-import viewmodel.LoginScreenModel
-import viewmodel.RegisterScreenModel
-import viewmodel.SecVaultScreenModel
+import viewmodel.*
 
 val appModule = module {
 
@@ -49,6 +46,7 @@ val appModule = module {
     factory { (clazz: Class<*>) ->
         LoggerFactory.getLogger(clazz)
     }
+
 }
 
 val repositoryModule = module {
@@ -68,6 +66,8 @@ val viewModelModule = module {
     factory { ForgotPasswordScreenModel(get()) }
 
     factory { SecVaultScreenModel(get()) }
+
+    factory { PasswordMgntScreenModel(get(), get()) }
 
 }
 

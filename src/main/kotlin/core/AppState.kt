@@ -14,6 +14,12 @@ class AppState {
     private var currentUser by mutableStateOf<User?>(null)
     private var userExists by mutableStateOf(false)
 
+    val getAuthenticatedUser: User?
+        get() = currentUser
+
+    val userName: String
+        get() = currentUser?.userName.takeIf { userExists } ?: "system"
+
     fun updateCurrentUser(user: User?) {
         currentUser = user
     }
@@ -21,9 +27,6 @@ class AppState {
     fun userExists(exists: Boolean) {
         userExists = exists
     }
-
-    val getAuthenticatedUser: User?
-        get() = currentUser
 
     fun clearCurrentUser() {
         currentUser = null

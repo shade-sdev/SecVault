@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.form.validation.FormValidator
+import core.models.dto.PasswordDto
 import ui.components.FormTextField
 import ui.components.PasswordTextField
 import ui.theme.Font
@@ -25,13 +26,16 @@ import ui.theme.primary
 import ui.theme.secondary
 import ui.theme.tertiary
 import ui.validators.PasswordFormFieldName
+import ui.validators.toPasswordDto
+import viewmodel.PasswordMgntScreenModel
 
 @Preview
 @Composable
 fun PasswordForm(
     formValidator: FormValidator,
+    screenModel: PasswordMgntScreenModel,
     isFormValid: Boolean,
-    onSaveClick: () -> Unit,
+    onSaveClick: (PasswordDto) -> Unit,
     onCancelClick: () -> Unit
 ) {
 
@@ -227,7 +231,7 @@ fun PasswordForm(
             horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
         ) {
             Button(
-                onClick = onSaveClick,
+                onClick = { onSaveClick(toPasswordDto(formValidator, screenModel.getAuthenticatedUser())) },
                 modifier = Modifier.width(175.dp),
                 enabled = isFormValid,
                 colors = ButtonColors(

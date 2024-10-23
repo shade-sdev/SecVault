@@ -3,6 +3,8 @@ package ui.validators
 import core.form.FormField
 import core.form.FormFieldName
 import core.form.validation.*
+import core.models.dto.PasswordDto
+import repository.user.User
 
 fun passwordFormValidator(): FormValidator {
     return FormValidator()
@@ -51,6 +53,18 @@ fun passwordFormValidator(): FormValidator {
                     .addRule(urlRule)
             )
         ).validateAllFields()
+}
+
+fun toPasswordDto(formValidator: FormValidator, user: User): PasswordDto {
+    return PasswordDto(
+        formValidator.getField(PasswordFormFieldName.USERNAME)?.value?.value,
+        formValidator.getField(PasswordFormFieldName.EMAIL)?.value?.value,
+        formValidator.getField(PasswordFormFieldName.PASSWORD)?.value?.value!!,
+        formValidator.getField(PasswordFormFieldName.NAME)?.value?.value!!,
+        formValidator.getField(PasswordFormFieldName.WEBSITE_URL)?.value?.value,
+        formValidator.getField(PasswordFormFieldName.WEBSITE_ICON_URL)?.value?.value,
+        user
+    )
 }
 
 enum class PasswordFormFieldName(val fieldName: String) : FormFieldName {
