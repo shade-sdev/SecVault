@@ -31,7 +31,8 @@ import ui.validators.PasswordFormFieldName
 fun PasswordForm(
     formValidator: FormValidator,
     isFormValid: Boolean,
-    onSaveClick: () -> Unit
+    onSaveClick: () -> Unit,
+    onCancelClick: () -> Unit
 ) {
 
     val userName = formValidator.getField(PasswordFormFieldName.USERNAME)
@@ -226,7 +227,7 @@ fun PasswordForm(
             horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
         ) {
             Button(
-                onClick = {},
+                onClick = onSaveClick,
                 modifier = Modifier.width(175.dp),
                 enabled = isFormValid,
                 colors = ButtonColors(
@@ -247,7 +248,7 @@ fun PasswordForm(
                 )
             }
             Button(
-                onClick = onSaveClick,
+                onClick = onCancelClick,
                 modifier = Modifier.width(175.dp),
                 colors = ButtonColors(
                     containerColor = primary,
