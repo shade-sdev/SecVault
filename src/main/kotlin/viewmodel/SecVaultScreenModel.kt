@@ -2,10 +2,12 @@ package viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import core.AppState
 import core.models.DefaultMenuItem
 import core.models.PasswordSort
 import core.models.Result
 import core.models.UiState
+import core.models.criteria.PasswordSearchCriteria
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +20,7 @@ import repository.password.projection.PasswordSummary
 
 class SecVaultScreenModel(
     private val passwordRepository: PasswordRepository,
+    private val appState: AppState,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ScreenModel {
 
@@ -72,7 +75,8 @@ class SecVaultScreenModel(
     }
 
     private suspend fun loadPasswords(sort: PasswordSort) {
-        _passwordItems.value = when (val passwords = passwordRepository.findSummaries(sort)) {
+        val criteria = PasswordSearchCriteria(appState.getAuthenticatedUser?.id?.value, sort)
+        _passwordItems.value = when (val passwords = passwordRepository.findSummaries(criteria)) {
             is Result.Success -> {
                 _secVaultState.value = UiState.Success("Successfully loaded passwords")
                 passwords.data

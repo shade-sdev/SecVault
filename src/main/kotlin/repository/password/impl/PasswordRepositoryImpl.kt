@@ -2,11 +2,13 @@ package repository.password.impl
 
 import core.models.PasswordSort
 import core.models.Result
+import core.models.criteria.PasswordSearchCriteria
 import core.models.dto.PasswordDto
 import kotlinx.coroutines.delay
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.Logger
 import repository.common.errors.DatabaseError
@@ -20,11 +22,12 @@ class PasswordRepositoryImpl(
     private val logger: Logger
 ) : PasswordRepository {
 
-    override suspend fun findSummaries(sort: PasswordSort): Result<List<PasswordSummary>> {
+    override suspend fun findSummaries(searchCriteria: PasswordSearchCriteria): Result<List<PasswordSummary>> {
         delay(550)
         return try {
             return transaction(db) {
-                PasswordsTable.select(
+
+                val query = PasswordsTable.select(
                     listOf(
                         PasswordsTable.id,
                         PasswordsTable.name,
@@ -32,16 +35,21 @@ class PasswordRepositoryImpl(
                         PasswordsTable.email,
                         PasswordsTable.favorite
                     )
-                ).orderBy(toSort(sort), toOrder(sort))
-                    .map {
-                        PasswordSummary(
-                            id = it[PasswordsTable.id].value,
-                            name = it[PasswordsTable.name],
-                            username = it[PasswordsTable.username],
-                            email = it[PasswordsTable.email],
-                            favorite = it[PasswordsTable.favorite]
-                        )
-                    }
+                )
+
+                searchCriteria.userId?.let {
+                    query.andWhere { PasswordsTable.user eq it }
+                }
+
+                query.orderBy(toSort(searchCriteria.sort), toOrder(searchCriteria.sort)).map {
+                    PasswordSummary(
+                        id = it[PasswordsTable.id].value,
+                        name = it[PasswordsTable.name],
+                        username = it[PasswordsTable.username],
+                        email = it[PasswordsTable.email],
+                        favorite = it[PasswordsTable.favorite]
+                    )
+                }
             }.let { Result.Success(it) }
         } catch (e: Exception) {
             logger.error(e.message, e)
