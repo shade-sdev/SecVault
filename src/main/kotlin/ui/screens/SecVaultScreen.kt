@@ -26,6 +26,10 @@ class SecVaultScreen : Screen {
         val secVaultState by screenModel.secVaultState.collectAsState()
         val toaster = rememberToasterState()
 
+        LaunchedEffect(Unit) {
+            screenModel.init()
+        }
+
         Toaster(
             state = toaster,
             alignment = Alignment.TopEnd,

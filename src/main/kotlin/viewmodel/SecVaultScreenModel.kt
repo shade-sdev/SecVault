@@ -18,7 +18,7 @@ import repository.password.projection.PasswordSummary
 
 class SecVaultScreenModel(
     private val passwordRepository: PasswordRepository,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ScreenModel {
 
     private val _secVaultState = MutableStateFlow<UiState<Any>>(UiState.Idle)
@@ -39,7 +39,19 @@ class SecVaultScreenModel(
     private val _passwordItems = MutableStateFlow<List<PasswordSummary>>(emptyList())
     val passwordItems: StateFlow<List<PasswordSummary>> = _passwordItems.asStateFlow()
 
-    init {
+    fun selectMenuItem(item: DefaultMenuItem) {
+        _selectedMenuItem.value = item
+    }
+
+    fun selectSortItem(item: PasswordSort) {
+        _selectedSortItem.value = item
+    }
+
+    fun clearError() {
+        _secVaultState.value = UiState.Idle
+    }
+
+    fun init() {
         screenModelScope.launch(dispatcher) {
             _secVaultState.value = UiState.Loading
             loadPasswords(PasswordSort.NAME)
@@ -57,18 +69,6 @@ class SecVaultScreenModel(
                 loadPasswords(newFilterOption)
             }
         }
-    }
-
-    fun selectMenuItem(item: DefaultMenuItem) {
-        _selectedMenuItem.value = item
-    }
-
-    fun selectSortItem(item: PasswordSort) {
-        _selectedSortItem.value = item
-    }
-
-    fun clearError() {
-        _secVaultState.value = UiState.Idle
     }
 
     private suspend fun loadPasswords(sort: PasswordSort) {
