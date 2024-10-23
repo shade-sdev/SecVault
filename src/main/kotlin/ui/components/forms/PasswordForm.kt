@@ -23,6 +23,7 @@ import ui.components.PasswordTextField
 import ui.theme.Font
 import ui.theme.primary
 import ui.theme.secondary
+import ui.theme.tertiary
 import ui.validators.PasswordFormFieldName
 
 @Preview
@@ -53,11 +54,11 @@ fun PasswordForm(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(25.dp))
             Text(
                 text = "Create a new password",
                 color = Color.White,
-                fontFamily = Font.RobotoRegular,
+                fontFamily = Font.RussoOne,
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
@@ -66,7 +67,9 @@ fun PasswordForm(
 
         Row(
             modifier = Modifier.weight(7.5f)
-                .fillMaxSize()
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             Column(
@@ -218,7 +221,7 @@ fun PasswordForm(
         Row(
             modifier = Modifier.weight(1.5f)
                 .fillMaxSize()
-                .background(primary),
+                .background(tertiary),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
         ) {
@@ -227,10 +230,10 @@ fun PasswordForm(
                 modifier = Modifier.width(175.dp),
                 enabled = isFormValid,
                 colors = ButtonColors(
-                    containerColor = secondary,
+                    containerColor = primary,
                     contentColor = Color.White,
                     disabledContentColor = Color.Gray,
-                    disabledContainerColor = secondary,
+                    disabledContainerColor = primary,
                 )
             )
             {
@@ -247,7 +250,7 @@ fun PasswordForm(
                 onClick = onSaveClick,
                 modifier = Modifier.width(175.dp),
                 colors = ButtonColors(
-                    containerColor = secondary,
+                    containerColor = primary,
                     contentColor = Color.White,
                     disabledContentColor = secondary,
                     disabledContainerColor = secondary
