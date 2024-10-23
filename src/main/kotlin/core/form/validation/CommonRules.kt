@@ -9,6 +9,13 @@ val emailRule: ValidationRule = ValidationRule(
     errorMessage = "Invalid email address"
 )
 
+val urlRule: ValidationRule = ValidationRule(
+    condition = {url ->
+        url.matches(Regex("^https?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*$"))
+    },
+    errorMessage = "Invalid URL"
+)
+
 val passwordRule: ValidationRule = ValidationRule(
     condition = { password ->
         password.length >= 8 &&

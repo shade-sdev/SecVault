@@ -17,25 +17,39 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import core.form.validation.FormValidator
 import ui.components.FormTextField
 import ui.components.PasswordTextField
 import ui.theme.Font
 import ui.theme.primary
 import ui.theme.secondary
+import ui.validators.PasswordFormFieldName
 
 @Preview
 @Composable
-fun PasswordForm() {
+fun PasswordForm(
+    formValidator: FormValidator,
+    isFormValid: Boolean,
+    onSaveClick: () -> Unit
+) {
+
+    val userName = formValidator.getField(PasswordFormFieldName.USERNAME)
+    val email = formValidator.getField(PasswordFormFieldName.EMAIL)
+    val password = formValidator.getField(PasswordFormFieldName.PASSWORD)
+
+    val name = formValidator.getField(PasswordFormFieldName.NAME)
+    val webSiteUrl = formValidator.getField(PasswordFormFieldName.WEBSITE_URL)
+    val icon = formValidator.getField(PasswordFormFieldName.WEBSITE_ICON_URL)
 
     Column(
         modifier = Modifier.fillMaxSize()
-                .background(secondary)
+            .background(secondary)
     )
     {
 
         Row(
             modifier = Modifier.weight(1f)
-                    .fillMaxSize(),
+                .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
@@ -52,86 +66,170 @@ fun PasswordForm() {
 
         Row(
             modifier = Modifier.weight(7.5f)
-                    .fillMaxSize()
+                .fillMaxSize()
         ) {
 
             Column(
                 modifier = Modifier.weight(1f)
-                        .fillMaxSize()
-                        .background(primary)
-                        .padding(PaddingValues(end = 20.dp)),
+                    .fillMaxSize()
+                    .background(primary)
+                    .padding(PaddingValues(end = 20.dp)),
                 horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterVertically)
+                verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
             ) {
-                FormTextField(
-                    value = "fe",
-                    onValueChange = {},
-                    label = "Username",
-                    icon = Icons.Filled.AccountCircle,
-                    modifier = Modifier.height(45.dp).width(400.dp)
-                )
-                FormTextField(
-                    value = "fe",
-                    onValueChange = {},
-                    label = "Email",
-                    icon = Icons.Filled.Email,
-                    modifier = Modifier.height(45.dp).width(400.dp)
-                )
-                PasswordTextField(
-                    value = "fe",
-                    onValueChange = {},
-                    label = "Password",
-                    modifier = Modifier.height(45.dp).width(400.dp)
-                )
+                Column(modifier = Modifier.height(80.dp)) {
+                    FormTextField(
+                        value = userName?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            userName?.value?.value = newValue
+                            formValidator.validateField(PasswordFormFieldName.USERNAME)
+                        },
+                        label = "Username",
+                        icon = Icons.Filled.AccountCircle,
+                        modifier = Modifier.height(45.dp).width(400.dp)
+                    )
+                    userName?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
+                Column(modifier = Modifier.height(80.dp)) {
+                    FormTextField(
+                        value = email?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            email?.value?.value = newValue
+                            formValidator.validateField(PasswordFormFieldName.EMAIL)
+                        },
+                        label = "Email",
+                        icon = Icons.Filled.Email,
+                        modifier = Modifier.height(45.dp).width(400.dp)
+                    )
+                    email?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
+                Column(modifier = Modifier.height(80.dp)) {
+                    PasswordTextField(
+                        value = password?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            password?.value?.value = newValue
+                            formValidator.validateField(PasswordFormFieldName.PASSWORD)
+                        },
+                        label = "Password",
+                        modifier = Modifier.height(45.dp).width(400.dp)
+                    )
+                    password?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
             }
 
             Column(
                 modifier = Modifier.weight(1f)
-                        .fillMaxSize()
-                        .background(primary)
-                        .padding(PaddingValues(start = 20.dp)),
+                    .fillMaxSize()
+                    .background(primary)
+                    .padding(PaddingValues(start = 20.dp)),
                 horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterVertically)
+                verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
             ) {
-                FormTextField(
-                    value = "fe",
-                    onValueChange = {},
-                    label = "Name",
-                    icon = Icons.Filled.Web,
-                    modifier = Modifier.height(45.dp).width(400.dp)
-                )
-                FormTextField(
-                    value = "fe",
-                    onValueChange = {},
-                    label = "Website Url",
-                    icon = Icons.Filled.Link,
-                    modifier = Modifier.height(45.dp).width(400.dp)
-                )
-                FormTextField(
-                    value = "fe",
-                    onValueChange = {},
-                    label = "Website Icon Url",
-                    icon = Icons.Filled.Info,
-                    modifier = Modifier.height(45.dp).width(400.dp)
-                )
+                Column(modifier = Modifier.height(80.dp)) {
+                    FormTextField(
+                        value = name?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            name?.value?.value = newValue
+                            formValidator.validateField(PasswordFormFieldName.NAME)
+                        },
+                        label = "Name",
+                        icon = Icons.Filled.Web,
+                        modifier = Modifier.height(45.dp).width(400.dp)
+                    )
+                    name?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
+                Column(modifier = Modifier.height(80.dp)) {
+                    FormTextField(
+                        value = webSiteUrl?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            webSiteUrl?.value?.value = newValue
+                            formValidator.validateField(PasswordFormFieldName.WEBSITE_URL)
+                        },
+                        label = "Website Url",
+                        icon = Icons.Filled.Link,
+                        modifier = Modifier.height(45.dp).width(400.dp)
+                    )
+                    webSiteUrl?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
+                Column(modifier = Modifier.height(80.dp)) {
+                    FormTextField(
+                        value = icon?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            icon?.value?.value = newValue
+                            formValidator.validateField(PasswordFormFieldName.WEBSITE_ICON_URL)
+                        },
+                        label = "Website Icon Url",
+                        icon = Icons.Filled.Info,
+                        modifier = Modifier.height(45.dp).width(400.dp)
+                    )
+                    icon?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
             }
         }
 
         Row(
             modifier = Modifier.weight(1.5f)
-                    .fillMaxSize()
-                    .background(primary),
+                .fillMaxSize()
+                .background(primary),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
         ) {
             Button(
                 onClick = {},
                 modifier = Modifier.width(175.dp),
-                enabled = true,
+                enabled = isFormValid,
                 colors = ButtonColors(
                     containerColor = secondary,
                     contentColor = Color.White,
-                    disabledContentColor = secondary,
+                    disabledContentColor = Color.Gray,
                     disabledContainerColor = secondary,
                 )
             )
@@ -146,7 +244,7 @@ fun PasswordForm() {
                 )
             }
             Button(
-                onClick = {},
+                onClick = onSaveClick,
                 modifier = Modifier.width(175.dp),
                 colors = ButtonColors(
                     containerColor = secondary,
