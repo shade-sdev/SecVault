@@ -16,6 +16,7 @@ import repository.password.Password
 import repository.password.PasswordRepository
 import repository.password.PasswordsTable
 import repository.password.projection.PasswordSummary
+import java.util.*
 
 class PasswordRepositoryImpl(
     private val db: Database,
@@ -41,13 +42,13 @@ class PasswordRepositoryImpl(
                     query.andWhere { PasswordsTable.user eq it }
                 }
 
-                query.orderBy(toSort(searchCriteria.sort), toOrder(searchCriteria.sort)).map {
+                query.orderBy(toSort(searchCriteria.sort), toOrder(searchCriteria.sort)).map { resultRow ->
                     PasswordSummary(
-                        id = it[PasswordsTable.id].value,
-                        name = it[PasswordsTable.name],
-                        username = it[PasswordsTable.username],
-                        email = it[PasswordsTable.email],
-                        favorite = it[PasswordsTable.favorite]
+                        id = resultRow[PasswordsTable.id].value,
+                        name = resultRow[PasswordsTable.name].replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
+                        username = resultRow[PasswordsTable.username],
+                        email = resultRow[PasswordsTable.email],
+                        favorite = resultRow[PasswordsTable.favorite]
                     )
                 }
             }.let { Result.Success(it) }

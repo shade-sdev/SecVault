@@ -1,5 +1,6 @@
 package core.form.validation
 
+import core.form.FormField
 import java.util.*
 
 val emailRule: ValidationRule = ValidationRule(
@@ -9,8 +10,19 @@ val emailRule: ValidationRule = ValidationRule(
     errorMessage = "Invalid email address"
 )
 
+val emailIfNotNullRule: ValidationRule = ValidationRule(
+    condition = { email ->
+        if (email.isNotEmpty()) {
+            emailRule.condition.invoke(email)
+        } else {
+            true
+        }
+    },
+    errorMessage = "Invalid email address"
+)
+
 val urlRule: ValidationRule = ValidationRule(
-    condition = {url ->
+    condition = { url ->
         url.matches(Regex("^https?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*$"))
     },
     errorMessage = "Invalid URL"
@@ -19,10 +31,10 @@ val urlRule: ValidationRule = ValidationRule(
 val passwordRule: ValidationRule = ValidationRule(
     condition = { password ->
         password.length >= 8 &&
-        password.any { it.isDigit() } &&
-        password.any { it.isUpperCase() } &&
-        password.any { it.isLowerCase() } &&
-        password.any { it in "!@#$%^&*()-_=+[]{}|;:'\",.<>?/~`" }
+                password.any { it.isDigit() } &&
+                password.any { it.isUpperCase() } &&
+                password.any { it.isLowerCase() } &&
+                password.any { it in "!@#$%^&*()-_=+[]{}|;:'\",.<>?/~`" }
     },
     errorMessage = "Password must be 8+ chars, with a number, symbol, upper & lower case."
 )
@@ -67,5 +79,18 @@ fun notNullRule(field: String): ValidationRule {
     return ValidationRule(
         condition = { it.isNotEmpty() },
         errorMessage = "$field must not be null"
+    )
+}
+
+fun conditionalRule(comparingField: () -> FormField, rules: List<ValidationRule>): ValidationRule {
+    return ValidationRule(
+        condition = { input ->
+            if (comparingField().value.value.isNotEmpty()) {
+                true
+            } else {
+                rules.all { rule -> rule.condition(input) }
+            }
+        },
+        errorMessage = rules.firstOrNull()?.errorMessage ?: "Invalid input"
     )
 }

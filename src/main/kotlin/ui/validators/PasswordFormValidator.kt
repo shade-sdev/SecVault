@@ -7,20 +7,16 @@ import core.models.dto.PasswordDto
 import repository.user.User
 
 fun passwordFormValidator(): FormValidator {
-    return FormValidator()
+    val validator = FormValidator()
         .addField(
             PasswordFormFieldName.USERNAME, FormField(
                 validator = Validator()
-                    .addRule(notNullRule(PasswordFormFieldName.USERNAME.fieldName))
-                    .addRule(lengthRule(PasswordFormFieldName.USERNAME.fieldName, 1))
             )
         )
         .addField(
             PasswordFormFieldName.EMAIL, FormField(
                 validator = Validator()
-                    .addRule(notNullRule(PasswordFormFieldName.EMAIL.fieldName))
-                    .addRule(lengthRule(PasswordFormFieldName.EMAIL.fieldName, 1))
-                    .addRule(emailRule)
+                    .addRule(emailIfNotNullRule)
             )
         )
         .addField(
@@ -52,7 +48,25 @@ fun passwordFormValidator(): FormValidator {
                     .addRule(lengthRule(PasswordFormFieldName.WEBSITE_ICON_URL.fieldName, 1))
                     .addRule(urlRule)
             )
-        ).validateAllFields()
+        )
+
+    validator.getField(PasswordFormFieldName.USERNAME)?.validator
+        ?.addRule(
+            conditionalRule(
+                { validator.getField(PasswordFormFieldName.EMAIL)!! },
+                listOf(notNullRule(PasswordFormFieldName.USERNAME.fieldName))
+            )
+        )
+
+    validator.getField(PasswordFormFieldName.EMAIL)?.validator
+        ?.addRule(
+            conditionalRule(
+                { validator.getField(PasswordFormFieldName.USERNAME)!! },
+                listOf(notNullRule(PasswordFormFieldName.EMAIL.fieldName))
+            )
+        )
+
+    return validator.validateAllFields()
 }
 
 fun toPasswordDto(formValidator: FormValidator, user: User): PasswordDto {

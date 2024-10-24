@@ -91,6 +91,7 @@ fun PasswordForm(
                         onValueChange = { newValue ->
                             userName?.value?.value = newValue
                             formValidator.validateField(PasswordFormFieldName.USERNAME)
+                            formValidator.validateField(PasswordFormFieldName.EMAIL)
                         },
                         label = "Username",
                         icon = Icons.Filled.AccountCircle,
@@ -112,6 +113,7 @@ fun PasswordForm(
                         onValueChange = { newValue ->
                             email?.value?.value = newValue
                             formValidator.validateField(PasswordFormFieldName.EMAIL)
+                            formValidator.validateField(PasswordFormFieldName.USERNAME)
                         },
                         label = "Email",
                         icon = Icons.Filled.Email,
