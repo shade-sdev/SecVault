@@ -1,5 +1,6 @@
 package ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -305,7 +306,9 @@ fun UnderLineTextFiled(
                                     imageVector = if (passwordVisible) Icons.Default.VisibilityOff
                                     else Icons.Default.Visibility,
                                     contentDescription = "",
-                                    modifier = Modifier.size(width = 15.dp, height = 15.dp),
+                                    modifier = Modifier.size(width = 15.dp, height = 15.dp)
+                                        .clickable(enabled = true, onClick = { }, indication = null, interactionSource = interactionSource)
+                                        .pointerHoverIcon(PointerIcon.Default),
                                     tint = Color.Gray
                                 )
                             }
@@ -317,6 +320,8 @@ fun UnderLineTextFiled(
                             contentDescription = "",
                             tint = Color.Gray,
                             modifier = Modifier.size(width = 15.dp, height = 15.dp)
+                                .clickable(enabled = true, onClick = { }, indication = null, interactionSource = interactionSource)
+                                .pointerHoverIcon(PointerIcon.Default)
                         )
                     }
                     if (isPassword) {
