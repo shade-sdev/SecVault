@@ -1,6 +1,7 @@
 package ui.components
 
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -28,14 +29,12 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
+import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Dialog
 import core.models.NotificationType
 import kotlinx.coroutines.delay
 import ui.theme.Font
+import ui.theme.PasswordColors
 import ui.theme.secondary
 import kotlin.system.exitProcess
 
@@ -63,6 +62,38 @@ fun CloseButton() {
             contentDescription = "Setting button",
             modifier = Modifier.size(15.dp),
             tint = Color.White
+        )
+    }
+}
+
+@Composable
+fun OutlineTextButton(
+    modifier: Modifier,
+    cornerSize: Dp,
+    fontSize: TextUnit,
+    text: String,
+    onClick: () -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered by interactionSource.collectIsHoveredAsState()
+
+    OutlinedButton(
+        onClick = onClick,
+        modifier = modifier.hoverable(interactionSource),
+        shape = RoundedCornerShape(size = cornerSize),
+        contentPadding = PaddingValues(4.dp),
+        border = BorderStroke(2.dp, color = Color.White),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = if (isHovered) Color.White else Color.Transparent,
+        )
+
+    )
+    {
+        Text(
+            text = text,
+            fontSize = fontSize,
+            fontFamily = Font.RussoOne,
+            color = if (isHovered) PasswordColors.tertiary else Color.White
         )
     }
 }

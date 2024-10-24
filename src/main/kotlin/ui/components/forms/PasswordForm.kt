@@ -17,10 +17,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.navigator.LocalNavigator
 import core.form.validation.FormValidator
 import core.models.dto.PasswordDto
 import ui.components.FormTextField
 import ui.components.MultiSelectDropdown
+import ui.components.OutlineTextButton
 import ui.components.PasswordTextField
 import ui.theme.Font
 import ui.theme.primary
@@ -58,17 +60,40 @@ fun PasswordForm(
             modifier = Modifier.weight(1f)
                 .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Spacer(modifier = Modifier.width(25.dp))
-            Text(
-                text = "Create a new password",
-                color = Color.White,
-                fontFamily = Font.RussoOne,
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                textAlign = TextAlign.Center,
-            )
+            Row {
+                Spacer(modifier = Modifier.width(25.dp))
+                Text(
+                    text = "Create a new password",
+                    color = Color.White,
+                    fontFamily = Font.RussoOne,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
+                )
+            }
+
+            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                val navigator = LocalNavigator.current
+
+                OutlineTextButton(
+                    modifier = Modifier.size(height = 28.dp, width = 100.dp),
+                    cornerSize = 4.dp,
+                    fontSize = 12.sp,
+                    text = "Credit Card",
+                    onClick = {}
+                )
+
+                OutlineTextButton(
+                    modifier = Modifier.size(height = 28.dp, width = 100.dp),
+                    cornerSize = 4.dp,
+                    fontSize = 12.sp,
+                    text = "Notes",
+                    onClick = {}
+                )
+                Spacer(modifier = Modifier.width(25.dp))
+            }
         }
 
         Row(
