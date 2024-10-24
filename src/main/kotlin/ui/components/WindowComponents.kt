@@ -1,6 +1,7 @@
 package ui.components
 
 import androidx.compose.animation.core.*
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -9,13 +10,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,14 +26,19 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.Dialog
 import core.models.NotificationType
 import kotlinx.coroutines.delay
 import ui.theme.Font
 import ui.theme.secondary
+import ui.theme.tertiary
 import kotlin.system.exitProcess
 
 @Composable
@@ -44,7 +49,7 @@ fun CloseButton() {
     Button(
         onClick = { exitProcess(0) },
         modifier = Modifier.size(30.dp)
-                .hoverable(interactionSource),
+            .hoverable(interactionSource),
         shape = RoundedCornerShape(topEnd = 10.dp),
         colors = ButtonColors(
             containerColor = if (isHovered) Color(0xFFb91919) else secondary,
@@ -92,8 +97,8 @@ fun LoadingScreen(
 ) {
     Box(
         modifier = modifier
-                .fillMaxSize()
-                .background(backgroundColor),
+            .fillMaxSize()
+            .background(backgroundColor),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -146,15 +151,15 @@ fun TopRightNotification(
     if (visible) {
         Box(
             modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
+                .fillMaxSize()
+                .padding(16.dp),
             contentAlignment = Alignment.TopEnd
         ) {
             Surface(
                 modifier = Modifier
-                        .fillMaxHeight(0.12f)
-                        .fillMaxWidth(0.3f)
-                        .padding(18.dp),
+                    .fillMaxHeight(0.12f)
+                    .fillMaxWidth(0.3f)
+                    .padding(18.dp),
                 shape = RoundedCornerShape(8.dp),
                 shadowElevation = 4.dp,
                 color = backgroundColor
@@ -232,17 +237,129 @@ fun ShimmerShape(modifier: Modifier, shape: Shape, radius: Float?) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = modifier.clip(shape)
-                    .drawBehind {
-                        val brush = Brush.linearGradient(
-                            colors = shimmerColors,
-                            start = Offset.Zero,
-                            end = Offset(x = translateAnim.value, y = translateAnim.value)
-                        )
-                        if (shape == CircleShape)
-                            drawCircle(brush = brush, radius = radius!!)
-                        else
-                            drawRect(brush = brush, size = Size(size.width, size.height))
-                    }
+                .drawBehind {
+                    val brush = Brush.linearGradient(
+                        colors = shimmerColors,
+                        start = Offset.Zero,
+                        end = Offset(x = translateAnim.value, y = translateAnim.value)
+                    )
+                    if (shape == CircleShape)
+                        drawCircle(brush = brush, radius = radius!!)
+                    else
+                        drawRect(brush = brush, size = Size(size.width, size.height))
+                }
         )
+    }
+}
+
+@Composable
+fun <T> MultiSelectDropdown(
+    items: List<T>,
+    selectedItems: List<T>,
+    onItemSelect: (T) -> Unit,
+    onItemDeselect: (T) -> Unit,
+    itemToString: (T) -> String,
+    modifier: Modifier = Modifier,
+    placeholder: String = "Select items..."
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+
+    Box(modifier = modifier) {
+        Column {
+            OutlinedTextField(
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledTextColor = Color.LightGray,
+                    unfocusedContainerColor = tertiary,
+                    focusedContainerColor = tertiary,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    unfocusedLabelColor = Color.White,
+                    focusedLabelColor = Color.Gray
+                ),
+                shape = RoundedCornerShape(8.dp),
+                value = if (selectedItems.isEmpty()) "" else selectedItems.joinToString(", "),
+                onValueChange = { },
+                textStyle = TextStyle(color = Color.White, fontSize = 12.sp, fontFamily = Font.RussoOne),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(45.dp)
+                    .onSizeChanged { textFieldSize = it.toSize() },
+                placeholder = { Text(placeholder, color = Color.White, fontSize = 12.sp) },
+                trailingIcon = {
+                    IconButton(onClick = { expanded = !expanded }) {
+                        Icon(
+                            Icons.Default.ArrowDropDown,
+                            contentDescription = if (expanded) "Close" else "Open"
+                        )
+                    }
+                }
+            )
+        }
+
+        // Dropdown menu
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+                .heightIn(max = 250.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .heightIn(max = 250.dp)
+                    .padding(vertical = 4.dp)
+            ) {
+                Column {
+                    items.forEach { item ->
+                        val isSelected = selectedItems.contains(item)
+                        DropdownMenuItem(
+                            onClick = {
+                                if (isSelected) {
+                                    onItemDeselect(item)
+                                } else {
+                                    onItemSelect(item)
+                                }
+                            },
+                            modifier = Modifier.height(48.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Checkbox(
+                                    checked = isSelected,
+                                    onCheckedChange = null
+                                )
+                                Text(itemToString(item), color = Color.White, fontSize = 12.sp)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun MultiSelectDropdownPreview() {
+    val items = listOf("Apple", "Banana", "Cherry", "Date", "Elderberry")
+    var selectedItems by remember { mutableStateOf(listOf<String>()) }
+
+    MaterialTheme {
+        Surface {
+            MultiSelectDropdown(
+                items = items,
+                selectedItems = selectedItems,
+                onItemSelect = { selectedItems = selectedItems + it },
+                onItemDeselect = { selectedItems = selectedItems - it },
+                itemToString = { it },
+                modifier = Modifier.padding(16.dp)
+            )
+        }
     }
 }

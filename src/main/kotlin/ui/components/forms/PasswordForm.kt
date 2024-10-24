@@ -8,7 +8,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import core.form.validation.FormValidator
 import core.models.dto.PasswordDto
 import ui.components.FormTextField
+import ui.components.MultiSelectDropdown
 import ui.components.PasswordTextField
 import ui.theme.Font
 import ui.theme.primary
@@ -221,6 +222,20 @@ fun PasswordForm(
                             modifier = Modifier.padding(start = 8.dp)
                         )
                     }
+                }
+
+                Column(modifier = Modifier.height(80.dp)) {
+                    val items = listOf("Apple", "Banana", "Cherry", "Date", "Elderberry")
+                    var selectedItems by remember { mutableStateOf(listOf<String>("Apple")) }
+
+                    MultiSelectDropdown(
+                        items = items,
+                        selectedItems = selectedItems,
+                        onItemSelect = { selectedItems = selectedItems + it },
+                        onItemDeselect = { selectedItems = selectedItems - it },
+                        itemToString = { it },
+                        modifier = Modifier.height(55.dp).width(400.dp)
+                    )
                 }
             }
         }
