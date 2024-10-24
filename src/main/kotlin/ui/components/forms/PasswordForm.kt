@@ -226,7 +226,7 @@ fun PasswordForm(
 
                 Column(modifier = Modifier.height(80.dp)) {
                     val items = listOf("Apple", "Banana", "Cherry", "Date", "Elderberry")
-                    var selectedItems by remember { mutableStateOf(listOf<String>("Apple")) }
+                    var selectedItems by remember { mutableStateOf(listOf<String>()) }
 
                     MultiSelectDropdown(
                         items = items,

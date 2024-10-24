@@ -280,7 +280,7 @@ fun <T> MultiSelectDropdown(
                     focusedLabelColor = foregroundColor
                 ),
                 shape = RoundedCornerShape(8.dp),
-                value = if (selectedItems.isEmpty()) placeholder else selectedItems.joinToString(", "),
+                value = if (selectedItems.isEmpty()) placeholder else selectedItems.sortedBy(itemToString).joinToString(", "),
                 onValueChange = { },
                 textStyle = TextStyle(color = foregroundColor, fontSize = 12.sp, fontFamily = Font.RussoOne),
                 modifier = Modifier
