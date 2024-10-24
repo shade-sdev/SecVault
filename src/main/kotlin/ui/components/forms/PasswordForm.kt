@@ -234,7 +234,10 @@ fun PasswordForm(
                         onItemSelect = { selectedItems = selectedItems + it },
                         onItemDeselect = { selectedItems = selectedItems - it },
                         itemToString = { it },
-                        modifier = Modifier.height(55.dp).width(400.dp)
+                        modifier = Modifier.height(55.dp).width(400.dp),
+                        placeholder = "Select Password Genres",
+                        backgroundColor = secondary,
+                        foregroundColor = Color.White
                     )
                 }
             }

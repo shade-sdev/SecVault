@@ -1,7 +1,6 @@
 package ui.components
 
 import androidx.compose.animation.core.*
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -38,7 +37,6 @@ import core.models.NotificationType
 import kotlinx.coroutines.delay
 import ui.theme.Font
 import ui.theme.secondary
-import ui.theme.tertiary
 import kotlin.system.exitProcess
 
 @Composable
@@ -260,7 +258,9 @@ fun <T> MultiSelectDropdown(
     onItemDeselect: (T) -> Unit,
     itemToString: (T) -> String,
     modifier: Modifier = Modifier,
-    placeholder: String = "Select items..."
+    placeholder: String = "Select items...",
+    backgroundColor: Color,
+    foregroundColor: Color
 ) {
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
@@ -272,17 +272,17 @@ fun <T> MultiSelectDropdown(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledTextColor = Color.LightGray,
-                    unfocusedContainerColor = tertiary,
-                    focusedContainerColor = tertiary,
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    focusedLabelColor = Color.Gray
+                    unfocusedContainerColor = backgroundColor,
+                    focusedContainerColor = backgroundColor,
+                    focusedTextColor = foregroundColor,
+                    unfocusedTextColor = foregroundColor,
+                    unfocusedLabelColor = foregroundColor,
+                    focusedLabelColor = foregroundColor
                 ),
                 shape = RoundedCornerShape(8.dp),
-                value = if (selectedItems.isEmpty()) "" else selectedItems.joinToString(", "),
+                value = if (selectedItems.isEmpty()) placeholder else selectedItems.joinToString(", "),
                 onValueChange = { },
-                textStyle = TextStyle(color = Color.White, fontSize = 12.sp, fontFamily = Font.RussoOne),
+                textStyle = TextStyle(color = foregroundColor, fontSize = 12.sp, fontFamily = Font.RussoOne),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(45.dp)
@@ -334,32 +334,12 @@ fun <T> MultiSelectDropdown(
                                     checked = isSelected,
                                     onCheckedChange = null
                                 )
-                                Text(itemToString(item), color = Color.White, fontSize = 12.sp)
+                                Text(itemToString(item), color = foregroundColor, fontSize = 12.sp)
                             }
                         }
                     }
                 }
             }
-        }
-    }
-}
-
-@Preview
-@Composable
-fun MultiSelectDropdownPreview() {
-    val items = listOf("Apple", "Banana", "Cherry", "Date", "Elderberry")
-    var selectedItems by remember { mutableStateOf(listOf<String>()) }
-
-    MaterialTheme {
-        Surface {
-            MultiSelectDropdown(
-                items = items,
-                selectedItems = selectedItems,
-                onItemSelect = { selectedItems = selectedItems + it },
-                onItemDeselect = { selectedItems = selectedItems - it },
-                itemToString = { it },
-                modifier = Modifier.padding(16.dp)
-            )
         }
     }
 }
