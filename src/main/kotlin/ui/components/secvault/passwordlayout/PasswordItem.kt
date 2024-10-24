@@ -68,7 +68,7 @@ fun PasswordItem(passwordSummary: PasswordSummary) {
 
             Row {
                 Text(
-                    text = passwordSummary.email ?: passwordSummary.username ?: "",
+                    text = if (passwordSummary.email?.isEmpty() == true) passwordSummary.username!! else passwordSummary.email!!,
                     fontSize = 12.sp,
                     fontFamily = Font.RobotoThin,
                     color = PasswordColors.outline

@@ -44,8 +44,6 @@ fun passwordFormValidator(): FormValidator {
         .addField(
             PasswordFormFieldName.WEBSITE_ICON_URL, FormField(
                 validator = Validator()
-                    .addRule(notNullRule(PasswordFormFieldName.WEBSITE_ICON_URL.fieldName))
-                    .addRule(lengthRule(PasswordFormFieldName.WEBSITE_ICON_URL.fieldName, 1))
                     .addRule(urlRule)
             )
         )
