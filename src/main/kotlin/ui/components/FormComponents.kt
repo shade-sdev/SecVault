@@ -1,6 +1,5 @@
 package ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -51,8 +50,8 @@ fun FormTextField(
             onValueChange = onValueChange,
             interactionSource = interactionSource,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 14.dp, bottom = 3.dp),
+                    .fillMaxSize()
+                    .padding(start = 14.dp, bottom = 3.dp),
             textStyle = TextStyle(
                 fontFamily = Font.RussoOne,
                 color = Color.White,
@@ -124,8 +123,8 @@ fun PasswordTextField(
             onValueChange = onValueChange,
             interactionSource = interactionSource,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 14.dp, bottom = 3.dp),
+                    .fillMaxSize()
+                    .padding(start = 14.dp, bottom = 3.dp),
             textStyle = TextStyle(
                 fontFamily = Font.RussoOne,
                 color = Color.White,
@@ -152,7 +151,7 @@ fun PasswordTextField(
                         checked = passwordVisible,
                         onCheckedChange = { passwordVisible = it },
                         modifier = Modifier.hoverable(interactionSource)
-                            .pointerHoverIcon(PointerIcon.Hand)
+                                .pointerHoverIcon(PointerIcon.Hand)
                     )
                     {
                         Icon(
@@ -307,22 +306,25 @@ fun UnderLineTextFiled(
                                     else Icons.Default.Visibility,
                                     contentDescription = "",
                                     modifier = Modifier.size(width = 15.dp, height = 15.dp)
-                                        .clickable(enabled = true, onClick = { }, indication = null, interactionSource = interactionSource)
-                                        .pointerHoverIcon(PointerIcon.Default),
+                                            .pointerHoverIcon(PointerIcon.Default),
                                     tint = Color.Gray
                                 )
                             }
                         }
                     }
                     Column {
-                        Icon(
-                            imageVector = Icons.Default.ContentCopy,
-                            contentDescription = "",
-                            tint = Color.Gray,
-                            modifier = Modifier.size(width = 15.dp, height = 15.dp)
-                                .clickable(enabled = true, onClick = { }, indication = null, interactionSource = interactionSource)
-                                .pointerHoverIcon(PointerIcon.Default)
-                        )
+                        IconButton(
+                            interactionSource = interactionSource,
+                            onClick = {}
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ContentCopy,
+                                contentDescription = "",
+                                tint = Color.Gray,
+                                modifier = Modifier.size(width = 15.dp, height = 15.dp)
+                                        .pointerHoverIcon(PointerIcon.Default)
+                            )
+                        }
                     }
                     if (isPassword) {
                         Spacer(modifier = Modifier.width(12.dp))
