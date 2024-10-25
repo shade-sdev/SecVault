@@ -326,9 +326,6 @@ fun UnderLineTextFiled(
                             )
                         }
                     }
-                    if (isPassword) {
-                        Spacer(modifier = Modifier.width(12.dp))
-                    }
                 }
             },
             contentPadding = TextFieldDefaults.contentPaddingWithLabel(0.dp),

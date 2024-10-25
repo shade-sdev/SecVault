@@ -82,7 +82,7 @@ fun OutlineTextButton(
         modifier = modifier.hoverable(interactionSource),
         shape = RoundedCornerShape(size = cornerSize),
         contentPadding = PaddingValues(4.dp),
-        border = BorderStroke(2.dp, color = Color.White),
+        border = BorderStroke(1.dp, color = Color.White),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = if (isHovered) Color.White else Color.Transparent,
         )
