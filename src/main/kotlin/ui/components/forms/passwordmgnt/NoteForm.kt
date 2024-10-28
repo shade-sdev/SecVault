@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import ui.screens.SecVaultScreen
 import ui.theme.primary
 import ui.theme.secondary
 import ui.theme.tertiary
@@ -60,7 +61,7 @@ class NoteForm : Screen {
             ) {
                 Footer(
                     { },
-                    { navigator?.pop() },
+                    { navigator?.popUntil {screen: Screen -> screen.key == SecVaultScreen().key } },
                     true
                 )
             }

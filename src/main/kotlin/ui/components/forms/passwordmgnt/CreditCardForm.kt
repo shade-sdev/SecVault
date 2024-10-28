@@ -20,6 +20,7 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import ui.components.FormTextArea
 import ui.components.FormTextField
+import ui.screens.SecVaultScreen
 import ui.theme.Font
 import ui.theme.primary
 import ui.theme.secondary
@@ -200,7 +201,7 @@ class CreditCardForm : Screen {
             ) {
                 Footer(
                     { },
-                    { navigator?.pop() },
+                    { navigator?.popUntil { screen: Screen -> screen.key == SecVaultScreen().key } },
                     isFormValid
                 )
             }
