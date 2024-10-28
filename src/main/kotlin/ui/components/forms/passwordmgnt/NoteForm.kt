@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -44,6 +46,8 @@ class NoteForm : Screen {
         val subtitleSize = MaterialTheme.typography.titleLarge.fontSize
         val logger = rememberLogger(NoteForm::class.java)
 
+        var test: Boolean by remember { mutableStateOf(true) }
+
         Column(
             modifier = Modifier.fillMaxSize()
                 .background(secondary)
@@ -70,47 +74,58 @@ class NoteForm : Screen {
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                EditorControls(
-                    modifier = Modifier.weight(2f),
-                    state = state,
-                    onBoldClick = {
-                        state.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold))
-                    },
-                    onItalicClick = {
-                        state.toggleSpanStyle(SpanStyle(fontStyle = FontStyle.Italic))
-                    },
-                    onUnderlineClick = {
-                        state.toggleSpanStyle(SpanStyle(textDecoration = TextDecoration.Underline))
-                    },
-                    onTitleClick = {
-                        state.toggleSpanStyle(SpanStyle(fontSize = titleSize))
-                    },
-                    onSubtitleClick = {
-                        state.toggleSpanStyle(SpanStyle(fontSize = subtitleSize))
-                    },
-                    onTextColorClick = {
-                        state.toggleSpanStyle(SpanStyle(color = Color.Red))
-                    },
-                    onStartAlignClick = {
-                        state.toggleParagraphStyle(ParagraphStyle(textAlign = TextAlign.Start))
-                    },
-                    onEndAlignClick = {
-                        state.toggleParagraphStyle(ParagraphStyle(textAlign = TextAlign.End))
-                    },
-                    onCenterAlignClick = {
-                        state.toggleParagraphStyle(ParagraphStyle(textAlign = TextAlign.Center))
-                    },
-                    onExportClick = {
-                        logger.info("Editor {}", state.toMarkdown())
-                    }
-                )
-                RichTextEditor(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(8f),
-                    state = state,
-                )
+                Button(onClick = {
+                    test = !test
+                    logger.info(test.toString())
+                }) {
+                    Text(text = "wdwd")
+                }
 
+                if (test) {
+                    EditorControls(
+                        modifier = Modifier.weight(2f),
+                        state = state,
+                        onBoldClick = {
+                            state.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold))
+                        },
+                        onItalicClick = {
+                            state.toggleSpanStyle(SpanStyle(fontStyle = FontStyle.Italic))
+                        },
+                        onUnderlineClick = {
+                            state.toggleSpanStyle(SpanStyle(textDecoration = TextDecoration.Underline))
+                        },
+                        onTitleClick = {
+                            state.toggleSpanStyle(SpanStyle(fontSize = titleSize))
+                        },
+                        onSubtitleClick = {
+                            state.toggleSpanStyle(SpanStyle(fontSize = subtitleSize))
+                        },
+                        onTextColorClick = {
+                            state.toggleSpanStyle(SpanStyle(color = Color.Red))
+                        },
+                        onStartAlignClick = {
+                            state.toggleParagraphStyle(ParagraphStyle(textAlign = TextAlign.Start))
+                        },
+                        onEndAlignClick = {
+                            state.toggleParagraphStyle(ParagraphStyle(textAlign = TextAlign.End))
+                        },
+                        onCenterAlignClick = {
+                            state.toggleParagraphStyle(ParagraphStyle(textAlign = TextAlign.Center))
+                        },
+                        onExportClick = {
+                            logger.info("Editor {}", state.toMarkdown())
+                        }
+                    )
+                } else {
+
+
+                    RichTextEditor(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(8f),
+                        state = state,
+                    )
+                }
             }
 
             Row(
