@@ -40,7 +40,6 @@ class CreditCardForm : Screen {
         var selectedItem by remember { mutableStateOf<DropdownItem<User>?>(null) }
         val users by remember { mutableStateOf<List<User>?>(screenModel.fetchUsers()) }
 
-
         val cardBank = formValidator.getField(CreditCardFormFieldName.CARD_NAME)
         val cardOwner = formValidator.getField(CreditCardFormFieldName.CARD_OWNER)
         val cardNumber = formValidator.getField(CreditCardFormFieldName.CARD_NUMBER)
@@ -49,9 +48,11 @@ class CreditCardForm : Screen {
         val expiry = formValidator.getField(CreditCardFormFieldName.CARD_EXPIRY)
         val notes = formValidator.getField(CreditCardFormFieldName.CARD_NOTES)
 
-        selectedItem?.let {
-            cardOwner?.value?.value = it.id.toString()
-            formValidator.validateField(CreditCardFormFieldName.CARD_OWNER)
+        LaunchedEffect(selectedItem) {
+            selectedItem?.let {
+                cardOwner?.value?.value = it.id.toString()
+                formValidator.validateField(CreditCardFormFieldName.CARD_OWNER)
+            }
         }
 
         Column(
