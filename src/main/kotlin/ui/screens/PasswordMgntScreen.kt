@@ -12,13 +12,13 @@ import core.models.UiState
 import core.models.dto.PasswordDto
 import kotlinx.coroutines.delay
 import ui.components.LoadingScreen
-import ui.components.forms.PasswordForm
+import ui.components.forms.passwordmgnt.PasswordForm
 import ui.theme.tertiary
 import ui.validators.passwordFormValidator
 import viewmodel.PasswordMgntScreenModel
 import kotlin.time.Duration.Companion.seconds
 
-class PasswordFormScreen : Screen {
+class PasswordMgntScreen : Screen {
 
     @Composable
     override fun Content() {

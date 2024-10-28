@@ -4,9 +4,9 @@ import androidx.compose.runtime.*
 import cafe.adriel.voyager.navigator.Navigator
 import core.models.UiState
 import repository.user.User
-import ui.components.forms.ForgotPasswordForm
-import ui.components.forms.LoginForm
-import ui.components.forms.RegisterForm
+import ui.components.forms.authentication.ForgotPasswordForm
+import ui.components.forms.authentication.LoginForm
+import ui.components.forms.authentication.RegisterForm
 import ui.screens.ForgotPasswordScreen
 import ui.screens.LoginScreen
 import ui.screens.RegisterScreen

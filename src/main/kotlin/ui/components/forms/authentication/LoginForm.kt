@@ -1,4 +1,4 @@
-package ui.components.forms
+package ui.components.forms.authentication
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

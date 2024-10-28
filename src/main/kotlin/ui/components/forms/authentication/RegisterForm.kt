@@ -1,10 +1,10 @@
-package ui.components.forms
+package ui.components.forms.authentication
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Security
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
@@ -26,16 +26,16 @@ import ui.components.PasswordTextField
 import ui.theme.Font
 import ui.theme.secondary
 import ui.theme.tertiary
-import ui.validators.ForgotPasswordFieldName
+import ui.validators.RegisterFieldName
 
 @Composable
-fun ForgotPasswordForm(
+fun RegisterForm(
+    username: FormField?,
     email: FormField?,
-    newPassword: FormField?,
-    otp: FormField?,
+    password: FormField?,
     formValidator: FormValidator,
     isFormValid: Boolean,
-    onResetClick: () -> Unit,
+    onRegisterClick: () -> Unit,
     onLoginClick: () -> Unit
 ) {
     Row(
@@ -70,7 +70,7 @@ fun ForgotPasswordForm(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "Reset your password.",
+                    text = "Register an account.",
                     color = Color.White,
                     fontFamily = Font.RussoOne,
                     fontWeight = FontWeight.Normal,
@@ -83,10 +83,34 @@ fun ForgotPasswordForm(
                     horizontalAlignment = Alignment.Start
                 ) {
                     FormTextField(
+                        value = username?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            username?.value?.value = newValue
+                            formValidator.validateField(RegisterFieldName.USERNAME)
+                        },
+                        label = "Username",
+                        icon = Icons.Filled.AccountCircle,
+                        modifier = Modifier.height(40.dp).width(360.dp)
+                    )
+                    username?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    FormTextField(
                         value = email?.value?.value ?: "",
                         onValueChange = { newValue ->
                             email?.value?.value = newValue
-                            formValidator.validateField(ForgotPasswordFieldName.EMAIL)
+                            formValidator.validateField(RegisterFieldName.EMAIL)
                         },
                         label = "Email",
                         icon = Icons.Filled.Email,
@@ -107,39 +131,15 @@ fun ForgotPasswordForm(
                     horizontalAlignment = Alignment.Start
                 ) {
                     PasswordTextField(
-                        value = newPassword?.value?.value ?: "",
+                        value = password?.value?.value ?: "",
                         onValueChange = { newValue ->
-                            newPassword?.value?.value = newValue
-                            formValidator.validateField(ForgotPasswordFieldName.NEW_PASSWORD)
+                            password?.value?.value = newValue
+                            formValidator.validateField(RegisterFieldName.PASSWORD)
                         },
-                        label = "New Password",
+                        label = "Password",
                         modifier = Modifier.height(40.dp).width(360.dp)
                     )
-                    newPassword?.error?.value?.let {
-                        Text(
-                            text = it,
-                            color = Color.Red,
-                            fontFamily = Font.RobotoRegular,
-                            fontSize = 10.sp,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
-                    }
-                }
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    FormTextField(
-                        value = otp?.value?.value ?: "",
-                        onValueChange = { newValue ->
-                            otp?.value?.value = newValue
-                            formValidator.validateField(ForgotPasswordFieldName.ONE_TIME_PASSWORD)
-                        },
-                        label = "One Time Password",
-                        icon = Icons.Filled.Security,
-                        modifier = Modifier.height(40.dp).width(360.dp)
-                    )
-                    otp?.error?.value?.let {
+                    password?.error?.value?.let {
                         Text(
                             text = it,
                             color = Color.Red,
@@ -151,7 +151,7 @@ fun ForgotPasswordForm(
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Button(
-                        onClick = onResetClick,
+                        onClick = onRegisterClick,
                         modifier = Modifier.width(175.dp),
                         enabled = isFormValid,
                         colors = ButtonColors(
@@ -164,7 +164,7 @@ fun ForgotPasswordForm(
                     {
                         Text(
                             color = Color.White,
-                            text = "Reset",
+                            text = "Register",
                             fontStyle = FontStyle.Normal,
                             fontWeight = FontWeight.Normal,
                             fontSize = 12.sp,

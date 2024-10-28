@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import ui.components.RoundedFilledTextField
-import ui.screens.PasswordFormScreen
+import ui.screens.PasswordMgntScreen
 import ui.theme.Font
 import ui.theme.PasswordColors
 import ui.theme.orange
@@ -58,7 +58,7 @@ fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
             ) {
                 FilledIconButton(
                     shape = IconButtonDefaults.filledShape,
-                    onClick = {navigator?.push(PasswordFormScreen())},
+                    onClick = {navigator?.push(PasswordMgntScreen())},
                     enabled = true,
                     modifier = Modifier.height(36.dp).width(36.dp),
                     colors = IconButtonColors(

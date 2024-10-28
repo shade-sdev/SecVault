@@ -1,28 +1,21 @@
-package ui.components.forms
+package ui.components.forms.passwordmgnt
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.navigator.LocalNavigator
 import core.form.validation.FormValidator
 import core.models.dto.PasswordDto
 import ui.components.FormTextField
 import ui.components.MultiSelectDropdown
-import ui.components.OutlineTextButton
 import ui.components.PasswordTextField
 import ui.theme.Font
 import ui.theme.primary
@@ -62,38 +55,10 @@ fun PasswordForm(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row {
-                Spacer(modifier = Modifier.width(25.dp))
-                Text(
-                    text = "Create a new password",
-                    color = Color.White,
-                    fontFamily = Font.RussoOne,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    textAlign = TextAlign.Center,
-                )
-            }
-
-            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                val navigator = LocalNavigator.current
-
-                OutlineTextButton(
-                    modifier = Modifier.size(height = 28.dp, width = 100.dp),
-                    cornerSize = 4.dp,
-                    fontSize = 12.sp,
-                    text = "Credit Card",
-                    onClick = {}
-                )
-
-                OutlineTextButton(
-                    modifier = Modifier.size(height = 28.dp, width = 100.dp),
-                    cornerSize = 4.dp,
-                    fontSize = 12.sp,
-                    text = "Notes",
-                    onClick = {}
-                )
-                Spacer(modifier = Modifier.width(25.dp))
-            }
+            Header(
+                creditCardButtonShown = true,
+                notesButtonShown = true
+            )
         }
 
         Row(
@@ -277,46 +242,11 @@ fun PasswordForm(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
         ) {
-            Button(
-                onClick = { onSaveClick(toPasswordDto(formValidator, screenModel.getAuthenticatedUser())) },
-                modifier = Modifier.width(175.dp),
-                enabled = isFormValid,
-                colors = ButtonColors(
-                    containerColor = primary,
-                    contentColor = Color.White,
-                    disabledContentColor = Color.Gray,
-                    disabledContainerColor = primary,
-                )
+            Footer(
+                { onSaveClick(toPasswordDto(formValidator, screenModel.getAuthenticatedUser())) },
+                onCancelClick,
+                isFormValid
             )
-            {
-                Text(
-                    color = Color.White,
-                    text = "Save",
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
-                    fontFamily = Font.RussoOne
-                )
-            }
-            Button(
-                onClick = onCancelClick,
-                modifier = Modifier.width(175.dp),
-                colors = ButtonColors(
-                    containerColor = primary,
-                    contentColor = Color.White,
-                    disabledContentColor = secondary,
-                    disabledContainerColor = secondary
-                )
-            )
-            {
-                Text(
-                    text = "Cancel",
-                    fontStyle = FontStyle.Normal,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
-                    fontFamily = Font.RussoOne
-                )
-            }
         }
 
     }

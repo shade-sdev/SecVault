@@ -14,7 +14,7 @@ import core.models.Result
 import core.models.UiState
 import ui.components.LoadingScreen
 import ui.components.RegisterScreenContent
-import ui.components.forms.QRCodeDialog
+import ui.components.dialog.QRCodeDialog
 import ui.theme.tertiary
 import viewmodel.RegisterScreenModel
 import kotlin.time.Duration

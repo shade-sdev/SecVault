@@ -283,8 +283,8 @@ fun ShimmerShape(modifier: Modifier, shape: Shape, radius: Float?) {
 
 @Composable
 fun <T> MultiSelectDropdown(
-    items: List<T>,
-    selectedItems: List<T>,
+    items: Collection<T>,
+    selectedItems: Collection<T>,
     onItemSelect: (T) -> Unit,
     onItemDeselect: (T) -> Unit,
     itemToString: (T) -> String,
