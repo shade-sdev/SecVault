@@ -67,7 +67,7 @@ val viewModelModule = module {
 
     factory { SecVaultScreenModel(get(), get()) }
 
-    factory { PasswordMgntScreenModel(get(), get()) }
+    factory { PasswordMgntScreenModel(get(), get(), get()) }
 
 }
 

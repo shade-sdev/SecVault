@@ -3,13 +3,9 @@ package ui.components.forms.passwordmgnt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CreditCard
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Pin
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +14,9 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import repository.user.User
+import ui.components.DropdownItem
+import ui.components.FormDropdown
 import ui.components.FormTextArea
 import ui.components.FormTextField
 import ui.screens.SecVaultScreen
@@ -38,12 +37,22 @@ class CreditCardForm : Screen {
         val isFormValid by formValidator.isValid
         val screenModel = koinScreenModel<PasswordMgntScreenModel>()
         val navigator = LocalNavigator.current
+        var selectedItem by remember { mutableStateOf<DropdownItem<User>?>(null) }
+        val users by remember { mutableStateOf<List<User>?>(screenModel.fetchUsers()) }
 
+
+        val cardBank = formValidator.getField(CreditCardFormFieldName.CARD_NAME)
+        val cardOwner = formValidator.getField(CreditCardFormFieldName.CARD_OWNER)
         val cardNumber = formValidator.getField(CreditCardFormFieldName.CARD_NUMBER)
         val cvc = formValidator.getField(CreditCardFormFieldName.CARD_CVC)
         val pin = formValidator.getField(CreditCardFormFieldName.CARD_PIN)
         val expiry = formValidator.getField(CreditCardFormFieldName.CARD_EXPIRY)
         val notes = formValidator.getField(CreditCardFormFieldName.CARD_NOTES)
+
+        selectedItem?.let {
+            cardOwner?.value?.value = it.id.toString()
+            formValidator.validateField(CreditCardFormFieldName.CARD_OWNER)
+        }
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -76,6 +85,49 @@ class CreditCardForm : Screen {
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
                 ) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(25.dp)) {
+                        Column(modifier = Modifier.height(80.dp)) {
+                            FormTextField(
+                                value = cardBank?.value?.value ?: "",
+                                onValueChange = { newValue ->
+                                    cardBank?.value?.value = newValue
+                                    formValidator.validateField(CreditCardFormFieldName.CARD_NAME)
+                                },
+                                label = CreditCardFormFieldName.CARD_NAME.fieldName,
+                                icon = Icons.Filled.Money,
+                                modifier = Modifier.height(45.dp).width(400.dp)
+                            )
+                            cardBank?.error?.value?.let {
+                                Text(
+                                    text = it,
+                                    color = Color.Red,
+                                    fontFamily = Font.RobotoRegular,
+                                    fontSize = 10.sp,
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
+                            }
+                        }
+                        Column(modifier = Modifier.height(80.dp)) {
+                            FormDropdown(
+                                items = users?.map { DropdownItem(it, it.userName) } ?: emptyList(),
+                                selectedItem = selectedItem,
+                                onItemSelected = { selectedItem = it },
+                                modifier = Modifier.height(45.dp).width(400.dp),
+                                label = CreditCardFormFieldName.CARD_OWNER.fieldName,
+                                icon = Icons.Filled.VerifiedUser
+                            )
+                            cardOwner?.error?.value?.let {
+                                Text(
+                                    text = it,
+                                    color = Color.Red,
+                                    fontFamily = Font.RobotoRegular,
+                                    fontSize = 10.sp,
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
+                            }
+                        }
+                    }
+
                     Row(horizontalArrangement = Arrangement.spacedBy(25.dp)) {
                         Column(modifier = Modifier.height(80.dp)) {
                             FormTextField(

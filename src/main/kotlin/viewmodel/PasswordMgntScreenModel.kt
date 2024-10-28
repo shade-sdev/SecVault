@@ -14,9 +14,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import repository.password.PasswordRepository
 import repository.user.User
+import repository.user.UserRepository
 
 class PasswordMgntScreenModel(
     private val passwordRepository: PasswordRepository,
+    private val userRepository: UserRepository,
     private val appState: AppState,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ScreenModel {
@@ -33,6 +35,10 @@ class PasswordMgntScreenModel(
                 is Result.Error -> _passwordState.value = UiState.Error(result.message)
             }
         }
+    }
+
+    fun fetchUsers(): List<User> {
+        return userRepository.findAll();
     }
 
     fun getAuthenticatedUser(): User {

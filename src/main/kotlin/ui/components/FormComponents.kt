@@ -1,15 +1,14 @@
 package ui.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -50,8 +49,8 @@ fun FormTextField(
             onValueChange = onValueChange,
             interactionSource = interactionSource,
             modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 14.dp, bottom = 3.dp),
+                .fillMaxSize()
+                .padding(start = 14.dp, bottom = 3.dp),
             textStyle = TextStyle(
                 fontFamily = Font.RussoOne,
                 color = Color.White,
@@ -102,7 +101,6 @@ fun FormTextField(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormTextArea(
     value: String,
@@ -158,6 +156,115 @@ fun FormTextArea(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun <T> FormDropdown(
+    items: List<DropdownItem<T>>,
+    selectedItem: DropdownItem<T>?,
+    onItemSelected: (DropdownItem<T>) -> Unit,
+    modifier: Modifier = Modifier,
+    label: String = "",
+    icon: ImageVector = Icons.Default.ArrowDropDown
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Surface(
+        modifier = modifier,
+        color = secondary,
+        shape = RoundedCornerShape(8.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable { expanded = true }
+        ) {
+            TextFieldDefaults.DecorationBox(
+                value = selectedItem?.displayText ?: "",
+                innerTextField = {
+                    Text(
+                        text = selectedItem?.displayText ?: "",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 14.dp, bottom = 3.dp),
+                        style = TextStyle(
+                            fontFamily = Font.RussoOne,
+                            color = Color.White,
+                            textAlign = TextAlign.Start,
+                            fontSize = 12.sp
+                        )
+                    )
+                },
+                enabled = true,
+                singleLine = true,
+                visualTransformation = VisualTransformation.None,
+                interactionSource = interactionSource,
+                label = {
+                    Text(
+                        label,
+                        fontSize = 10.sp,
+                        fontFamily = Font.RussoOne,
+                        modifier = Modifier.padding(start = 14.dp)
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = "Expand dropdown",
+                        tint = Color.White,
+                        modifier = Modifier.size(20.dp)
+                    )
+                },
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledTextColor = Color.LightGray,
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    unfocusedLabelColor = Color.White,
+                    focusedLabelColor = Color.Gray
+                ),
+                contentPadding = PaddingValues(0.dp),
+                container = {}
+            )
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier
+                    .background(secondary)
+                    .width(IntrinsicSize.Min)
+            ) {
+                items.forEach { item ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = item.displayText,
+                                color = Color.White,
+                                fontFamily = Font.RussoOne,
+                                fontSize = 12.sp
+                            )
+                        },
+                        onClick = {
+                            onItemSelected(item)
+                            expanded = false
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                if (item.id == selectedItem?.id) Color.White.copy(alpha = 0.1f)
+                                else Color.Transparent
+                            )
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun PasswordTextField(
     value: String,
     onValueChange: (String) -> Unit,
@@ -177,8 +284,8 @@ fun PasswordTextField(
             onValueChange = onValueChange,
             interactionSource = interactionSource,
             modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 14.dp, bottom = 3.dp),
+                .fillMaxSize()
+                .padding(start = 14.dp, bottom = 3.dp),
             textStyle = TextStyle(
                 fontFamily = Font.RussoOne,
                 color = Color.White,
@@ -205,7 +312,7 @@ fun PasswordTextField(
                         checked = passwordVisible,
                         onCheckedChange = { passwordVisible = it },
                         modifier = Modifier.hoverable(interactionSource)
-                                .pointerHoverIcon(PointerIcon.Hand)
+                            .pointerHoverIcon(PointerIcon.Hand)
                     )
                     {
                         Icon(
@@ -360,7 +467,7 @@ fun UnderLineTextFiled(
                                     else Icons.Default.Visibility,
                                     contentDescription = "",
                                     modifier = Modifier.size(width = 15.dp, height = 15.dp)
-                                            .pointerHoverIcon(PointerIcon.Default),
+                                        .pointerHoverIcon(PointerIcon.Default),
                                     tint = Color.Gray
                                 )
                             }
@@ -376,7 +483,7 @@ fun UnderLineTextFiled(
                                 contentDescription = "",
                                 tint = Color.Gray,
                                 modifier = Modifier.size(width = 15.dp, height = 15.dp)
-                                        .pointerHoverIcon(PointerIcon.Default)
+                                    .pointerHoverIcon(PointerIcon.Default)
                             )
                         }
                     }
@@ -395,3 +502,8 @@ fun UnderLineTextFiled(
         )
     }
 }
+
+data class DropdownItem<T>(
+    val id: T,
+    val displayText: String
+)

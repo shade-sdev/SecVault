@@ -7,6 +7,22 @@ import core.form.validation.*
 fun creditCardFormValidator(): FormValidator {
     return FormValidator()
         .addField(
+            CreditCardFormFieldName.CARD_NAME, FormField(
+                validator = Validator().addRule(notNullRule(CreditCardFormFieldName.CARD_NAME.fieldName))
+            )
+        )
+        .addField(
+            CreditCardFormFieldName.CARD_OWNER, FormField(
+                validator = Validator().addRule(notNullRule(CreditCardFormFieldName.CARD_OWNER.fieldName))
+            )
+        )
+        .addField(
+            CreditCardFormFieldName.CARD_NUMBER, FormField(
+                validator = Validator().addRule(creditCardRule)
+                    .addRule(notNullRule(CreditCardFormFieldName.CARD_NUMBER.fieldName))
+            )
+        )
+        .addField(
             CreditCardFormFieldName.CARD_NUMBER, FormField(
                 validator = Validator().addRule(creditCardRule)
                     .addRule(notNullRule(CreditCardFormFieldName.CARD_NUMBER.fieldName))
@@ -39,6 +55,8 @@ fun creditCardFormValidator(): FormValidator {
 }
 
 enum class CreditCardFormFieldName(val fieldName: String) : FormFieldName {
+    CARD_NAME("Bank Name"),
+    CARD_OWNER("Card Owner"),
     CARD_NUMBER("Card number"),
     CARD_PIN("Pin"),
     CARD_CVC("Cvc"),
