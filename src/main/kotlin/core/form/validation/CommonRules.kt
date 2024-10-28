@@ -39,6 +39,28 @@ val passwordRule: ValidationRule = ValidationRule(
     errorMessage = "Password must be 8+ chars, with a number, symbol, upper & lower case."
 )
 
+val creditCardRule: ValidationRule = ValidationRule(
+    condition = { card ->
+        card.matches(Regex("^4[0-9]{12}(?:[0-9]{3})?$"))
+                || card.matches(Regex("^5[1-5][0-9]{14}$"))
+    },
+    errorMessage = "Invalid Credit Card Number"
+)
+
+val creditCardPinRule: ValidationRule = ValidationRule(
+    condition = { card ->
+        card.matches(Regex("^[0-9]{3,4}$"))
+    },
+    errorMessage = "Invalid Credit Card PIN"
+)
+
+val creditCardExpiryDateRule: ValidationRule = ValidationRule(
+    condition = { card ->
+        card.matches(Regex("^(0[1-9]|1[0-2])/([0-9]{2})$"))
+    },
+    errorMessage = "Invalid Credit Card Expiry Date"
+)
+
 fun lengthRule(field: String, length: Int): ValidationRule {
     return ValidationRule(
         condition = { field.length >= length },

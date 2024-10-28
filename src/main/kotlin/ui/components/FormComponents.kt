@@ -104,6 +104,60 @@ fun FormTextField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun FormTextArea(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    label: String = "",
+    minLines: Int = 3,
+    maxLines: Int = 5
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Surface(
+        modifier = modifier.height(IntrinsicSize.Min),
+        color = secondary,
+        shape = RoundedCornerShape(8.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp)
+        ) {
+            if (label.isNotEmpty()) {
+                Text(
+                    text = label,
+                    fontSize = 10.sp,
+                    fontFamily = Font.RussoOne,
+                    color = Color.White,
+                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                )
+            }
+
+            BasicTextField(
+                value = value,
+                onValueChange = onValueChange,
+                interactionSource = interactionSource,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                textStyle = TextStyle(
+                    fontFamily = Font.RussoOne,
+                    color = Color.White,
+                    textAlign = TextAlign.Start,
+                    fontSize = 12.sp,
+                    lineHeight = 18.sp
+                ),
+                minLines = minLines,
+                maxLines = maxLines,
+                cursorBrush = SolidColor(Color.White),
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun PasswordTextField(
     value: String,
     onValueChange: (String) -> Unit,
