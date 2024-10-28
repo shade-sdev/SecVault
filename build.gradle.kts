@@ -15,6 +15,7 @@ val bcryptVersion: String by project
 val oneTimeVersion: String by project
 val zxingVersion: String by project
 val toastVersion: String by project
+val richEditorVersion: String by project
 
 plugins {
     kotlin("jvm")
@@ -66,6 +67,7 @@ dependencies {
     implementation("com.google.zxing", "javase", zxingVersion)
 
     implementation("io.github.dokar3", "sonner", toastVersion)
+    implementation("com.mohamedrejeb.richeditor", "richeditor-compose", richEditorVersion)
 
     implementation("org.slf4j", "slf4j-api", sl4jVersion)
     implementation("ch.qos.logback", "logback-classic", logbackVersion)
