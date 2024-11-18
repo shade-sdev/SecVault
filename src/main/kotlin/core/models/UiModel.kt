@@ -16,5 +16,6 @@ enum class PasswordSort(val value: String) {
 
 enum class DefaultMenuItem(val value: String) {
     PASSWORDS("Passwords"),
+    CREDIT_CARD("Credit Cards"),
     NOTES("Notes")
 }

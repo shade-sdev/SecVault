@@ -47,7 +47,7 @@ fun SecVaultContentScreen(screenModel: SecVaultScreenModel) {
                         .background(PasswordColors.tertiary)
             )
             {
-                PasswordInfo()
+                PasswordInfo(screenModel)
             }
 
         }

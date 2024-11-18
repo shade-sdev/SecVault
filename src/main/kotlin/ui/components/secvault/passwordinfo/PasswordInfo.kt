@@ -2,11 +2,19 @@ package ui.components.secvault.passwordinfo
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import core.models.DefaultMenuItem
+import viewmodel.SecVaultScreenModel
 
 @Composable
-fun PasswordInfo() {
+fun PasswordInfo(screenModel: SecVaultScreenModel) {
+    val menuItem = screenModel.selectedMenuItem.collectAsState()
+
+    val credentialFormWeight = if (menuItem.value == DefaultMenuItem.PASSWORDS) 5f else 10f
+    val miscWeight = if (menuItem.value == DefaultMenuItem.PASSWORDS) 6f else 1f
+
     Column(
         modifier = Modifier
                 .padding(PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 20.dp))
@@ -25,21 +33,23 @@ fun PasswordInfo() {
         }
 
         Row(
-            modifier = Modifier.weight(5f)
+            modifier = Modifier.weight(credentialFormWeight)
                     .fillMaxWidth()
                     .fillMaxHeight()
         )
         {
-            PasswordForm()
+            PasswordForm(screenModel)
         }
 
         Row(
-            modifier = Modifier.weight(6f)
+            modifier = Modifier.weight(miscWeight)
                     .fillMaxWidth()
                     .fillMaxHeight()
         )
         {
-            PasswordMisc()
+            if (menuItem.value == DefaultMenuItem.PASSWORDS){
+                PasswordMisc()
+            }
         }
     }
 }

@@ -417,6 +417,7 @@ fun UnderLineTextFiled(
     field: String,
     onFieldChange: (String) -> Unit,
     isPassword: Boolean = false,
+    singleLine: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -432,7 +433,7 @@ fun UnderLineTextFiled(
             textAlign = TextAlign.Start,
             fontSize = 12.sp
         ),
-        singleLine = true,
+        singleLine = singleLine,
         cursorBrush = SolidColor(Color.White),
         visualTransformation = if (!isPassword || passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
     ) { innerTextField ->

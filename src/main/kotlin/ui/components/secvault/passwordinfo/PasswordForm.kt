@@ -2,15 +2,17 @@ package ui.components.secvault.passwordinfo
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import core.models.DefaultMenuItem
 import ui.components.HorizontalSpacer
-import ui.components.UnderLineTextFiled
 import ui.theme.Font
+import viewmodel.SecVaultScreenModel
 
 @Composable
 fun PasswordFormTitle() {
@@ -38,54 +40,28 @@ fun PasswordFormTitle() {
 }
 
 @Composable
-fun PasswordForm() {
+fun PasswordForm(screenModel: SecVaultScreenModel) {
     Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
 
         Row(modifier = Modifier.weight(1f)) {
             PasswordFormTitle()
         }
 
+        val menuItem = screenModel.selectedMenuItem.collectAsState()
+
         Row(modifier = Modifier.weight(9f)) {
-            var userName by remember { mutableStateOf("") }
-
-            Column() {
-                Row(modifier = Modifier.weight(1f)) {
-                    UnderLineTextFiled(
-                        field = userName,
-                        onFieldChange = { userName = it },
-                        label = "Username",
-                        modifier = Modifier.fillMaxWidth()
-                    )
+            when (menuItem.value) {
+                DefaultMenuItem.PASSWORDS -> {
+                    PasswordCredentialForm()
                 }
 
-                Row(modifier = Modifier.weight(1f)) {
-                    UnderLineTextFiled(
-                        field = userName,
-                        onFieldChange = { userName = it },
-                        label = "Password",
-                        modifier = Modifier.fillMaxWidth(),
-                        isPassword = true
-                    )
+                DefaultMenuItem.CREDIT_CARD -> {
+                    CreditCardCredentialForm()
                 }
 
-                Row(modifier = Modifier.weight(1f)) {
-                    UnderLineTextFiled(
-                        field = userName,
-                        onFieldChange = { userName = it },
-                        label = "Email",
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                DefaultMenuItem.NOTES -> {
+                    NotesCredentialForm()
                 }
-
-                Row(modifier = Modifier.weight(1f)) {
-                    UnderLineTextFiled(
-                        field = userName,
-                        onFieldChange = { userName = it },
-                        label = "Website",
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-
             }
         }
 
