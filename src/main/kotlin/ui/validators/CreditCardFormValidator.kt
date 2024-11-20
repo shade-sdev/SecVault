@@ -3,6 +3,9 @@ package ui.validators
 import core.form.FormField
 import core.form.FormFieldName
 import core.form.validation.*
+import core.models.dto.CreditCardDto
+import core.models.dto.PasswordDto
+import repository.user.User
 
 fun creditCardFormValidator(): FormValidator {
     return FormValidator()
@@ -52,6 +55,19 @@ fun creditCardFormValidator(): FormValidator {
             )
         )
         .validateAllFields()
+}
+
+fun toCreditCardDto(formValidator: FormValidator, user: User, owner: User): CreditCardDto {
+    return CreditCardDto(
+        user,
+        formValidator.getField(CreditCardFormFieldName.CARD_NAME)?.value?.value!!,
+        owner,
+        formValidator.getField(CreditCardFormFieldName.CARD_NUMBER)?.value?.value!!,
+        formValidator.getField(CreditCardFormFieldName.CARD_CVC)?.value?.value!!.toInt(),
+        formValidator.getField(CreditCardFormFieldName.CARD_PIN)?.value?.value!!.toInt(),
+        formValidator.getField(CreditCardFormFieldName.CARD_EXPIRY)?.value?.value!!,
+        formValidator.getField(CreditCardFormFieldName.CARD_NOTES)?.value?.value,
+    )
 }
 
 enum class CreditCardFormFieldName(val fieldName: String) : FormFieldName {

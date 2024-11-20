@@ -8,11 +8,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import core.models.CredentialDisplay
+import core.models.DefaultMenuItem
 import core.models.UiState
 import viewmodel.SecVaultScreenModel
 
 @Composable
 fun PasswordLayout(screenModel: SecVaultScreenModel) {
+    val menuType by screenModel.selectedMenuItem.collectAsState()
+    val creditCards by screenModel.creditCardItems.collectAsState()
     val passwordItems by screenModel.passwordItems.collectAsState()
     val secVaultState by screenModel.secVaultState.collectAsState()
 
@@ -51,14 +55,39 @@ fun PasswordLayout(screenModel: SecVaultScreenModel) {
                     is UiState.Success,
                     is UiState.Error,
                     is UiState.Idle -> {
-                        if (passwordItems.isNotEmpty()) {
-                            items(passwordItems) { item ->
-                                PasswordItem(item)
+                        when (menuType) {
+                            DefaultMenuItem.PASSWORDS -> {
+                                if (passwordItems.isNotEmpty()) {
+                                    items(passwordItems) { item ->
+                                        PasswordItem(CredentialDisplay(
+                                            item.name,
+                                            if (item.email?.isEmpty() == true) item.username!! else item.email!!,
+                                            favorite = item.favorite
+                                        ))
+                                    }
+                                } else {
+                                    items(24) {
+                                        PasswordShimmerItem()
+                                    }
+                                }
                             }
-                        } else {
-                            items(24) {
-                                PasswordShimmerItem()
+
+                            DefaultMenuItem.CREDIT_CARD -> {
+                                if (creditCards.isNotEmpty()) {
+                                    items(creditCards) { item ->
+                                        PasswordItem(CredentialDisplay(
+                                            item.name,
+                                            item.number,
+                                            favorite = item.favorite
+                                        ))
+                                    }
+                                } else {
+                                    items(24) {
+                                        PasswordShimmerItem()
+                                    }
+                                }
                             }
+                            DefaultMenuItem.NOTES -> TODO()
                         }
                     }
                 }

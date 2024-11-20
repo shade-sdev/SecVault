@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import core.AppState
 import core.models.Result
 import core.models.UiState
+import core.models.dto.CreditCardDto
 import core.models.dto.PasswordDto
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -12,12 +13,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import repository.creditcard.CreditCardRepository
 import repository.password.PasswordRepository
 import repository.user.User
 import repository.user.UserRepository
 
 class PasswordMgntScreenModel(
     private val passwordRepository: PasswordRepository,
+    private val creditCardRepository: CreditCardRepository,
     private val userRepository: UserRepository,
     private val appState: AppState,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -31,6 +34,17 @@ class PasswordMgntScreenModel(
             _passwordState.value = UiState.Loading
 
             when (val result = passwordRepository.save(password)) {
+                is Result.Success -> _passwordState.value = UiState.Success(result.data)
+                is Result.Error -> _passwordState.value = UiState.Error(result.message)
+            }
+        }
+    }
+
+    fun saveCreditCard(creditCardDto: CreditCardDto) {
+        screenModelScope.launch(dispatcher) {
+            _passwordState.value = UiState.Loading
+
+            when (val result = creditCardRepository.save(creditCardDto)) {
                 is Result.Success -> _passwordState.value = UiState.Success(result.data)
                 is Result.Error -> _passwordState.value = UiState.Error(result.message)
             }

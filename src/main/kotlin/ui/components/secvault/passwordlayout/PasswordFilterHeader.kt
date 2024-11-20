@@ -29,6 +29,7 @@ fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
     var expanded by remember { mutableStateOf(false) }
     val filterItems by screenModel.sortItems.collectAsState()
     val selectedSortItem by screenModel.selectedSortItem.collectAsState()
+    val menuType by screenModel.selectedMenuItem.collectAsState()
     val navigator = LocalNavigator.current
 
     Column(
@@ -91,7 +92,7 @@ fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
             {
                 Text(
                     modifier = Modifier.align(Alignment.Start),
-                    text = "All Passwords",
+                    text = "All ${menuType.value}",
                     color = Color.White,
                     fontFamily = Font.RussoOne,
                     fontWeight = FontWeight.Normal,
@@ -164,6 +165,7 @@ fun PasswordFilterHeader(screenModel: SecVaultScreenModel) {
                                 filterItems.forEach { selectionOption ->
                                     DropdownMenuItem(onClick = {
                                         screenModel.selectSortItem(selectionOption)
+                                        screenModel.onScreenShown()
                                         expanded = false
                                     }) {
                                         Text(

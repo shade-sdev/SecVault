@@ -1,8 +1,8 @@
 package repository.password.impl
 
-import core.models.PasswordSort
+import core.models.CredentialSort
 import core.models.Result
-import core.models.criteria.PasswordSearchCriteria
+import core.models.criteria.CredentialSearchCriteria
 import core.models.dto.PasswordDto
 import kotlinx.coroutines.delay
 import org.jetbrains.exposed.sql.Database
@@ -23,7 +23,7 @@ class PasswordRepositoryImpl(
     private val logger: Logger
 ) : PasswordRepository {
 
-    override suspend fun findSummaries(searchCriteria: PasswordSearchCriteria): Result<List<PasswordSummary>> {
+    override suspend fun findSummaries(searchCriteria: CredentialSearchCriteria): Result<List<PasswordSummary>> {
         delay(550)
         return try {
             return transaction(db) {
@@ -81,19 +81,19 @@ class PasswordRepositoryImpl(
         }
     }
 
-    private fun toSort(sort: PasswordSort): Expression<*> {
+    private fun toSort(sort: CredentialSort): Expression<*> {
         return when (sort) {
-            PasswordSort.NAME -> PasswordsTable.name
-            PasswordSort.CREATED -> PasswordsTable.createdBy
-            PasswordSort.FAVORITE -> PasswordsTable.favorite
+            CredentialSort.NAME -> PasswordsTable.name
+            CredentialSort.CREATED -> PasswordsTable.createdBy
+            CredentialSort.FAVORITE -> PasswordsTable.favorite
         }
     }
 
-    private fun toOrder(sort: PasswordSort): SortOrder {
+    private fun toOrder(sort: CredentialSort): SortOrder {
         return when (sort) {
-            PasswordSort.NAME -> SortOrder.ASC
-            PasswordSort.CREATED -> SortOrder.ASC
-            PasswordSort.FAVORITE -> SortOrder.DESC
+            CredentialSort.NAME -> SortOrder.ASC
+            CredentialSort.CREATED -> SortOrder.ASC
+            CredentialSort.FAVORITE -> SortOrder.DESC
         }
     }
 

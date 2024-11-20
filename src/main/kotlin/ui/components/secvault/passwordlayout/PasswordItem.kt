@@ -20,24 +20,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import core.models.CredentialDisplay
 import repository.password.projection.PasswordSummary
 import ui.theme.Font
 import ui.theme.PasswordColors
 
 @Composable
-fun PasswordItem(passwordSummary: PasswordSummary) {
+fun PasswordItem(credentialDisplay: CredentialDisplay) {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
 
     Row(
         modifier = Modifier.height(60.dp).fillMaxWidth()
-                .background(
-                    if (isHovered) PasswordColors.tertiary else Color.Transparent,
-                    shape = RoundedCornerShape(6.dp)
-                )
-                .padding(PaddingValues(start = 5.dp, end = 5.dp))
-                .clickable(onClick = {}, indication = null, interactionSource = interactionSource)
-                .hoverable(interactionSource),
+            .background(
+                if (isHovered) PasswordColors.tertiary else Color.Transparent,
+                shape = RoundedCornerShape(6.dp)
+            )
+            .padding(PaddingValues(start = 5.dp, end = 5.dp))
+            .clickable(onClick = {}, indication = null, interactionSource = interactionSource)
+            .hoverable(interactionSource),
         verticalAlignment = Alignment.CenterVertically
     )
     {
@@ -59,7 +60,7 @@ fun PasswordItem(passwordSummary: PasswordSummary) {
 
             Row {
                 Text(
-                    text = passwordSummary.name,
+                    text = credentialDisplay.title,
                     fontSize = 16.sp,
                     fontFamily = Font.RussoOne,
                     color = Color.White
@@ -68,7 +69,7 @@ fun PasswordItem(passwordSummary: PasswordSummary) {
 
             Row {
                 Text(
-                    text = if (passwordSummary.email?.isEmpty() == true) passwordSummary.username!! else passwordSummary.email!!,
+                    text = credentialDisplay.description,
                     fontSize = 12.sp,
                     fontFamily = Font.RobotoThin,
                     color = PasswordColors.outline
@@ -85,7 +86,7 @@ fun PasswordItem(passwordSummary: PasswordSummary) {
                 imageVector = Icons.Default.Star,
                 contentDescription = "User Icon",
                 modifier = Modifier.size(38.dp),
-                tint = if (passwordSummary.favorite) Color.Yellow else Color.White
+                tint = if (credentialDisplay.favorite) Color.Yellow else Color.White
             )
         }
     }

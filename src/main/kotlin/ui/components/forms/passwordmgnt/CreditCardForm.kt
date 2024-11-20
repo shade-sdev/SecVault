@@ -14,11 +14,15 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
+import com.dokar.sonner.ToastType
+import com.dokar.sonner.Toaster
+import com.dokar.sonner.rememberToasterState
+import core.form.validation.FormValidator
+import core.models.UiState
+import kotlinx.coroutines.delay
 import repository.user.User
-import ui.components.DropdownItem
-import ui.components.FormDropdown
-import ui.components.FormTextArea
-import ui.components.FormTextField
+import ui.components.*
 import ui.screens.SecVaultScreen
 import ui.theme.Font
 import ui.theme.primary
@@ -26,7 +30,9 @@ import ui.theme.secondary
 import ui.theme.tertiary
 import ui.validators.CreditCardFormFieldName
 import ui.validators.creditCardFormValidator
+import ui.validators.toCreditCardDto
 import viewmodel.PasswordMgntScreenModel
+import kotlin.time.Duration.Companion.seconds
 
 class CreditCardForm : Screen {
 
@@ -34,11 +40,62 @@ class CreditCardForm : Screen {
     override fun Content() {
 
         val formValidator = remember { creditCardFormValidator() }
-        val isFormValid by formValidator.isValid
         val screenModel = koinScreenModel<PasswordMgntScreenModel>()
+        val passwordState by screenModel.passwordState.collectAsState()
         val navigator = LocalNavigator.current
-        var selectedItem by remember { mutableStateOf<DropdownItem<User>?>(null) }
+        val toaster = rememberToasterState()
+
+        Toaster(
+            state = toaster,
+            alignment = Alignment.TopEnd,
+            darkTheme = true,
+            showCloseButton = true,
+            richColors = true
+        )
+
+        CreditCardFormContent(
+            formValidator,
+            screenModel,
+            navigator
+        )
+
+        when (val state = passwordState) {
+            is UiState.Loading -> LoadingScreen(backgroundColor = tertiary.copy(alpha = 0.8f))
+            is UiState.Success -> {
+                LaunchedEffect(state) {
+                    toaster.show(
+                        message = "Credit Card was successfully added",
+                        type = ToastType.Success,
+                        duration = 2.seconds
+                    )
+                    delay(500)
+                    navigator?.popUntil { screen: Screen -> screen.key == SecVaultScreen().key }
+                }
+            }
+
+            is UiState.Error -> {
+                LaunchedEffect(toaster) {
+                    toaster.show(
+                        message = state.message,
+                        type = ToastType.Error,
+                        duration = 5.seconds
+                    )
+                    screenModel.clearError()
+                }
+            }
+
+            is UiState.Idle -> {}
+        }
+
+    }
+
+    @Composable
+    fun CreditCardFormContent(formValidator: FormValidator, screenModel: PasswordMgntScreenModel, navigator: Navigator?) {
+
+        val isFormValid by formValidator.isValid
         val users by remember { mutableStateOf<List<User>?>(screenModel.fetchUsers()) }
+        var selectedItem by remember { mutableStateOf<DropdownItem<User>?>(null) }
+
 
         val cardBank = formValidator.getField(CreditCardFormFieldName.CARD_NAME)
         val cardOwner = formValidator.getField(CreditCardFormFieldName.CARD_OWNER)
@@ -198,7 +255,8 @@ class CreditCardForm : Screen {
                         }
                         Column(modifier = Modifier.height(80.dp)) {
                             FormTextField(
-                                value = expiry?.value?.value ?: "",
+                                value =
+                                expiry?.value?.value ?: "",
                                 onValueChange = { newValue ->
                                     expiry?.value?.value = newValue
                                     formValidator.validateField(CreditCardFormFieldName.CARD_EXPIRY)
@@ -253,7 +311,7 @@ class CreditCardForm : Screen {
                 horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
             ) {
                 Footer(
-                    { },
+                    { screenModel.saveCreditCard(toCreditCardDto(formValidator, screenModel.getAuthenticatedUser(), selectedItem?.id!!)) },
                     { navigator?.popUntil { screen: Screen -> screen.key == SecVaultScreen().key } },
                     isFormValid
                 )

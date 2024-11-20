@@ -8,7 +8,13 @@ enum class NotificationType(val color: Color) {
     SUCCESS(Color.Green)
 }
 
-enum class PasswordSort(val value: String) {
+data class CredentialDisplay(
+    val title: String,
+    val description: String,
+    val favorite: Boolean
+)
+
+enum class CredentialSort(val value: String) {
     NAME("Name"),
     FAVORITE("Favorite"),
     CREATED("Created"),

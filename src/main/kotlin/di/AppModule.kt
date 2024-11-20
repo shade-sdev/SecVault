@@ -15,6 +15,8 @@ import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import repository.creditcard.CreditCardRepository
+import repository.creditcard.impl.CreditCardRepositoryImpl
 import repository.password.PasswordRepository
 import repository.password.impl.PasswordRepositoryImpl
 import repository.user.UserRepository
@@ -55,6 +57,8 @@ val repositoryModule = module {
 
     single<PasswordRepository> { PasswordRepositoryImpl(get(), get { parametersOf(PasswordRepository::class.java) }) }
 
+    single<CreditCardRepository> { CreditCardRepositoryImpl(get(), get { parametersOf(CreditCardRepository::class.java) }) }
+
 }
 
 val viewModelModule = module {
@@ -65,9 +69,9 @@ val viewModelModule = module {
 
     factory { ForgotPasswordScreenModel(get()) }
 
-    factory { SecVaultScreenModel(get(), get()) }
+    factory { SecVaultScreenModel(get(), get(), get()) }
 
-    factory { PasswordMgntScreenModel(get(), get(), get()) }
+    factory { PasswordMgntScreenModel(get(), get(), get(), get()) }
 
 }
 
