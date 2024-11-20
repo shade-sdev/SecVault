@@ -8,12 +8,10 @@ import core.models.PasswordSort
 import core.models.Result
 import core.models.UiState
 import core.models.criteria.PasswordSearchCriteria
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import repository.password.PasswordRepository
 import repository.password.projection.PasswordSummary
@@ -42,6 +40,12 @@ class SecVaultScreenModel(
     private val _passwordItems = MutableStateFlow<List<PasswordSummary>>(emptyList())
     val passwordItems: StateFlow<List<PasswordSummary>> = _passwordItems.asStateFlow()
 
+    init {
+        observeMenuItemSelection()
+        observeSortItemSelection()
+        loadInitialPasswords()
+    }
+
     fun selectMenuItem(item: DefaultMenuItem) {
         _selectedMenuItem.value = item
     }
@@ -54,23 +58,10 @@ class SecVaultScreenModel(
         _secVaultState.value = UiState.Idle
     }
 
-    fun init() {
+    fun loadInitialPasswords() {
         screenModelScope.launch(dispatcher) {
             _secVaultState.value = UiState.Loading
             loadPasswords(PasswordSort.NAME)
-        }
-
-        screenModelScope.launch(dispatcher) {
-            _selectedMenuItem.collect { newMenuItem ->
-                LoggerFactory.getLogger(SecVaultScreenModel::class.java).info(newMenuItem.value)
-            }
-        }
-
-        screenModelScope.launch(dispatcher) {
-            _selectedSortItem.collect { newFilterOption ->
-                _secVaultState.value = UiState.Loading
-                loadPasswords(newFilterOption)
-            }
         }
     }
 
@@ -85,6 +76,23 @@ class SecVaultScreenModel(
             is Result.Error -> {
                 _secVaultState.value = UiState.Error(passwords.message)
                 emptyList()
+            }
+        }
+    }
+
+    private fun observeMenuItemSelection() {
+        screenModelScope.launch(dispatcher) {
+            _selectedMenuItem.collect { newMenuItem ->
+                LoggerFactory.getLogger(SecVaultScreenModel::class.java).info(newMenuItem.value)
+            }
+        }
+    }
+
+    private fun observeSortItemSelection() {
+        screenModelScope.launch(dispatcher) {
+            _selectedSortItem.collect { newSortItem ->
+                _secVaultState.value = UiState.Loading
+                loadPasswords(newSortItem)
             }
         }
     }

@@ -27,7 +27,7 @@ class SecVaultScreen : Screen {
         val toaster = rememberToasterState()
 
         LaunchedEffect(Unit) {
-            screenModel.init()
+            screenModel.loadInitialPasswords()
         }
 
         Toaster(
