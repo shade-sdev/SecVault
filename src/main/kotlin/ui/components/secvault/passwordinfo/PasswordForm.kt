@@ -52,11 +52,11 @@ fun PasswordForm(screenModel: SecVaultScreenModel) {
         Row(modifier = Modifier.weight(9f)) {
             when (menuItem.value) {
                 DefaultMenuItem.PASSWORDS -> {
-                    PasswordCredentialForm()
+                    PasswordCredentialForm(screenModel)
                 }
 
                 DefaultMenuItem.CREDIT_CARD -> {
-                    CreditCardCredentialForm()
+                    CreditCardCredentialForm(screenModel)
                 }
 
                 DefaultMenuItem.NOTES -> {

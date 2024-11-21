@@ -12,6 +12,7 @@ import core.models.CredentialDisplay
 import core.models.DefaultMenuItem
 import core.models.UiState
 import viewmodel.SecVaultScreenModel
+import java.util.*
 
 @Composable
 fun PasswordLayout(screenModel: SecVaultScreenModel) {
@@ -27,8 +28,8 @@ fun PasswordLayout(screenModel: SecVaultScreenModel) {
 
         Row(
             modifier = Modifier.fillMaxWidth()
-                    .fillMaxHeight()
-                    .weight(1.6f)
+                .fillMaxHeight()
+                .weight(1.6f)
         )
         {
             PasswordFilterHeader(screenModel)
@@ -36,8 +37,8 @@ fun PasswordLayout(screenModel: SecVaultScreenModel) {
 
         Row(
             modifier = Modifier.fillMaxWidth()
-                    .fillMaxHeight()
-                    .weight(8.4f)
+                .fillMaxHeight()
+                .weight(8.4f)
         )
         {
             LazyColumn(
@@ -59,11 +60,15 @@ fun PasswordLayout(screenModel: SecVaultScreenModel) {
                             DefaultMenuItem.PASSWORDS -> {
                                 if (passwordItems.isNotEmpty()) {
                                     items(passwordItems) { item ->
-                                        PasswordItem(CredentialDisplay(
-                                            item.name,
-                                            if (item.email?.isEmpty() == true) item.username!! else item.email!!,
-                                            favorite = item.favorite
-                                        ))
+                                        PasswordItem(
+                                            CredentialDisplay(
+                                                item.id,
+                                                item.name,
+                                                if (item.email?.isEmpty() == true) item.username!! else item.email!!,
+                                                favorite = item.favorite,
+                                            ),
+                                            onClick = { id: UUID -> screenModel.loadSelectedCredential(id) }
+                                        )
                                     }
                                 } else {
                                     items(24) {
@@ -75,11 +80,15 @@ fun PasswordLayout(screenModel: SecVaultScreenModel) {
                             DefaultMenuItem.CREDIT_CARD -> {
                                 if (creditCards.isNotEmpty()) {
                                     items(creditCards) { item ->
-                                        PasswordItem(CredentialDisplay(
-                                            item.name,
-                                            item.number,
-                                            favorite = item.favorite
-                                        ))
+                                        PasswordItem(
+                                            CredentialDisplay(
+                                                item.id,
+                                                item.name,
+                                                item.number,
+                                                favorite = item.favorite
+                                            ),
+                                            onClick = { id: UUID -> screenModel.loadSelectedCredential(id) }
+                                        )
                                     }
                                 } else {
                                     items(24) {
@@ -87,6 +96,7 @@ fun PasswordLayout(screenModel: SecVaultScreenModel) {
                                     }
                                 }
                             }
+
                             DefaultMenuItem.NOTES -> TODO()
                         }
                     }

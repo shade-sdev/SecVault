@@ -8,5 +8,5 @@ data class DatabaseConfig(
     val maximumPoolSize: Int,
     val isAutoCommit: Boolean,
     val isReadOnly: Boolean,
-    val transactionIsolation: String
+    val transactionIsolation: String,
 )

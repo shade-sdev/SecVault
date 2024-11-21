@@ -23,6 +23,17 @@ class PasswordRepositoryImpl(
     private val logger: Logger
 ) : PasswordRepository {
 
+    override suspend fun findById(id: UUID): Result<Password> {
+        return try {
+            return transaction(db) {
+                Password.findById(id)
+            }?.let { Result.Success(it) } ?: Result.Error("Password not found")
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+            Result.Error(DatabaseError.fromException(e).extractMessage())
+        }
+    }
+
     override suspend fun findSummaries(searchCriteria: CredentialSearchCriteria): Result<List<PasswordSummary>> {
         delay(550)
         return try {

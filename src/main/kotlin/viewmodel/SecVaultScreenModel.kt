@@ -17,6 +17,7 @@ import repository.creditcard.CreditCardRepository
 import repository.creditcard.projection.CreditCardSummary
 import repository.password.PasswordRepository
 import repository.password.projection.PasswordSummary
+import java.util.*
 
 class SecVaultScreenModel(
     private val passwordRepository: PasswordRepository,
@@ -48,6 +49,9 @@ class SecVaultScreenModel(
     private val _creditCardItems = MutableStateFlow<List<CreditCardSummary>>(emptyList())
     val creditCardItems: StateFlow<List<CreditCardSummary>> = _creditCardItems.asStateFlow()
 
+    private val _selectedCredential = MutableStateFlow(SelectedCredential(null, null))
+    val selectedCredential: StateFlow<SelectedCredential> = _selectedCredential.asStateFlow()
+
     init {
         handleEvents()
     }
@@ -77,8 +81,32 @@ class SecVaultScreenModel(
     }
 
     fun onScreenShown() {
-        screenModelScope.launch {
+        screenModelScope.launch(dispatcher) {
             eventChannel.send(SecVaultEvent.LoadCredentials)
+        }
+    }
+
+    fun loadSelectedCredential(id: UUID) {
+        screenModelScope.launch(dispatcher) {
+            when (_selectedMenuItem.value) {
+                DefaultMenuItem.PASSWORDS -> {
+                    passwordRepository.findById(id).let { result ->
+                        if (result is Result.Success) {
+                            _selectedCredential.value = SelectedCredential(result.data, null)
+                        }
+                    }
+                }
+
+                DefaultMenuItem.CREDIT_CARD -> {
+                    creditCardRepository.findById(id).let { result ->
+                        if (result is Result.Success) {
+                            _selectedCredential.value = SelectedCredential(null, result.data)
+                        }
+                    }
+                }
+
+                DefaultMenuItem.NOTES -> TODO()
+            }
         }
     }
 

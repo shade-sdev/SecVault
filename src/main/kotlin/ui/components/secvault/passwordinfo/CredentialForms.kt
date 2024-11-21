@@ -6,10 +6,27 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import ui.components.UnderLineTextFiled
+import viewmodel.SecVaultScreenModel
 
 @Composable
-fun PasswordCredentialForm() {
-    var userName by remember { mutableStateOf("") }
+fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
+    val selectedCredential by screenModel.selectedCredential.collectAsState()
+
+    var userName by remember(selectedCredential) {
+        mutableStateOf(selectedCredential.password?.username ?: "")
+    }
+
+    var password by remember(selectedCredential) {
+        mutableStateOf(selectedCredential.password?.password ?: "")
+    }
+
+    var email by remember(selectedCredential) {
+        mutableStateOf(selectedCredential.password?.email ?: "")
+    }
+
+    var website by remember(selectedCredential) {
+        mutableStateOf(selectedCredential.password?.website ?: "")
+    }
 
     Column() {
         Row(modifier = Modifier.weight(1f)) {
@@ -23,8 +40,8 @@ fun PasswordCredentialForm() {
 
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = userName,
-                onFieldChange = { userName = it },
+                field = password,
+                onFieldChange = { password = it },
                 label = "Password",
                 modifier = Modifier.fillMaxWidth(),
                 isPassword = true
@@ -33,8 +50,8 @@ fun PasswordCredentialForm() {
 
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = userName,
-                onFieldChange = { userName = it },
+                field = email,
+                onFieldChange = { email = it },
                 label = "Email",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -42,8 +59,8 @@ fun PasswordCredentialForm() {
 
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = userName,
-                onFieldChange = { userName = it },
+                field = website,
+                onFieldChange = { website = it },
                 label = "Website",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -53,14 +70,42 @@ fun PasswordCredentialForm() {
 }
 
 @Composable
-fun CreditCardCredentialForm() {
-    var userName by remember { mutableStateOf("") }
+fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
+    val selectedCredential by screenModel.selectedCredential.collectAsState()
+
+    var bankName by remember(selectedCredential) {
+        mutableStateOf(selectedCredential.creditCard?.name ?: "")
+    }
+
+    var cardOwner by remember(selectedCredential) {
+        mutableStateOf(selectedCredential.creditCard?.owner?.userName ?: "")
+    }
+
+    var cardNumber by remember(selectedCredential) {
+        mutableStateOf(selectedCredential.creditCard?.number ?: "")
+    }
+
+    var cvc by remember(selectedCredential) {
+        mutableStateOf(selectedCredential.creditCard?.cvc ?: "")
+    }
+
+    var pin by remember(selectedCredential) {
+        mutableStateOf(selectedCredential.creditCard?.pin ?: "")
+    }
+
+    var expiryDate by remember(selectedCredential) {
+        mutableStateOf(selectedCredential.creditCard?.expiryDate ?: "")
+    }
+
+    var notes by remember(selectedCredential) {
+        mutableStateOf(selectedCredential.creditCard?.notes ?: "")
+    }
 
     Column() {
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = userName,
-                onFieldChange = { userName = it },
+                field = bankName,
+                onFieldChange = { bankName = it },
                 label = "Bank Name",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -68,8 +113,8 @@ fun CreditCardCredentialForm() {
 
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = userName,
-                onFieldChange = { userName = it },
+                field = cardOwner,
+                onFieldChange = { cardOwner = it },
                 label = "Card Owner",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -77,8 +122,8 @@ fun CreditCardCredentialForm() {
 
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = userName,
-                onFieldChange = { userName = it },
+                field = cardNumber,
+                onFieldChange = { cardNumber = it },
                 label = "Card Number",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -86,8 +131,8 @@ fun CreditCardCredentialForm() {
 
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = userName,
-                onFieldChange = { userName = it },
+                field = cvc.toString(),
+                onFieldChange = { cvc = it },
                 label = "CVC",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -95,8 +140,8 @@ fun CreditCardCredentialForm() {
 
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = userName,
-                onFieldChange = { userName = it },
+                field = pin.toString(),
+                onFieldChange = { pin = it },
                 label = "Pin",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -104,8 +149,8 @@ fun CreditCardCredentialForm() {
 
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = userName,
-                onFieldChange = { userName = it },
+                field = expiryDate,
+                onFieldChange = { expiryDate = it },
                 label = "Expiry Date",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -113,8 +158,8 @@ fun CreditCardCredentialForm() {
 
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = userName,
-                onFieldChange = { userName = it },
+                field = notes,
+                onFieldChange = { notes = it },
                 label = "Notes",
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = false

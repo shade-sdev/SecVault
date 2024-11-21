@@ -21,12 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.models.CredentialDisplay
-import repository.password.projection.PasswordSummary
 import ui.theme.Font
 import ui.theme.PasswordColors
+import java.util.*
 
 @Composable
-fun PasswordItem(credentialDisplay: CredentialDisplay) {
+fun PasswordItem(credentialDisplay: CredentialDisplay, onClick: (id: UUID) -> Unit = {}) {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
 
@@ -37,7 +37,7 @@ fun PasswordItem(credentialDisplay: CredentialDisplay) {
                 shape = RoundedCornerShape(6.dp)
             )
             .padding(PaddingValues(start = 5.dp, end = 5.dp))
-            .clickable(onClick = {}, indication = null, interactionSource = interactionSource)
+            .clickable(onClick = { onClick(credentialDisplay.id) }, indication = null, interactionSource = interactionSource)
             .hoverable(interactionSource),
         verticalAlignment = Alignment.CenterVertically
     )

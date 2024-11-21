@@ -4,6 +4,8 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.DatabaseConfig
+import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
 
 object DatabaseFactory {
 
@@ -24,12 +26,17 @@ object DatabaseFactory {
         val dataSource = HikariDataSource(hikariConfig)
 
         Flyway.configure()
-                .dataSource(dataSource)
-                .locations("classpath:db/migration")
-                .load()
-                .migrate()
+            .dataSource(dataSource)
+            .locations("classpath:db/migration")
+            .load()
+            .migrate()
 
-        return Database.connect(dataSource)
+        val exposedDbConfig = DatabaseConfig {
+            sqlLogger = Slf4jSqlDebugLogger
+            keepLoadedReferencesOutOfTransaction = true
+        }
+
+        return Database.connect(datasource = dataSource, databaseConfig = exposedDbConfig)
     }
 
 }

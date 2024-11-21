@@ -5,6 +5,7 @@ import core.models.Result
 import core.models.criteria.CredentialSearchCriteria
 import core.models.dto.CreditCardDto
 import kotlinx.coroutines.delay
+import org.jetbrains.exposed.dao.load
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.SortOrder
@@ -16,11 +17,27 @@ import repository.creditcard.CreditCard
 import repository.creditcard.CreditCardRepository
 import repository.creditcard.CreditCardTable
 import repository.creditcard.projection.CreditCardSummary
+import java.util.*
 
 class CreditCardRepositoryImpl(
     private val db: Database,
     private val logger: Logger
 ) : CreditCardRepository {
+
+    override suspend fun findById(id: UUID): Result<CreditCard> {
+        return try {
+            return transaction(db) {
+                CreditCard.findById(id)?.load(CreditCard::owner, CreditCard::user)?.apply {
+                    owner
+                    user
+                }
+
+            }?.let { Result.Success(it) } ?: Result.Error("Password not found")
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+            Result.Error(DatabaseError.fromException(e).extractMessage())
+        }
+    }
 
     override suspend fun findSummaries(searchCriteria: CredentialSearchCriteria): Result<List<CreditCardSummary>> {
         delay(550)
