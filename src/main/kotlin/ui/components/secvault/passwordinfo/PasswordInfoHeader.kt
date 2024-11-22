@@ -13,9 +13,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,9 +23,20 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import ui.screens.LoginScreen
 import ui.theme.Font
 import ui.theme.PasswordColors
+import viewmodel.SecVaultScreenModel
 
 @Composable
-fun PasswordInfoHeader() {
+fun PasswordInfoHeader(screenModel: SecVaultScreenModel) {
+    val selectedCredential by screenModel.selectedCredential.collectAsState()
+    val selectedMenu by screenModel.selectedMenuItem.collectAsState()
+
+    val title by remember(selectedCredential, selectedMenu) {
+        mutableStateOf(selectedCredential.getTitle(selectedMenu))
+    }
+
+    val description by remember(selectedCredential, selectedMenu) {
+        mutableStateOf(selectedCredential.getDescription(selectedMenu))
+    }
 
     Row(
         modifier = Modifier.fillMaxWidth().fillMaxHeight(),
@@ -59,7 +68,7 @@ fun PasswordInfoHeader() {
 
                     Row() {
                         Text(
-                            text = "Spotify",
+                            text = title,
                             fontSize = 20.sp,
                             fontFamily = Font.RussoOne,
                             color = Color.White
@@ -68,7 +77,7 @@ fun PasswordInfoHeader() {
 
                     Row() {
                         Text(
-                            text = "Shade@Shade.ga",
+                            text = description,
                             fontSize = 14.sp,
                             fontFamily = Font.Aldrich,
                             color = PasswordColors.outline
@@ -82,9 +91,9 @@ fun PasswordInfoHeader() {
 
         Column(
             modifier = Modifier.weight(3f)
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .padding(PaddingValues(top = 4.dp)),
+                .fillMaxHeight()
+                .fillMaxWidth()
+                .padding(PaddingValues(top = 4.dp)),
             horizontalAlignment = Alignment.End
         )
         {
@@ -110,7 +119,7 @@ fun PasswordInfoHeader() {
                     OutlinedButton(
                         onClick = { navigator?.push(LoginScreen()) },
                         modifier = Modifier.size(height = 28.dp, width = 62.dp)
-                                .hoverable(interactionSource),
+                            .hoverable(interactionSource),
                         shape = RoundedCornerShape(size = 4.dp),
                         contentPadding = PaddingValues(4.dp),
                         border = BorderStroke(2.dp, color = Color.White),

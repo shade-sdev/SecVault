@@ -27,10 +27,7 @@ class CreditCardRepositoryImpl(
     override suspend fun findById(id: UUID): Result<CreditCard> {
         return try {
             return transaction(db) {
-                CreditCard.findById(id)?.load(CreditCard::owner, CreditCard::user)?.apply {
-                    owner
-                    user
-                }
+                CreditCard.findById(id)?.load(CreditCard::owner)
 
             }?.let { Result.Success(it) } ?: Result.Error("Password not found")
         } catch (e: Exception) {
@@ -59,7 +56,7 @@ class CreditCardRepositoryImpl(
                 query.orderBy(toSort(searchCriteria.sort), toOrder(searchCriteria.sort)).map { resultRow ->
                     CreditCardSummary(
                         id = resultRow[CreditCardTable.id].value,
-                        name = resultRow[CreditCardTable.name],
+                        name = resultRow[CreditCardTable.name].replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
                         number = resultRow[CreditCardTable.number],
                         favorite = resultRow[CreditCardTable.favorite]
                     )
@@ -82,7 +79,7 @@ class CreditCardRepositoryImpl(
                     this.pin = creditCardDto.pin
                     this.notes = creditCardDto.notes
                     this.owner = creditCardDto.owner
-                    this.name = creditCardDto.name
+                    this.name = creditCardDto.name.lowercase()
                     this.createdBy = creditCardDto.user.userName
                     this.lastUpdatedBy = creditCardDto.user.userName
                 }

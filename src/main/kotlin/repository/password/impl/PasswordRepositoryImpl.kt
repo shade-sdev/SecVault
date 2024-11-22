@@ -74,8 +74,8 @@ class PasswordRepositoryImpl(
             return transaction(db) {
                 Password.new {
                     this.user = password.user
-                    this.username = password.userName
-                    this.email = password.email
+                    this.username = password.userName?.lowercase()
+                    this.email = password.email?.lowercase()
                     this.password = password.password
                     this.name = password.name.lowercase()
                     this.website = password.website

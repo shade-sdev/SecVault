@@ -29,7 +29,7 @@ fun PasswordInfo(screenModel: SecVaultScreenModel) {
                     .fillMaxHeight()
         )
         {
-            PasswordInfoHeader()
+            PasswordInfoHeader(screenModel)
         }
 
         Row(
