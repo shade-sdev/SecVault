@@ -47,7 +47,7 @@ class PasswordMgntScreen(password: Password?, formType: FormType) : Screen {
             formValidator,
             screenModel,
             isFormValid,
-            onSaveClick = { password: PasswordDto -> screenModel.savePassword(password) },
+            onSaveClick = { password: PasswordDto -> screenModel.savePassword(_password?.id?.value, password, _formType) },
             onCancelClick = { navigator?.pop() },
             _formType
         )

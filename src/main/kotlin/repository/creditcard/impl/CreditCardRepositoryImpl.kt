@@ -17,6 +17,7 @@ import repository.creditcard.CreditCard
 import repository.creditcard.CreditCardRepository
 import repository.creditcard.CreditCardTable
 import repository.creditcard.projection.CreditCardSummary
+import java.time.LocalDateTime
 import java.util.*
 
 class CreditCardRepositoryImpl(
@@ -82,6 +83,30 @@ class CreditCardRepositoryImpl(
                     this.name = creditCardDto.name.lowercase()
                     this.createdBy = creditCardDto.user.userName
                     this.lastUpdatedBy = creditCardDto.user.userName
+                }
+            }.let {
+                Result.Success(true)
+            }
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+            Result.Error(DatabaseError.fromException(e).extractMessage())
+        }
+    }
+
+    override suspend fun update(id: UUID, user: String, creditCardDto: CreditCardDto): Result<Boolean> {
+        return try {
+            return transaction(db) {
+                CreditCard.findById(id)?.let {
+                    it.owner = creditCardDto.owner
+                    it.name = creditCardDto.name
+                    it.number = creditCardDto.number
+                    it.cvc = creditCardDto.cvc
+                    it.pin = creditCardDto.pin
+                    it.notes = creditCardDto.notes
+                    it.expiryDate = creditCardDto.expiryDate
+                    it.lastUpdateDateTime = LocalDateTime.now()
+                    it.lastUpdatedBy = user
+                    it.version += 1
                 }
             }.let {
                 Result.Success(true)

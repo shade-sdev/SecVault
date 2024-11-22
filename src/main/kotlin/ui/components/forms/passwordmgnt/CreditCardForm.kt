@@ -20,6 +20,7 @@ import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
 import core.form.validation.FormValidator
 import core.models.FormType
+import core.models.FormType.CREATION
 import core.models.UiState
 import kotlinx.coroutines.delay
 import repository.creditcard.CreditCard
@@ -142,8 +143,8 @@ class CreditCardForm(creditCard: CreditCard?, formType: FormType) : Screen {
             ) {
                 Header(
                     creditCardButtonShown = false,
-                    notesButtonShown = (formType == FormType.CREATION),
-                    title = if (formType == FormType.CREATION) "Create Credit Card" else "Update Credit Card"
+                    notesButtonShown = (formType == CREATION),
+                    title = if (formType == CREATION) "Create Credit Card" else "Update Credit Card"
                 )
             }
 
@@ -330,11 +331,13 @@ class CreditCardForm(creditCard: CreditCard?, formType: FormType) : Screen {
                 Footer(
                     {
                         screenModel.saveCreditCard(
+                            _creditCard?.id?.value,
                             toCreditCardDto(
                                 formValidator,
                                 screenModel.getAuthenticatedUser(),
                                 selectedItem?.id!!
-                            )
+                            ),
+                            formType
                         )
                     },
                     { navigator?.popUntil { screen: Screen -> screen.key == SecVaultScreen().key } },

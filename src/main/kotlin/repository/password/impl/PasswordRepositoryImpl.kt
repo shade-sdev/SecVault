@@ -16,6 +16,7 @@ import repository.password.Password
 import repository.password.PasswordRepository
 import repository.password.PasswordsTable
 import repository.password.projection.PasswordSummary
+import java.time.LocalDateTime
 import java.util.*
 
 class PasswordRepositoryImpl(
@@ -56,7 +57,11 @@ class PasswordRepositoryImpl(
                 query.orderBy(toSort(searchCriteria.sort), toOrder(searchCriteria.sort)).map { resultRow ->
                     PasswordSummary(
                         id = resultRow[PasswordsTable.id].value,
-                        name = resultRow[PasswordsTable.name].replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
+                        name = resultRow[PasswordsTable.name].replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        },
                         username = resultRow[PasswordsTable.username],
                         email = resultRow[PasswordsTable.email],
                         favorite = resultRow[PasswordsTable.favorite]
@@ -82,6 +87,29 @@ class PasswordRepositoryImpl(
                     this.websiteIcon = password.icon
                     this.createdBy = password.user.userName
                     this.lastUpdatedBy = password.user.userName
+                }
+            }.let {
+                Result.Success(true)
+            }
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+            Result.Error(DatabaseError.fromException(e).extractMessage())
+        }
+    }
+
+    override suspend fun update(id: UUID, user: String, password: PasswordDto): Result<Boolean> {
+        return try {
+            return transaction(db) {
+                Password.findById(id)?.let {
+                    it.username = password.userName?.lowercase()
+                    it.email = password.email
+                    it.password = password.password
+                    it.name = password.name.lowercase()
+                    it.website = password.website
+                    it.websiteIcon = password.icon
+                    it.lastUpdatedBy = user
+                    it.lastUpdateDateTime = LocalDateTime.now()
+                    it.version += 1
                 }
             }.let {
                 Result.Success(true)
