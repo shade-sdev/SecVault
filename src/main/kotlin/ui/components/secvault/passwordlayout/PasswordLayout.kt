@@ -41,68 +41,85 @@ fun PasswordLayout(screenModel: SecVaultScreenModel) {
                 .weight(8.4f)
         )
         {
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-            )
-            {
-                when (secVaultState) {
-                    is UiState.Loading -> {
+
+            when (secVaultState) {
+                is UiState.Loading -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                        verticalArrangement = Arrangement.spacedBy(2.dp),
+                    )
+                    {
                         items(24) {
                             PasswordShimmerItem()
                         }
                     }
+                }
 
-                    is UiState.Success,
-                    is UiState.Error,
-                    is UiState.Idle -> {
-                        when (menuType) {
-                            DefaultMenuItem.PASSWORDS -> {
-                                if (passwordItems.isNotEmpty()) {
-                                    items(passwordItems) { item ->
-                                        PasswordItem(
-                                            CredentialDisplay(
-                                                item.id,
-                                                item.name,
-                                                if (item.email?.isEmpty() == true) item.username!! else item.email!!,
-                                                favorite = item.favorite,
-                                            ),
-                                            onClick = { id: UUID -> screenModel.loadSelectedCredential(id) }
-                                        )
-                                    }
-                                } else {
-                                    items(24) {
-                                        PasswordShimmerItem()
-                                    }
-                                }
-                            }
-
-                            DefaultMenuItem.CREDIT_CARD -> {
-                                if (creditCards.isNotEmpty()) {
-                                    items(creditCards) { item ->
-                                        PasswordItem(
-                                            CredentialDisplay(
-                                                item.id,
-                                                item.name,
-                                                item.number,
-                                                favorite = item.favorite
-                                            ),
-                                            onClick = { id: UUID -> screenModel.loadSelectedCredential(id) }
-                                        )
-                                    }
-                                } else {
-                                    items(24) {
-                                        PasswordShimmerItem()
-                                    }
-                                }
-                            }
-
-                            DefaultMenuItem.NOTES -> TODO()
+                is UiState.Success,
+                is UiState.Error,
+                is UiState.Idle -> {
+                    when (menuType) {
+                        DefaultMenuItem.PASSWORDS -> {
+                            renderItems(
+                                displayItems = passwordItems,
+                                display = { item ->
+                                    CredentialDisplay(
+                                        id = item.id,
+                                        title = item.name,
+                                        description = item.email?.takeIf { it.isNotEmpty() } ?: item.username!!,
+                                        favorite = item.favorite
+                                    )
+                                },
+                                screenModel
+                            )
                         }
+
+                        DefaultMenuItem.CREDIT_CARD -> {
+                            renderItems(
+                                displayItems = creditCards,
+                                display = { item ->
+                                    CredentialDisplay(
+                                        id = item.id,
+                                        title = item.name,
+                                        description = item.number,
+                                        favorite = item.favorite,
+                                    )
+                                },
+                                screenModel
+                            )
+                        }
+
+                        DefaultMenuItem.NOTES -> TODO()
                     }
                 }
             }
+        }
 
+    }
+}
+
+@Composable
+private fun <T> renderItems(
+    displayItems: List<T>,
+    display: (T) -> CredentialDisplay,
+    screenModel: SecVaultScreenModel
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    )
+    {
+        if (displayItems.isNotEmpty()) {
+            items(displayItems) { item ->
+                PasswordItem(
+                    display(item),
+                    onClick = { id: UUID -> screenModel.loadSelectedCredential(id) }
+                )
+            }
+        } else {
+            items(24) {
+                PasswordShimmerItem()
+            }
         }
     }
 }
