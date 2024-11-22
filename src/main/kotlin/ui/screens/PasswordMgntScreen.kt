@@ -8,9 +8,11 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import com.dokar.sonner.ToastType
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
+import core.models.FormType
 import core.models.UiState
 import core.models.dto.PasswordDto
 import kotlinx.coroutines.delay
+import repository.password.Password
 import ui.components.LoadingScreen
 import ui.components.forms.passwordmgnt.PasswordForm
 import ui.theme.tertiary
@@ -18,12 +20,15 @@ import ui.validators.passwordFormValidator
 import viewmodel.PasswordMgntScreenModel
 import kotlin.time.Duration.Companion.seconds
 
-class PasswordMgntScreen : Screen {
+class PasswordMgntScreen(password: Password?, formType: FormType) : Screen {
+
+    private val _password = password
+    private val _formType = formType
 
     @Composable
     override fun Content() {
 
-        val formValidator = remember { passwordFormValidator() }
+        val formValidator = remember { passwordFormValidator(_password) }
         val screenModel = koinScreenModel<PasswordMgntScreenModel>()
         val passwordState by screenModel.passwordState.collectAsState()
         val navigator = LocalNavigator.current
@@ -43,7 +48,8 @@ class PasswordMgntScreen : Screen {
             screenModel,
             isFormValid,
             onSaveClick = { password: PasswordDto -> screenModel.savePassword(password) },
-            onCancelClick = { navigator?.pop() }
+            onCancelClick = { navigator?.pop() },
+            _formType
         )
 
         when (val state = passwordState) {

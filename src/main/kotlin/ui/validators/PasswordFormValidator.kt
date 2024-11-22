@@ -1,36 +1,42 @@
 package ui.validators
 
+import androidx.compose.runtime.mutableStateOf
 import core.form.FormField
 import core.form.FormFieldName
 import core.form.validation.*
 import core.models.dto.PasswordDto
+import repository.password.Password
 import repository.user.User
 
-fun passwordFormValidator(): FormValidator {
+fun passwordFormValidator(password: Password?): FormValidator {
     val validator = FormValidator()
         .addField(
             PasswordFormFieldName.USERNAME, FormField(
-                validator = Validator()
+                validator = Validator(),
+                value = mutableStateOf(password?.username ?: "")
             )
         )
         .addField(
             PasswordFormFieldName.EMAIL, FormField(
                 validator = Validator()
-                    .addRule(emailIfNotNullRule)
+                    .addRule(emailIfNotNullRule),
+                value = mutableStateOf(password?.email ?: "")
             )
         )
         .addField(
             PasswordFormFieldName.PASSWORD, FormField(
                 validator = Validator()
                     .addRule(notNullRule(PasswordFormFieldName.PASSWORD.fieldName))
-                    .addRule(passwordRule)
+                    .addRule(passwordRule),
+                value = mutableStateOf(password?.password ?: "")
             )
         )
         .addField(
             PasswordFormFieldName.NAME, FormField(
                 validator = Validator()
                     .addRule(notNullRule(PasswordFormFieldName.NAME.fieldName))
-                    .addRule(lengthRule(PasswordFormFieldName.NAME.fieldName, 1))
+                    .addRule(lengthRule(PasswordFormFieldName.NAME.fieldName, 1)),
+                value = mutableStateOf(password?.name ?: "")
             )
         )
         .addField(
@@ -38,13 +44,15 @@ fun passwordFormValidator(): FormValidator {
                 validator = Validator()
                     .addRule(notNullRule(PasswordFormFieldName.WEBSITE_URL.fieldName))
                     .addRule(lengthRule(PasswordFormFieldName.WEBSITE_URL.fieldName, 1))
-                    .addRule(urlRule)
+                    .addRule(urlRule),
+                value = mutableStateOf(password?.website ?: "")
             )
         )
         .addField(
             PasswordFormFieldName.WEBSITE_ICON_URL, FormField(
                 validator = Validator()
-                    .addRule(urlRule)
+                    .addRule(urlRule),
+                value = mutableStateOf(password?.websiteIcon ?: "")
             )
         )
 

@@ -19,8 +19,10 @@ import com.dokar.sonner.ToastType
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
 import core.form.validation.FormValidator
+import core.models.FormType
 import core.models.UiState
 import kotlinx.coroutines.delay
+import repository.creditcard.CreditCard
 import repository.user.User
 import ui.components.*
 import ui.screens.SecVaultScreen
@@ -34,12 +36,15 @@ import ui.validators.toCreditCardDto
 import viewmodel.PasswordMgntScreenModel
 import kotlin.time.Duration.Companion.seconds
 
-class CreditCardForm : Screen {
+class CreditCardForm(creditCard: CreditCard?, formType: FormType) : Screen {
+
+    private val _creditCard = creditCard
+    private val _formType = formType
 
     @Composable
     override fun Content() {
 
-        val formValidator = remember { creditCardFormValidator() }
+        val formValidator = remember { creditCardFormValidator(_creditCard) }
         val screenModel = koinScreenModel<PasswordMgntScreenModel>()
         val passwordState by screenModel.passwordState.collectAsState()
         val navigator = LocalNavigator.current
@@ -56,7 +61,8 @@ class CreditCardForm : Screen {
         CreditCardFormContent(
             formValidator,
             screenModel,
-            navigator
+            navigator,
+            _formType
         )
 
         when (val state = passwordState) {
@@ -90,12 +96,16 @@ class CreditCardForm : Screen {
     }
 
     @Composable
-    fun CreditCardFormContent(formValidator: FormValidator, screenModel: PasswordMgntScreenModel, navigator: Navigator?) {
+    fun CreditCardFormContent(
+        formValidator: FormValidator,
+        screenModel: PasswordMgntScreenModel,
+        navigator: Navigator?,
+        formType: FormType
+    ) {
 
         val isFormValid by formValidator.isValid
         val users by remember { mutableStateOf<List<User>?>(screenModel.fetchUsers()) }
         var selectedItem by remember { mutableStateOf<DropdownItem<User>?>(null) }
-
 
         val cardBank = formValidator.getField(CreditCardFormFieldName.CARD_NAME)
         val cardOwner = formValidator.getField(CreditCardFormFieldName.CARD_OWNER)
@@ -104,6 +114,12 @@ class CreditCardForm : Screen {
         val pin = formValidator.getField(CreditCardFormFieldName.CARD_PIN)
         val expiry = formValidator.getField(CreditCardFormFieldName.CARD_EXPIRY)
         val notes = formValidator.getField(CreditCardFormFieldName.CARD_NOTES)
+
+        users?.find {
+            it.id.value.toString() == cardOwner?.value?.value
+        }?.let {
+            selectedItem = DropdownItem(it, it.userName)
+        }
 
         LaunchedEffect(selectedItem) {
             selectedItem?.let {
@@ -114,32 +130,33 @@ class CreditCardForm : Screen {
 
         Column(
             modifier = Modifier.fillMaxSize()
-                .background(secondary)
+                    .background(secondary)
         )
         {
 
             Row(
                 modifier = Modifier.weight(1f)
-                    .fillMaxSize(),
+                        .fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Header(
                     creditCardButtonShown = false,
-                    notesButtonShown = true
+                    notesButtonShown = (formType == FormType.CREATION),
+                    title = if (formType == FormType.CREATION) "Create Credit Card" else "Update Credit Card"
                 )
             }
 
             Row(
                 modifier = Modifier.weight(7.5f)
-                    .background(primary)
-                    .fillMaxSize(),
+                        .background(primary)
+                        .fillMaxSize(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     modifier = Modifier.background(primary)
-                        .padding(PaddingValues(end = 20.dp)),
+                            .padding(PaddingValues(end = 20.dp)),
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
                 ) {
@@ -256,7 +273,7 @@ class CreditCardForm : Screen {
                         Column(modifier = Modifier.height(80.dp)) {
                             FormTextField(
                                 value =
-                                expiry?.value?.value ?: "",
+                                    expiry?.value?.value ?: "",
                                 onValueChange = { newValue ->
                                     expiry?.value?.value = newValue
                                     formValidator.validateField(CreditCardFormFieldName.CARD_EXPIRY)
@@ -305,13 +322,21 @@ class CreditCardForm : Screen {
 
             Row(
                 modifier = Modifier.weight(1.5f)
-                    .fillMaxSize()
-                    .background(tertiary),
+                        .fillMaxSize()
+                        .background(tertiary),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
             ) {
                 Footer(
-                    { screenModel.saveCreditCard(toCreditCardDto(formValidator, screenModel.getAuthenticatedUser(), selectedItem?.id!!)) },
+                    {
+                        screenModel.saveCreditCard(
+                            toCreditCardDto(
+                                formValidator,
+                                screenModel.getAuthenticatedUser(),
+                                selectedItem?.id!!
+                            )
+                        )
+                    },
                     { navigator?.popUntil { screen: Screen -> screen.key == SecVaultScreen().key } },
                     isFormValid
                 )

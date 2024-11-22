@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.models.FormType.CREATION
 import ui.components.OutlineTextButton
 import ui.theme.Font
 import ui.theme.primary
@@ -21,14 +22,15 @@ import ui.theme.secondary
 @Composable
 fun Header(
     creditCardButtonShown: Boolean,
-    notesButtonShown: Boolean
+    notesButtonShown: Boolean,
+    title: String
 ) {
     val navigator = LocalNavigator.current
 
     Row {
         Spacer(modifier = Modifier.width(25.dp))
         Text(
-            text = "Create a new password",
+            text = title,
             color = Color.White,
             fontFamily = Font.RussoOne,
             fontWeight = FontWeight.Normal,
@@ -45,7 +47,7 @@ fun Header(
                 cornerSize = 4.dp,
                 fontSize = 12.sp,
                 text = "Credit Card",
-                onClick = { navigator?.push(CreditCardForm()) }
+                onClick = { navigator?.push(CreditCardForm(null, CREATION)) }
             )
         }
 

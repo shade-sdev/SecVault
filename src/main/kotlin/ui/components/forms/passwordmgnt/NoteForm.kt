@@ -62,7 +62,8 @@ class NoteForm : Screen {
             ) {
                 Header(
                     creditCardButtonShown = true,
-                    notesButtonShown = false
+                    notesButtonShown = false,
+                    ""
                 )
             }
 

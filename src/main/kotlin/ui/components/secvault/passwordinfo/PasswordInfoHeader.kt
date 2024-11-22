@@ -20,7 +20,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.LocalNavigator
-import ui.screens.LoginScreen
+import core.models.DefaultMenuItem
+import core.models.FormType.MODIFIATION
+import ui.components.forms.passwordmgnt.CreditCardForm
+import ui.screens.PasswordMgntScreen
 import ui.theme.Font
 import ui.theme.PasswordColors
 import viewmodel.SecVaultScreenModel
@@ -117,7 +120,12 @@ fun PasswordInfoHeader(screenModel: SecVaultScreenModel) {
                     val navigator = LocalNavigator.current
 
                     OutlinedButton(
-                        onClick = { navigator?.push(LoginScreen()) },
+                        onClick = { when(selectedMenu) {
+                            DefaultMenuItem.PASSWORDS -> {navigator?.push(PasswordMgntScreen(selectedCredential.password, MODIFIATION))}
+                            DefaultMenuItem.CREDIT_CARD -> {navigator?.push(CreditCardForm(selectedCredential.creditCard, MODIFIATION))}
+                            DefaultMenuItem.NOTES -> TODO()
+                        } },
+                        enabled = selectedCredential.isSelected(),
                         modifier = Modifier.size(height = 28.dp, width = 62.dp)
                             .hoverable(interactionSource),
                         shape = RoundedCornerShape(size = 4.dp),
@@ -125,6 +133,8 @@ fun PasswordInfoHeader(screenModel: SecVaultScreenModel) {
                         border = BorderStroke(2.dp, color = Color.White),
                         colors = ButtonDefaults.outlinedButtonColors(
                             containerColor = if (isHovered) Color.White else Color.Transparent,
+                            disabledContentColor = Color.White,
+                            disabledContainerColor = if (isHovered) Color.White else Color.Transparent,
                         )
 
                     )

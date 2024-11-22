@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.form.validation.FormValidator
+import core.models.FormType
 import core.models.dto.PasswordDto
 import ui.components.FormTextField
 import ui.components.MultiSelectDropdown
@@ -32,7 +33,8 @@ fun PasswordForm(
     screenModel: PasswordMgntScreenModel,
     isFormValid: Boolean,
     onSaveClick: (PasswordDto) -> Unit,
-    onCancelClick: () -> Unit
+    onCancelClick: () -> Unit,
+    formType: FormType
 ) {
 
     val userName = formValidator.getField(PasswordFormFieldName.USERNAME)
@@ -45,33 +47,34 @@ fun PasswordForm(
 
     Column(
         modifier = Modifier.fillMaxSize()
-            .background(secondary)
+                .background(secondary)
     )
     {
 
         Row(
             modifier = Modifier.weight(1f)
-                .fillMaxSize(),
+                    .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Header(
-                creditCardButtonShown = true,
-                notesButtonShown = true
+                creditCardButtonShown = (formType == FormType.CREATION),
+                notesButtonShown = (formType == FormType.CREATION),
+                title = if (formType == FormType.CREATION) "Create Password" else "Update Password",
             )
         }
 
         Row(
             modifier = Modifier.weight(7.5f)
-                .background(primary)
-                .fillMaxSize(),
+                    .background(primary)
+                    .fillMaxSize(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Column(
                 modifier = Modifier.background(primary)
-                    .padding(PaddingValues(end = 20.dp)),
+                        .padding(PaddingValues(end = 20.dp)),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
             ) {
@@ -237,8 +240,8 @@ fun PasswordForm(
 
         Row(
             modifier = Modifier.weight(1.5f)
-                .fillMaxSize()
-                .background(tertiary),
+                    .fillMaxSize()
+                    .background(tertiary),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
         ) {
