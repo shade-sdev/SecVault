@@ -13,7 +13,8 @@ data class CredentialDisplay(
     val id: UUID,
     val title: String,
     val description: String,
-    val favorite: Boolean
+    val favorite: Boolean,
+    val isSelected: Boolean
 )
 
 enum class CredentialSort(val value: String) {

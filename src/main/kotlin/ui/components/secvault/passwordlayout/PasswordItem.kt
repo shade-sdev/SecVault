@@ -33,7 +33,7 @@ fun PasswordItem(credentialDisplay: CredentialDisplay, onClick: (id: UUID) -> Un
     Row(
         modifier = Modifier.height(60.dp).fillMaxWidth()
             .background(
-                if (isHovered) PasswordColors.tertiary else Color.Transparent,
+                if (isHovered || credentialDisplay.isSelected) PasswordColors.tertiary else Color.Transparent,
                 shape = RoundedCornerShape(6.dp)
             )
             .padding(PaddingValues(start = 5.dp, end = 5.dp))

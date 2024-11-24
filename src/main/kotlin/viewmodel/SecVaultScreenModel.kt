@@ -13,8 +13,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import repository.creditcard.CreditCard
 import repository.creditcard.CreditCardRepository
 import repository.creditcard.projection.CreditCardSummary
+import repository.password.Password
 import repository.password.PasswordRepository
 import repository.password.projection.PasswordSummary
 import java.util.*
@@ -72,6 +74,8 @@ class SecVaultScreenModel(
     fun loadCredentials() {
         screenModelScope.launch(dispatcher) {
             _secVaultState.value = UiState.Loading
+            selectedCredential.value.getId()?.let { loadSelectedCredential(it)}
+
             when (_selectedMenuItem.value) {
                 DefaultMenuItem.PASSWORDS -> loadPasswords(_selectedSortItem.value)
                 DefaultMenuItem.CREDIT_CARD -> loadCreditCards(_selectedSortItem.value)
@@ -91,21 +95,38 @@ class SecVaultScreenModel(
             when (_selectedMenuItem.value) {
                 DefaultMenuItem.PASSWORDS -> {
                     passwordRepository.findById(id).let { result ->
-                        if (result is Result.Success) {
-                            _selectedCredential.value = SelectedCredential(result.data, null)
+                        when (result) {
+                            is Result.Error -> UiState.Error(result.message)
+                            is Result.Success<Password> -> _selectedCredential.value = SelectedCredential(result.data, null)
                         }
                     }
                 }
 
                 DefaultMenuItem.CREDIT_CARD -> {
                     creditCardRepository.findById(id).let { result ->
-                        if (result is Result.Success) {
-                            _selectedCredential.value = SelectedCredential(null, result.data)
+                        when (result) {
+                            is Result.Error -> UiState.Error(result.message)
+                            is Result.Success<CreditCard> -> _selectedCredential.value = SelectedCredential(null, result.data)
                         }
                     }
                 }
 
                 DefaultMenuItem.NOTES -> TODO()
+            }
+        }
+    }
+
+     fun favorite(id: UUID) {
+        screenModelScope.launch(dispatcher) {
+            val result = when (selectedMenuItem.value) {
+                DefaultMenuItem.PASSWORDS -> passwordRepository.favorite(id, appState.userName)
+                DefaultMenuItem.CREDIT_CARD -> creditCardRepository.favorite(id, appState.userName)
+                DefaultMenuItem.NOTES -> TODO()
+            }
+
+            when (result) {
+                is Result.Error -> UiState.Error(result.message)
+                is Result.Success -> onScreenShown()
             }
         }
     }

@@ -20,6 +20,7 @@ fun PasswordLayout(screenModel: SecVaultScreenModel) {
     val creditCards by screenModel.creditCardItems.collectAsState()
     val passwordItems by screenModel.passwordItems.collectAsState()
     val secVaultState by screenModel.secVaultState.collectAsState()
+    val selectedCredential by screenModel.selectedCredential.collectAsState()
 
     Column(
         modifier = Modifier.padding(PaddingValues(start = 20.dp, end = 20.dp, top = 24.dp, bottom = 20.dp))
@@ -67,7 +68,8 @@ fun PasswordLayout(screenModel: SecVaultScreenModel) {
                                         id = item.id,
                                         title = item.name,
                                         description = item.email?.takeIf { it.isNotEmpty() } ?: item.username!!,
-                                        favorite = item.favorite
+                                        favorite = item.favorite,
+                                        isSelected = selectedCredential.getId() == item.id
                                     )
                                 },
                                 screenModel
@@ -83,6 +85,7 @@ fun PasswordLayout(screenModel: SecVaultScreenModel) {
                                         title = item.name,
                                         description = item.number,
                                         favorite = item.favorite,
+                                        isSelected = selectedCredential.getId() == item.id
                                     )
                                 },
                                 screenModel

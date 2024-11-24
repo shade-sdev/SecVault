@@ -16,4 +16,6 @@ interface PasswordRepository {
 
     suspend fun update(id: UUID, user: String, password: PasswordDto): Result<Boolean>
 
+    suspend fun favorite(id: UUID, user: String): Result<Boolean>
+
 }

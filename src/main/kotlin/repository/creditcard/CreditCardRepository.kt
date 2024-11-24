@@ -16,4 +16,6 @@ interface CreditCardRepository {
 
     suspend fun update(id: UUID, user: String, creditCardDto: CreditCardDto): Result<Boolean>
 
+    suspend fun favorite(id: UUID, user: String): Result<Boolean>
+
 }

@@ -41,4 +41,12 @@ data class SelectedCredential(
         return password != null || creditCard != null
     }
 
+    fun isFavorite(): Boolean {
+        return (password != null || creditCard != null) && (password?.favorite == true || creditCard?.favorite == true)
+    }
+
+    fun getId(): UUID? {
+        return password?.id?.value ?: creditCard?.id?.value
+    }
+
 }

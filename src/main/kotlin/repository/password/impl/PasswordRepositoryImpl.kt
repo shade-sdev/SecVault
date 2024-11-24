@@ -120,6 +120,24 @@ class PasswordRepositoryImpl(
         }
     }
 
+    override suspend fun favorite(id: UUID, user: String): Result<Boolean> {
+        return try {
+            return transaction(db) {
+                Password.findById(id)?.let {
+                    it.favorite = !it.favorite
+                    it.lastUpdatedBy = user
+                    it.lastUpdateDateTime = LocalDateTime.now()
+                    it.version += 1
+                }
+            }.let {
+                Result.Success(true)
+            }
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+            Result.Error(DatabaseError.fromException(e).extractMessage())
+        }
+    }
+
     private fun toSort(sort: CredentialSort): Expression<*> {
         return when (sort) {
             CredentialSort.NAME -> PasswordsTable.name

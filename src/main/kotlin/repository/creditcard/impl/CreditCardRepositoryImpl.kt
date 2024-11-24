@@ -117,6 +117,24 @@ class CreditCardRepositoryImpl(
         }
     }
 
+    override suspend fun favorite(id: UUID, user: String): Result<Boolean> {
+        return try {
+            return transaction(db) {
+                CreditCard.findById(id)?.let {
+                    it.favorite = !it.favorite
+                    it.lastUpdateDateTime = LocalDateTime.now()
+                    it.lastUpdatedBy = user
+                    it.version += 1
+                }
+            }.let {
+                Result.Success(true)
+            }
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+            Result.Error(DatabaseError.fromException(e).extractMessage())
+        }
+    }
+
     private fun toSort(sort: CredentialSort): Expression<*> {
         return when (sort) {
             CredentialSort.NAME -> CreditCardTable.name

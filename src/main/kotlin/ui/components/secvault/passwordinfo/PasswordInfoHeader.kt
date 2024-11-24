@@ -9,10 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -94,9 +91,9 @@ fun PasswordInfoHeader(screenModel: SecVaultScreenModel) {
 
         Column(
             modifier = Modifier.weight(3f)
-                .fillMaxHeight()
-                .fillMaxWidth()
-                .padding(PaddingValues(top = 4.dp)),
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .padding(PaddingValues(top = 4.dp)),
             horizontalAlignment = Alignment.End
         )
         {
@@ -106,12 +103,26 @@ fun PasswordInfoHeader(screenModel: SecVaultScreenModel) {
             )
             {
                 Column() {
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = "User Icon",
-                        modifier = Modifier.size(24.dp),
-                        tint = Color.White
+                    IconButton(
+                        onClick = {
+                            when (selectedMenu) {
+                                DefaultMenuItem.PASSWORDS,
+                                DefaultMenuItem.CREDIT_CARD,
+                                DefaultMenuItem.NOTES -> {
+                                    screenModel.favorite(selectedCredential.getId()!!)
+                                }
+                            }
+                        },
+                        enabled = selectedCredential.isSelected()
                     )
+                    {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = "Favorite Icon",
+                            modifier = Modifier.size(24.dp),
+                            tint = if (selectedCredential.isFavorite()) Color.Yellow else Color.White
+                        )
+                    }
                 }
 
                 Column() {
@@ -120,14 +131,22 @@ fun PasswordInfoHeader(screenModel: SecVaultScreenModel) {
                     val navigator = LocalNavigator.current
 
                     OutlinedButton(
-                        onClick = { when(selectedMenu) {
-                            DefaultMenuItem.PASSWORDS -> {navigator?.push(PasswordMgntScreen(selectedCredential.password, MODIFIATION))}
-                            DefaultMenuItem.CREDIT_CARD -> {navigator?.push(CreditCardForm(selectedCredential.creditCard, MODIFIATION))}
-                            DefaultMenuItem.NOTES -> TODO()
-                        } },
+                        onClick = {
+                            when (selectedMenu) {
+                                DefaultMenuItem.PASSWORDS -> {
+                                    navigator?.push(PasswordMgntScreen(selectedCredential.password, MODIFIATION))
+                                }
+
+                                DefaultMenuItem.CREDIT_CARD -> {
+                                    navigator?.push(CreditCardForm(selectedCredential.creditCard, MODIFIATION))
+                                }
+
+                                DefaultMenuItem.NOTES -> TODO()
+                            }
+                        },
                         enabled = selectedCredential.isSelected(),
                         modifier = Modifier.size(height = 28.dp, width = 62.dp)
-                            .hoverable(interactionSource),
+                                .hoverable(interactionSource),
                         shape = RoundedCornerShape(size = 4.dp),
                         contentPadding = PaddingValues(4.dp),
                         border = BorderStroke(2.dp, color = Color.White),
