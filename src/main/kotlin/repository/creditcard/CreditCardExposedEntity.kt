@@ -41,10 +41,4 @@ class CreditCard(id: EntityID<UUID>) : UUIDEntity(id) {
     var lastUpdatedBy by CreditCardTable.lastUpdatedBy
     var version by CreditCardTable.version
 
-    fun favorite(): CreditCard {
-        return this.apply {
-            favorite = true
-        }
-    }
-
 }
