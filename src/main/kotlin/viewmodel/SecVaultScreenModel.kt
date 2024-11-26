@@ -98,7 +98,7 @@ class SecVaultScreenModel(
                 DefaultMenuItem.PASSWORDS -> {
                     passwordRepository.findById(id).let { result ->
                         when (result) {
-                            is Result.Error -> UiState.Error(result.message)
+                            is Result.Error -> _secVaultState.value = UiState.Error(result.message)
                             is Result.Success<Password> -> _selectedCredential.value = SelectedCredential(result.data, null)
                         }
                     }
@@ -107,7 +107,7 @@ class SecVaultScreenModel(
                 DefaultMenuItem.CREDIT_CARD -> {
                     creditCardRepository.findById(id).let { result ->
                         when (result) {
-                            is Result.Error -> UiState.Error(result.message)
+                            is Result.Error -> _secVaultState.value = UiState.Error(result.message)
                             is Result.Success<CreditCard> -> _selectedCredential.value = SelectedCredential(null, result.data)
                         }
                     }
@@ -118,7 +118,7 @@ class SecVaultScreenModel(
         }
     }
 
-     fun favorite(id: UUID) {
+    fun favorite(id: UUID) {
         screenModelScope.launch(dispatcher) {
             val result = when (selectedMenuItem.value) {
                 DefaultMenuItem.PASSWORDS -> passwordRepository.favorite(id, appState.userName)
@@ -127,7 +127,7 @@ class SecVaultScreenModel(
             }
 
             when (result) {
-                is Result.Error -> UiState.Error(result.message)
+                is Result.Error -> _secVaultState.value = UiState.Error(result.message)
                 is Result.Success -> onScreenShown()
             }
         }
