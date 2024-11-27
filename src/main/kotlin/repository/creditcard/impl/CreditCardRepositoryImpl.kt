@@ -29,8 +29,7 @@ class CreditCardRepositoryImpl(
         return try {
             return transaction(db) {
                 CreditCard.findById(id)?.load(CreditCard::owner)
-
-            }?.let { Result.Success(it) } ?: Result.Error("Password not found")
+            }?.let { Result.Success(it) } ?: Result.Error("Credit Card not found")
         } catch (e: Exception) {
             logger.error(e.message, e)
             Result.Error(DatabaseError.fromException(e).extractMessage())

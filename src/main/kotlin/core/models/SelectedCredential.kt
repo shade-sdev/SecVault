@@ -49,4 +49,12 @@ data class SelectedCredential(
         return password?.id?.value ?: creditCard?.id?.value
     }
 
+    fun getId(menuItem: DefaultMenuItem): UUID? {
+        return when(menuItem) {
+            DefaultMenuItem.PASSWORDS -> password?.id?.value
+            DefaultMenuItem.CREDIT_CARD -> creditCard?.id?.value
+            DefaultMenuItem.NOTES -> TODO()
+        }
+    }
+
 }

@@ -74,7 +74,7 @@ class SecVaultScreenModel(
     fun loadCredentials() {
         screenModelScope.launch(dispatcher) {
             _secVaultState.value = UiState.Loading
-            val id = selectedCredential.value.getId()
+            val id = selectedCredential.value.getId(_selectedMenuItem.value)
             _selectedCredential.value = SelectedCredential(null, null)
             id?.let { loadSelectedCredential(it) }
 
