@@ -164,7 +164,7 @@ class SecVaultScreenModel(
     }
 
     private fun handleEvents() {
-        screenModelScope.launch {
+        screenModelScope.launch(dispatcher) {
             eventChannel.consumeAsFlow().collect { event ->
                 when (event) {
                     is SecVaultEvent.LoadCredentials -> loadCredentials()
