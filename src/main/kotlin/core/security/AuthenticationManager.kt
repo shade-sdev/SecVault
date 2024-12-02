@@ -21,12 +21,13 @@ class AuthenticationManager(
         loadUserFromToken()
     }
 
-    suspend fun login(username: String, password: String): Result<User> {
+    suspend fun login(username: String, password: String, masterPassword: String): Result<User> {
         delay(200)
         return userRepository.findByUsername(username).let { result ->
             if (result is Result.Success && BCrypt.checkpw(password, result.data.password)) {
                 result.data.also {
                     appState.updateCurrentUser(it)
+                    appState.initializeMasterPassword(masterPassword.toCharArray())
                     TokenManager.saveToken(jwtService.generateToken(it))
                 }.let { user ->
                     Result.Success(user)

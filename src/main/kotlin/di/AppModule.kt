@@ -69,7 +69,7 @@ val viewModelModule = module {
 
     factory { ForgotPasswordScreenModel(get()) }
 
-    factory { SecVaultScreenModel(get(), get(), get()) }
+    factory { SecVaultScreenModel(get(), get(), get(), get { parametersOf(SecVaultScreenModel::class.java) }) }
 
     factory { PasswordMgntScreenModel(get(), get(), get(), get()) }
 

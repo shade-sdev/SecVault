@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import core.AppState
 import core.models.*
 import core.models.criteria.CredentialSearchCriteria
+import core.security.MasterPasswordManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import org.slf4j.Logger
 import repository.creditcard.CreditCard
 import repository.creditcard.CreditCardRepository
 import repository.creditcard.projection.CreditCardSummary
@@ -25,6 +27,7 @@ class SecVaultScreenModel(
     private val passwordRepository: PasswordRepository,
     private val creditCardRepository: CreditCardRepository,
     private val appState: AppState,
+    private val logger: Logger,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ScreenModel {
 
@@ -131,6 +134,23 @@ class SecVaultScreenModel(
                 is Result.Success -> onScreenShown()
             }
         }
+    }
+
+    fun decryptPassword(text: String?): String {
+        try {
+            return appState.decryptPassword(text)
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+            return "FUCK U"
+        }
+    }
+
+    fun setMasterPassword(masterPassword: String) {
+        appState.initializeMasterPassword(MasterPasswordManager.convertToSecureString(masterPassword))
+    }
+
+    fun isMasterPasswordPresent(): Boolean {
+        return appState.isMasterPasswordPresent()
     }
 
     private suspend fun loadPasswords(sort: CredentialSort) {

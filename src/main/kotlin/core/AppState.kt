@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
+import core.security.MasterPasswordManager
 import repository.user.User
 import ui.screens.LoginScreen
 import ui.screens.LoginSplashScreen
@@ -52,6 +53,33 @@ class AppState {
         masterPassword?.fill('\u0000')
         masterPassword = null
     }
+
+    fun isMasterPasswordPresent(): Boolean {
+        return masterPassword != null
+    }
+
+    fun encryptString(text: String?): String {
+        return text?.let {
+            MasterPasswordManager.encryptString(
+                it,
+                MasterPasswordManager.getKey(
+                    MasterPasswordManager.convertToUnsecureString(this.fetchMasterPassword()!!)
+                )
+            )
+        } ?: ""
+    }
+
+    fun decryptPassword(text: String?): String {
+        return text?.let {
+            MasterPasswordManager.decryptString(
+                it,
+                MasterPasswordManager.getKey(
+                    MasterPasswordManager.convertToUnsecureString(this.fetchMasterPassword()!!)
+                )
+            )
+        } ?: ""
+    }
+
 
     private val isAuthenticated: Boolean
         get() = currentUser != null

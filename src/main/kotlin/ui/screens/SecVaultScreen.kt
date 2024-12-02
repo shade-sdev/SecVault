@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
@@ -12,6 +14,7 @@ import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
 import core.models.UiState
 import ui.components.LoadingScreen
+import ui.components.dialog.MasterPasswordDialog
 import ui.components.secvault.SecVaultContentScreen
 import ui.theme.tertiary
 import viewmodel.SecVaultScreenModel
@@ -24,6 +27,7 @@ class SecVaultScreen : Screen {
 
         val screenModel = koinScreenModel<SecVaultScreenModel>()
         val secVaultState by screenModel.secVaultState.collectAsState()
+        val masterPasswordDialogState = remember { mutableStateOf(!screenModel.isMasterPasswordPresent()) }
         val toaster = rememberToasterState()
 
         LaunchedEffect(Unit) {
@@ -58,6 +62,15 @@ class SecVaultScreen : Screen {
             }
 
             is UiState.Idle -> {}
+        }
+
+        when {
+            masterPasswordDialogState.value -> {
+                MasterPasswordDialog(
+                    dialogState = masterPasswordDialogState,
+                    viewModel = screenModel
+                )
+            }
         }
     }
 }

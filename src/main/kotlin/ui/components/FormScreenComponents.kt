@@ -27,16 +27,17 @@ fun LoginScreenContent(
 
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var masterPassword by remember { mutableStateOf("") }
 
     LoginForm(
         username = username,
         onUsernameChange = { username = it },
         password = password,
         onPasswordChange = { password = it },
-        masterPassword = password,
-        onMasterPassword = { password = it },
+        masterPassword = masterPassword,
+        onMasterPassword = { masterPassword = it },
         loginState = loginState,
-        onLoginClick = { screenModel.login(username, password) },
+        onLoginClick = { screenModel.login(username, password, masterPassword) },
         onForgotPasswordClick = { navigator?.push(ForgotPasswordScreen()) },
         onRegisterClick = {
             if (navigator?.canPop == true) navigator.pop() else navigator?.push(RegisterScreen())

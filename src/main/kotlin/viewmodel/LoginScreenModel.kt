@@ -21,11 +21,13 @@ class LoginScreenModel(
     private val _loginState = MutableStateFlow<UiState<User>>(UiState.Idle)
     val loginState: StateFlow<UiState<User>> = _loginState.asStateFlow()
 
-    fun login(username: String, password: String) {
+    fun login(username: String, password: String, masterPassword: String) {
         screenModelScope.launch(dispatcher) {
             _loginState.value = UiState.Loading
-            when (val result = authenticationManager.login(username, password)) {
-                is Result.Success -> _loginState.value = UiState.Success(result.data)
+            when (val result = authenticationManager.login(username, password, masterPassword)) {
+                is Result.Success -> {
+                    _loginState.value = UiState.Success(result.data)
+                }
                 is Result.Error -> _loginState.value = UiState.Error(result.message)
             }
         }

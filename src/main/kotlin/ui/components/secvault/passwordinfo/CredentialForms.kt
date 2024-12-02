@@ -17,7 +17,11 @@ fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
     }
 
     var password by remember(selectedCredential) {
-        mutableStateOf(selectedCredential.password?.password ?: "")
+        mutableStateOf(
+            selectedCredential.password?.password?.let {
+                screenModel.decryptPassword(it)
+            } ?: ""
+        )
     }
 
     var email by remember(selectedCredential) {

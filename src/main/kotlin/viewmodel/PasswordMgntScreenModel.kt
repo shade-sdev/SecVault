@@ -34,7 +34,9 @@ class PasswordMgntScreenModel(
     fun savePassword(id: UUID?, password: PasswordDto, formType: FormType) {
         saveOrUpdate(
             id = id,
-            dto = password,
+            dto = password.apply {
+                password.password = appState.encryptString(password.password)
+            },
             formType = formType,
             saveAction = passwordRepository::save,
             updateAction = passwordRepository::update,
