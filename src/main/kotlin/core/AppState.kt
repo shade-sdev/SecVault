@@ -13,6 +13,7 @@ class AppState {
 
     private var currentUser by mutableStateOf<User?>(null)
     private var userExists by mutableStateOf(false)
+    private var masterPassword by mutableStateOf<CharArray?>(null)
 
     val getAuthenticatedUser: User?
         get() = currentUser
@@ -36,6 +37,20 @@ class AppState {
         userExists && isAuthenticated -> LoginSplashScreen()
         userExists -> LoginScreen()
         else -> RegisterScreen()
+    }
+
+    fun initializeMasterPassword(password: CharArray) {
+        clearMasterPassword()
+        masterPassword = password.copyOf()
+    }
+
+    fun fetchMasterPassword(): CharArray? {
+        return masterPassword?.copyOf()
+    }
+
+    fun clearMasterPassword() {
+        masterPassword?.fill('\u0000')
+        masterPassword = null
     }
 
     private val isAuthenticated: Boolean
