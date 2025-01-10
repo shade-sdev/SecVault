@@ -3,7 +3,7 @@ name: Build and Release SecVault
 on:
   push:
     tags:
-      - '*' # Trigger on any tag push
+      - master
 
 jobs:
   build_and_release:
