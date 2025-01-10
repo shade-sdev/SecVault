@@ -10,39 +10,74 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    # Install JetBrains Runtime (JBR)
-    - name: Download JetBrains Runtime
-      run: |
-        JBR_URL="https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-17.0.10-linux-x64-b1207.1.tar.gz"
-        wget $JBR_URL -O jbr.tar.gz
-        mkdir jbr
-        tar -xzf jbr.tar.gz -C jbr --strip-components=1
+      # Install JetBrains Runtime (JBR)
+      - name: Download JetBrains Runtime
+        run: |
+          JBR_URL="https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-17.0.10-linux-x64-b1207.1.tar.gz"
+          wget $JBR_URL -O jbr.tar.gz
+          mkdir jbr
+          tar -xzf jbr.tar.gz -C jbr --strip-components=1
 
-    # Set the JAVA_HOME to point to JetBrains Runtime
-    - name: Set up JetBrains Runtime
-      run: echo "JAVA_HOME=${{ github.workspace }}/jbr" >> $GITHUB_ENV
+      # Set the JAVA_HOME to point to JetBrains Runtime
+      - name: Set up JetBrains Runtime
+        run: echo "JAVA_HOME=${{ github.workspace }}/jbr" >> $GITHUB_ENV
 
-    - name: Display current directory (for debugging)
-      run: pwd
+      - name: Display current directory (for debugging)
+        run: pwd
 
-    - name: List files in current directory (for debugging)
-      run: ls -la
+      - name: List files in current directory (for debugging)
+        run: ls -la
 
-    - name: Grant execution permissions for gradlew
-      run: chmod +x ./gradlew  # Ensure gradlew is executable
+      - name: Grant execution permissions for gradlew
+        run: chmod +x ./gradlew  # Ensure gradlew is executable
 
-    - name: Build the app and force the MSI task to run
-      run: ./gradlew packageDeb --rerun-tasks --warning-mode all
+      - name: Build the app and force the MSI task to run
+        run: ./gradlew packageDeb --rerun-tasks --warning-mode all
 
-    - name: List output directories (for debugging)
-      run: ls -R build  # Verify that MSI files are created in expected directory
+      - name: List output directories (for debugging)
+        run: ls -R build  # Verify that MSI files are created in expected directory
 
-    - name: Upload .msi artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: secvault-msi
-        path: build/compose/binaries/main/deb/*.deb  # Ensure this matches the actual path after build
-        if-no-files-found: warn
+      - name: Upload .deb artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: secvault-deb
+          path: build/compose/binaries/main/deb/*.deb  # Ensure this matches the actual path after build
+          if-no-files-found: warn
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download .deb artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: secvault-deb
+          path: ./build/compose/binaries/main/deb/
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+
+      - name: Upload .deb to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/compose/binaries/main/deb/*.deb
+          asset_name: secvault.deb
+          asset_content_type: application/octet-stream
