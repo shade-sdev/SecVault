@@ -43,7 +43,6 @@ jobs:
       - name: Compress artifact
         run: tar -czf release.tar.gz -C build/compose/binaries/main/deb .
 
-      # Step 7: Create a release and upload the artifact
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
