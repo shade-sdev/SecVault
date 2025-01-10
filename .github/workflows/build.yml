@@ -2,8 +2,8 @@ name: Build and Release SecVault
 
 on:
   push:
-    tags:
-      - master
+    branches:
+      - master  # Trigger only on pushes to the master branch
 
 jobs:
   build_and_release:
@@ -43,13 +43,14 @@ jobs:
       - name: Compress artifact
         run: tar -czf release.tar.gz -C build/compose/binaries/main/deb .
 
+      # Step 7: Create a release and upload the artifact
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: "release.tar.gz"
-          token: ${{ secrets.GITHUB_TOKEN }} # GitHub token is automatically provided for workflows
-          tag: ${{ github.ref_name }} # Use the tag name that triggered the workflow
-          name: Release ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token is automatically provided for workflows
+          tag: ${{ github.run_id }}  # Use the unique run ID as the tag for the release
+          name: Release Build ${{ github.run_id }}
           body: |
             This release contains the latest `.deb` package for SecVault.
             - Built using JetBrains Runtime
