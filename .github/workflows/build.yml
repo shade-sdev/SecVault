@@ -2,18 +2,21 @@ name: Build and Release SecVault
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - '*' # Trigger on any tag push
 
 jobs:
-  build:
+  build_and_release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Install JetBrains Runtime (JBR)
+      # Step 2: Download and set up JetBrains Runtime (JBR)
       - name: Download JetBrains Runtime
         run: |
           JBR_URL="https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-17.0.10-linux-x64-b1207.1.tar.gz"
@@ -21,76 +24,34 @@ jobs:
           mkdir jbr
           tar -xzf jbr.tar.gz -C jbr --strip-components=1
 
-      # Set the JAVA_HOME to point to JetBrains Runtime
       - name: Set up JetBrains Runtime
         run: echo "JAVA_HOME=${{ github.workspace }}/jbr" >> $GITHUB_ENV
 
-      - name: Display current directory (for debugging)
-        run: pwd
-
-      - name: List files in current directory (for debugging)
-        run: ls -la
-
+      # Step 3: Grant execution permissions for Gradle wrapper
       - name: Grant execution permissions for gradlew
-        run: chmod +x ./gradlew  # Ensure gradlew is executable
+        run: chmod +x ./gradlew
 
-      - name: Build the app and force the MSI task to run
+      # Step 4: Build the .deb package
+      - name: Build the app and force the DEB task to run
         run: ./gradlew packageDeb --rerun-tasks --warning-mode all
 
-      - name: List output directories (for debugging)
-        run: ls -R build  # Verify that MSI files are created in expected directory
+      # Step 5: Verify output and debug (optional)
+      - name: List output directories
+        run: ls -R build  # Confirm the .deb file location
 
-      - name: Upload .deb artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: secvault-deb
-          path: build/compose/binaries/main/deb/*.deb  # Ensure this matches the actual path after build
-          if-no-files-found: warn
+      # Step 6: Compress the artifact for release
+      - name: Compress artifact
+        run: tar -czf release.tar.gz -C build/compose/binaries/main/deb .
 
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Download .deb artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: secvault-deb
-          path: ./build/compose/binaries/main/deb/
-
+      # Step 7: Create a release and upload the artifact
       - name: Create GitHub Release
-        id: create_release
-        uses: actions/github-script@v6
+        uses: ncipollo/release-action@v1
         with:
-          script: |
-            const { data: release } = await github.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: `v${{ github.run_number }}`,
-              name: `Release ${{ github.run_number }}`,
-              draft: false,
-              prerelease: false,
-            });
-            core.setOutput('upload_url', release.upload_url);
-
-      - name: Upload .deb to Release
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const fs = require('fs');
-            const path = './build/compose/binaries/main/deb/secvault.deb';
-            const stat = fs.statSync(path);
-            const { data: asset } = await github.repos.uploadReleaseAsset({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: ${steps.create_release.outputs.id},
-              name: 'secvault.deb',
-              data: fs.readFileSync(path),
-              headers: {
-                'content-type': 'application/octet-stream',
-                'content-length': stat.size
-              }
-            });
+          artifacts: "release.tar.gz"
+          token: ${{ secrets.GITHUB_TOKEN }} # GitHub token is automatically provided for workflows
+          tag: ${{ github.ref_name }} # Use the tag name that triggered the workflow
+          name: Release ${{ github.ref_name }}
+          body: |
+            This release contains the latest `.deb` package for SecVault.
+            - Built using JetBrains Runtime
+            - Compatible with Linux
