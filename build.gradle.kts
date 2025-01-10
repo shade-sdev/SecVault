@@ -84,11 +84,3 @@ compose.desktop {
         }
     }
 }
-
-allprojects {
-    gradle.projectsEvaluated {
-        tasks.withType<JavaCompile> {
-            options.compilerArgs.add("-Xlint:-deprecation")
-        }
-    }
-}

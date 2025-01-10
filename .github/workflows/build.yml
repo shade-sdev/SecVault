@@ -35,7 +35,7 @@ jobs:
       run: chmod +x ./gradlew  # Ensure gradlew is executable
 
     - name: Build the app and force the MSI task to run
-      run: ./gradlew packageMsi --rerun-tasks --warning-mode all
+      run: ./gradlew packageDeb --rerun-tasks --warning-mode all
 
     - name: List output directories (for debugging)
       run: ls -R build  # Verify that MSI files are created in expected directory
@@ -44,5 +44,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: secvault-msi
-        path: build/compose/binaries/main/msi/*.msi  # Ensure this matches the actual path after build
+        path: build/compose/binaries/main/deb/*.deb  # Ensure this matches the actual path after build
         if-no-files-found: warn
