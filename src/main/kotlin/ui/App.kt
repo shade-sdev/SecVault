@@ -10,6 +10,10 @@ import org.koin.java.KoinJavaComponent.getKoin
 import ui.theme.PasswordColors
 import java.lang.invoke.MethodHandles
 
+/**
+ * Main composable function for the application.
+ * It sets up the application state, logger, and the theme.
+ */
 @Composable
 fun App() {
     val appState = getKoin().get<AppState>()

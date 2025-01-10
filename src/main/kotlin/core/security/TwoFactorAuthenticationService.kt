@@ -20,15 +20,32 @@ import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
+/**
+ * Service for handling two-factor authentication (2FA) operations.
+ *
+ * @param config The configuration object containing JWT settings.
+ */
 class TwoFactorAuthenticationService(config: Config) {
 
     private val jwtConfig: JwtConfig = config.jwt
 
+    /**
+     * Generates a new TOTP secret key.
+     *
+     * @return A new TOTPSecret object.
+     */
     fun generateSecretKey(): TOTPSecret {
         val randomSecretProvider = RandomSecretProvider()
         return randomSecretProvider.generateSecret()
     }
 
+    /**
+     * Verifies the provided TOTP code against the secret key.
+     *
+     * @param secretKey The base32 encoded secret key.
+     * @param code The TOTP code to verify.
+     * @return A Result object containing a boolean indicating success or failure.
+     */
     fun verifySecret(secretKey: String, code: String): Result<Boolean> {
         val totpCode = TOTP(code)
         val totpSecret = TOTPSecret.fromBase32EncodedString(secretKey)
@@ -39,6 +56,13 @@ class TwoFactorAuthenticationService(config: Config) {
             ?: Result.Error("Invalid TOTP secret")
     }
 
+    /**
+     * Generates a QR code image for the provided secret key and email.
+     *
+     * @param secretKey The base32 encoded secret key.
+     * @param email The email address associated with the TOTP account.
+     * @return A Result object containing a BitmapPainter for the QR code image.
+     */
     fun generateQRCodeImage(secretKey: String, email: String): Result<BitmapPainter> {
         val topSecret = TOTPSecret.fromBase32EncodedString(secretKey)
         val otpAuthUri = DefaultTOTPService().generateTOTPUrl(

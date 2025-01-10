@@ -1,6 +1,7 @@
 package repository.common.errors
 
 sealed class DatabaseError {
+
     abstract fun extractMessage(): String
 
     data object UniqueConstraintViolation : DatabaseError() {

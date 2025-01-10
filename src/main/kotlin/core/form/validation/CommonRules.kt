@@ -3,6 +3,9 @@ package core.form.validation
 import core.form.FormField
 import java.util.*
 
+/**
+ * Contains common validation rules for form fields.
+ */
 val emailRule: ValidationRule = ValidationRule(
     condition = { email ->
         email.matches(Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"))

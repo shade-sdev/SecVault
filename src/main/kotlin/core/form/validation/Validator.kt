@@ -1,6 +1,10 @@
 package core.form.validation
 
+/**
+ * Validator class for managing and applying validation rules to input strings.
+ */
 class Validator {
+
     private val rules = mutableListOf<ValidationRule>()
 
     fun addRule(rule: ValidationRule): Validator {

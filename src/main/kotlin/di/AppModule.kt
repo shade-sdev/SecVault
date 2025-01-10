@@ -23,6 +23,9 @@ import repository.user.UserRepository
 import repository.user.impl.UserRepositoryImpl
 import viewmodel.*
 
+/**
+ * Koin module for application-level dependencies.
+ */
 val appModule = module {
 
     single { loadConfigs() } withOptions {
@@ -51,6 +54,9 @@ val appModule = module {
 
 }
 
+/**
+ * Koin module for repository dependencies.
+ */
 val repositoryModule = module {
 
     single<UserRepository> { UserRepositoryImpl(get(), get { parametersOf(UserRepository::class.java) }) }
@@ -61,6 +67,9 @@ val repositoryModule = module {
 
 }
 
+/**
+ * Koin module for ViewModel dependencies.
+ */
 val viewModelModule = module {
 
     factory { LoginScreenModel(get()) }
@@ -75,6 +84,12 @@ val viewModelModule = module {
 
 }
 
+/**
+ * Remembers and provides a logger for the given class.
+ *
+ * @param clazz The class for which the logger is to be provided.
+ * @return The logger for the given class.
+ */
 @Composable
 fun rememberLogger(clazz: Class<*>): Logger {
     return remember {
@@ -83,4 +98,3 @@ fun rememberLogger(clazz: Class<*>): Logger {
         }
     }
 }
-

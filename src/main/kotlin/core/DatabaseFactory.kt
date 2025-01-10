@@ -7,8 +7,17 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.DatabaseConfig
 import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
 
+/**
+ * The `DatabaseFactory` object is responsible for creating and configuring the database connection.
+ */
 object DatabaseFactory {
 
+    /**
+     * Creates and configures a database connection using the provided configuration.
+     *
+     * @param config The configuration object containing database settings.
+     * @return The configured `Database` instance.
+     */
     fun create(config: Config): Database {
         val dbConfig = config.database
 
