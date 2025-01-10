@@ -47,7 +47,10 @@ class PasswordMgntScreenModel(
     fun saveCreditCard(id: UUID?, creditCardDto: CreditCardDto, formType: FormType) {
         saveOrUpdate(
             id = id,
-            dto = creditCardDto,
+            dto = creditCardDto.apply {
+                creditCardDto.cvc = appState.encryptString(creditCardDto.cvc)
+                creditCardDto.pin = appState.encryptString(creditCardDto.pin)
+            },
             formType = formType,
             saveAction = creditCardRepository::save,
             updateAction = creditCardRepository::update,

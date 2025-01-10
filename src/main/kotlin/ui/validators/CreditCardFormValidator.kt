@@ -65,8 +65,8 @@ fun toCreditCardDto(formValidator: FormValidator, user: User, owner: User): Cred
         formValidator.getField(CreditCardFormFieldName.CARD_NAME)?.value?.value!!,
         owner,
         formValidator.getField(CreditCardFormFieldName.CARD_NUMBER)?.value?.value!!,
-        formValidator.getField(CreditCardFormFieldName.CARD_CVC)?.value?.value!!.toInt(),
-        formValidator.getField(CreditCardFormFieldName.CARD_PIN)?.value?.value!!.toInt(),
+        formValidator.getField(CreditCardFormFieldName.CARD_CVC)?.value?.value!!,
+        formValidator.getField(CreditCardFormFieldName.CARD_PIN)?.value?.value!!,
         formValidator.getField(CreditCardFormFieldName.CARD_EXPIRY)?.value?.value!!,
         formValidator.getField(CreditCardFormFieldName.CARD_NOTES)?.value?.value,
     )

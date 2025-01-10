@@ -90,11 +90,19 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
     }
 
     var cvc by remember(selectedCredential) {
-        mutableStateOf(selectedCredential.creditCard?.cvc ?: "")
+        mutableStateOf(
+            selectedCredential.creditCard?.cvc?.let {
+                screenModel.decryptPassword(it)
+            } ?: ""
+        )
     }
 
     var pin by remember(selectedCredential) {
-        mutableStateOf(selectedCredential.creditCard?.pin ?: "")
+        mutableStateOf(
+            selectedCredential.creditCard?.pin?.let {
+                screenModel.decryptPassword(it)
+            } ?: ""
+        )
     }
 
     var expiryDate by remember(selectedCredential) {
@@ -138,7 +146,8 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
                 field = cvc.toString(),
                 onFieldChange = { cvc = it },
                 label = "CVC",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                isPassword = true
             )
         }
 
@@ -147,7 +156,8 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
                 field = pin.toString(),
                 onFieldChange = { pin = it },
                 label = "Pin",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                isPassword = true
             )
         }
 
