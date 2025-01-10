@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -35,7 +35,7 @@ jobs:
       run: chmod +x ./gradlew  # Ensure gradlew is executable
 
     - name: Build the app and force the MSI task to run
-      run: ./gradlew packageMsi --rerun-tasks
+      run: ./gradlew packageMsi --rerun-tasks --warning-mode all
 
     - name: List output directories (for debugging)
       run: ls -R build  # Verify that MSI files are created in expected directory
