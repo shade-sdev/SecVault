@@ -12,13 +12,15 @@ jobs:
       contents: write
 
     steps:
-      # Step 1: Checkout repository
+      # Step 1: Checkout code
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Install Windows cross-compilation toolchain (Mingw-w64)
-      - name: Install Mingw-w64
-        run: sudo apt-get update && sudo apt-get install -y mingw-w64
+      # Step 2: Install Mingw-w64 and dependencies
+      - name: Install Windows toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mingw-w64 binutils-mingw-w64
 
       # Step 3: Download JetBrains Runtime (JBR)
       - name: Download JetBrains Runtime
@@ -28,43 +30,32 @@ jobs:
           mkdir jbr
           tar -xzf jbr.tar.gz -C jbr --strip-components=1
 
-      # Step 4: Set up Java environment
-      - name: Set up JetBrains Runtime
+      # Step 4: Set Java environment
+      - name: Set up Java
         run: echo "JAVA_HOME=${{ github.workspace }}/jbr" >> $GITHUB_ENV
 
       # Step 5: Grant Gradle permissions
-      - name: Grant execution permissions for gradlew
+      - name: Grant gradlew permissions
         run: chmod +x ./gradlew
 
-      # Step 6: Build BOTH Linux (.deb) and Windows (.exe/msi)
-      - name: Build Linux and Windows packages
+      # Step 6: Build with WiX and debug logging
+      - name: Build Windows MSI
         run: |
-          # Build Linux .deb package
-          ./gradlew packageDeb --rerun-tasks
-          # Build Windows package (adjust task name based on your Gradle config)
-          ./gradlew packageMsi --rerun-tasks  # Or packageExe/packageWin
+          # Force include WiX and enable debug logging
+          ./gradlew packageMsi \
+            -Pcompose.desktop.experimental.include_wix=true \
+            --rerun-tasks \
+            --info
 
-      # Step 7: List output files (for debugging)
-      - name: List build artifacts
+      # Step 7: Verify artifacts
+      - name: List build outputs
         run: ls -R build/compose/binaries
 
-      # Step 8: Compress artifacts for release
-      - name: Compress artifacts
-        run: |
-          # Include both Linux (.deb) and Windows (.msi) artifacts
-          tar -czf release.tar.gz \
-            -C build/compose/binaries/main/deb . \
-            -C ../../msi .  # Adjust path if using "exe" instead of "msi"
-
-      # Step 9: Create GitHub release
+      # Step 8: Create release
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "release.tar.gz"
+          artifacts: "build/compose/binaries/main/msi/*.msi"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.run_id }}
-          name: Release Build ${{ github.run_id }}
-          body: |
-            Multiplatform release for SecVault.
-            - Linux: `.deb` package
-            - Windows: `.msi` installer
+          name: Release ${{ github.run_id }}
