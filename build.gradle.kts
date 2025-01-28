@@ -81,6 +81,10 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "SecVault"
             packageVersion = "1.0.0"
+            windows {
+                menuGroup = "SecVault"
+                upgradeUuid = "f9ccedd2-ad1d-4e25-b0ab-830c83259222"
+            }
         }
     }
 }
