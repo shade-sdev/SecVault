@@ -3,7 +3,7 @@ name: Build and Release SecVault
 on:
   push:
     branches:
-      - master  # Trigger only on pushes to the master branch
+      - master
 
 jobs:
   build_and_release:
@@ -12,11 +12,15 @@ jobs:
       contents: write
 
     steps:
-      # Step 1: Checkout the repository
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Download and set up JetBrains Runtime (JBR)
+      # Step 2: Install Windows cross-compilation toolchain (Mingw-w64)
+      - name: Install Mingw-w64
+        run: sudo apt-get update && sudo apt-get install -y mingw-w64
+
+      # Step 3: Download JetBrains Runtime (JBR)
       - name: Download JetBrains Runtime
         run: |
           JBR_URL="https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-17.0.10-linux-x64-b1207.1.tar.gz"
@@ -24,34 +28,43 @@ jobs:
           mkdir jbr
           tar -xzf jbr.tar.gz -C jbr --strip-components=1
 
+      # Step 4: Set up Java environment
       - name: Set up JetBrains Runtime
         run: echo "JAVA_HOME=${{ github.workspace }}/jbr" >> $GITHUB_ENV
 
-      # Step 3: Grant execution permissions for Gradle wrapper
+      # Step 5: Grant Gradle permissions
       - name: Grant execution permissions for gradlew
         run: chmod +x ./gradlew
 
-      # Step 4: Build the .deb package
-      - name: Build the app and force the DEB task to run
-        run: ./gradlew packageDeb --rerun-tasks --warning-mode all
+      # Step 6: Build BOTH Linux (.deb) and Windows (.exe/msi)
+      - name: Build Linux and Windows packages
+        run: |
+          # Build Linux .deb package
+          ./gradlew packageDeb --rerun-tasks
+          # Build Windows package (adjust task name based on your Gradle config)
+          ./gradlew packageMsi --rerun-tasks  # Or packageExe/packageWin
 
-      # Step 5: Verify output and debug (optional)
-      - name: List output directories
-        run: ls -R build  # Confirm the .deb file location
+      # Step 7: List output files (for debugging)
+      - name: List build artifacts
+        run: ls -R build/compose/binaries
 
-      # Step 6: Compress the artifact for release
-      - name: Compress artifact
-        run: tar -czf release.tar.gz -C build/compose/binaries/main/deb .
+      # Step 8: Compress artifacts for release
+      - name: Compress artifacts
+        run: |
+          # Include both Linux (.deb) and Windows (.msi) artifacts
+          tar -czf release.tar.gz \
+            -C build/compose/binaries/main/deb . \
+            -C ../../msi .  # Adjust path if using "exe" instead of "msi"
 
-      # Step 7: Create a release and upload the artifact
+      # Step 9: Create GitHub release
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: "release.tar.gz"
-          token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token is automatically provided for workflows
-          tag: ${{ github.run_id }}  # Use the unique run ID as the tag for the release
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.run_id }}
           name: Release Build ${{ github.run_id }}
           body: |
-            This release contains the latest `.deb` package for SecVault.
-            - Built using JetBrains Runtime
-            - Compatible with Linux
+            Multiplatform release for SecVault.
+            - Linux: `.deb` package
+            - Windows: `.msi` installer
