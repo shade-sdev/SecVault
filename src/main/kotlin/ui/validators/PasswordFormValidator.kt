@@ -87,7 +87,7 @@ fun toPasswordDto(formValidator: FormValidator, user: User): PasswordDto {
         formValidator.getField(PasswordFormFieldName.NAME)?.value?.value!!,
         formValidator.getField(PasswordFormFieldName.WEBSITE_URL)?.value?.value,
         formValidator.getField(PasswordFormFieldName.WEBSITE_ICON_URL)?.value?.value,
-        formValidator.getField(PasswordFormFieldName.PASSWORD_CATEGORY)?.value?.value,
+        formValidator.getField(PasswordFormFieldName.PASSWORD_CATEGORY)?.value?.value?.takeIf { it.isNotEmpty() },
         user
     )
 }

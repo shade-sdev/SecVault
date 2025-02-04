@@ -231,7 +231,7 @@ fun PasswordForm(
                         var selectedItems by remember { mutableStateOf(savedCategories) }
 
                         LaunchedEffect(selectedItems) {
-                            passwordCategory?.value?.value = selectedItems.joinToString(", ") { it.name }
+                            passwordCategory?.value?.value = selectedItems.joinToString(",") { it.name }
                         }
 
                         MultiSelectDropdown(
