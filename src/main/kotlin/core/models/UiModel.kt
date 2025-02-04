@@ -60,3 +60,12 @@ enum class FormType {
     CREATION,
     MODIFIATION
 }
+
+enum class PasswordCategory(val value: String) {
+    SOCIAL_MEDIA("Social Media"),
+    GAMING("Gaming"),
+    E_COMMERCE("E Commerce"),
+    BANKING("Banking"),
+    EDUCATION("Education"),
+    EMAIL("Email"),
+}

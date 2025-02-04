@@ -9,5 +9,6 @@ data class PasswordDto(
     var name: String,
     var website: String?,
     var icon: String?,
+    var passwordCategory: String?,
     var user: User
 )

@@ -85,6 +85,7 @@ class PasswordRepositoryImpl(
                     this.name = password.name.lowercase()
                     this.website = password.website
                     this.websiteIcon = password.icon
+                    this.passwordCategory = password.passwordCategory
                     this.createdBy = password.user.userName
                     this.lastUpdatedBy = password.user.userName
                 }
@@ -107,6 +108,7 @@ class PasswordRepositoryImpl(
                     it.name = password.name.lowercase()
                     it.website = password.website
                     it.websiteIcon = password.icon
+                    it.passwordCategory = password.passwordCategory
                     it.lastUpdatedBy = user
                     it.lastUpdateDateTime = LocalDateTime.now()
                     it.version += 1

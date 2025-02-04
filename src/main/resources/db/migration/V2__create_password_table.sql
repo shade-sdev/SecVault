@@ -11,6 +11,7 @@ CREATE TABLE passwords
     website               TEXT,
     website_icon          TEXT,
     favorite              INTEGER           DEFAULT 0,
+    password_category     TEXT,
     deleted               INTEGER           DEFAULT 0,
     creation_date_time    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by            TEXT,

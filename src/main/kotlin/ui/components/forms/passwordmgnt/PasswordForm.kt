@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.form.validation.FormValidator
 import core.models.FormType
+import core.models.PasswordCategory
 import core.models.dto.PasswordDto
 import ui.components.FormTextField
 import ui.components.MultiSelectDropdown
@@ -44,6 +45,7 @@ fun PasswordForm(
     val name = formValidator.getField(PasswordFormFieldName.NAME)
     val webSiteUrl = formValidator.getField(PasswordFormFieldName.WEBSITE_URL)
     val icon = formValidator.getField(PasswordFormFieldName.WEBSITE_ICON_URL)
+    val passwordCategory = formValidator.getField(PasswordFormFieldName.PASSWORD_CATEGORY)
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -218,15 +220,24 @@ fun PasswordForm(
 
                 Row(horizontalArrangement = Arrangement.spacedBy(25.dp)) {
                     Column(modifier = Modifier.height(80.dp)) {
-                        val items = listOf("Apple", "Banana", "Cherry", "Date", "Elderberry")
-                        var selectedItems by remember { mutableStateOf(listOf<String>()) }
+                        val items = PasswordCategory.entries.toSet()
+
+                        val savedCategories =
+                            passwordCategory?.value?.value?.split(",")?.map { PasswordCategory.valueOf(it) }?.sorted()
+                                    ?.toSet() ?: emptySet()
+
+                        var selectedItems by remember { mutableStateOf(savedCategories) }
+
+                        LaunchedEffect(selectedItems) {
+                            passwordCategory?.value?.value = selectedItems.joinToString(",") { it.name }
+                        }
 
                         MultiSelectDropdown(
                             items = items,
                             selectedItems = selectedItems,
                             onItemSelect = { selectedItems = selectedItems + it },
                             onItemDeselect = { selectedItems = selectedItems - it },
-                            itemToString = { it },
+                            itemToString = { it.value },
                             modifier = Modifier.height(55.dp).width(400.dp),
                             placeholder = "Select Password Genres",
                             backgroundColor = secondary,

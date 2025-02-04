@@ -48,7 +48,7 @@ fun PasswordInfo(screenModel: SecVaultScreenModel) {
         )
         {
             if (menuItem.value == DefaultMenuItem.PASSWORDS){
-                PasswordMisc()
+                PasswordMisc(screenModel)
             }
         }
     }

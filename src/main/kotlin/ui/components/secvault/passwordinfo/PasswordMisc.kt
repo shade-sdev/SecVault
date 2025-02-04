@@ -3,30 +3,42 @@ package ui.components.secvault.passwordinfo
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import core.models.PasswordCategory
 import ui.theme.Font
 import ui.theme.PasswordColors
+import viewmodel.SecVaultScreenModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun PasswordMisc() {
+fun PasswordMisc(screenModel: SecVaultScreenModel) {
+    val selectedCredential by screenModel.selectedCredential.collectAsState()
+    val selectedMenu by screenModel.selectedMenuItem.collectAsState()
+
+    val categories by remember(selectedCredential, selectedMenu) {
+        mutableStateOf(screenModel.selectedCredential.value.password?.passwordCategory?.split(",")
+                               ?.map(PasswordCategory::valueOf)
+                               ?.map(PasswordCategory::value)
+                               ?.toList() ?: emptyList())
+    }
+
     Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
 
         Row(modifier = Modifier.weight(2f).fillMaxHeight().fillMaxWidth()) {
@@ -44,28 +56,34 @@ fun PasswordMisc() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    LazyRow(
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(3), // Single row, behaving like LazyRow
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items(5) { index ->
+                        items(categories) { item ->
                             Box(
                                 contentAlignment = Alignment.Center,
                                 modifier = Modifier
                                         .background(Color(0xFF2B2B2B), shape = RoundedCornerShape(2.dp))
-                                        .size(width = 56.dp, height = 28.dp)
+                                        .widthIn(min = 56.dp, max = 120.dp)
+                                        .height(28.dp)
                             ) {
                                 Text(
-                                    text = "Item $index",
+                                    text = item,
                                     fontSize = 12.sp,
                                     fontFamily = Font.RobotoRegular,
                                     color = Color(0xFFcd9b5b),
                                     textAlign = TextAlign.Center,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }
                         }
                     }
+
                 }
             }
         }

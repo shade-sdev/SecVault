@@ -17,6 +17,7 @@ object PasswordsTable : AuditableTable(name = "passwords") {
     val website = varchar("website", length = 255).nullable()
     val websiteIcon = varchar("website_icon", length = 255).nullable()
     val favorite = bool("favorite").default(false)
+    val passwordCategory = varchar("password_category", length = 1000).nullable()
     val deleted = bool("deleted").default(false)
 }
 
@@ -31,6 +32,7 @@ class Password(id: EntityID<UUID>) : UUIDEntity(id) {
     var website by PasswordsTable.website
     var websiteIcon by PasswordsTable.websiteIcon
     var favorite by PasswordsTable.favorite
+    var passwordCategory by PasswordsTable.passwordCategory
     var deleted by PasswordsTable.deleted
 
     var creationDateTime by PasswordsTable.creationDateTime

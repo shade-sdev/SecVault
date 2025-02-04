@@ -10,67 +10,71 @@ import repository.user.User
 
 fun passwordFormValidator(password: Password?): FormValidator {
     val validator = FormValidator()
-        .addField(
-            PasswordFormFieldName.USERNAME, FormField(
-                validator = Validator(),
-                value = mutableStateOf(password?.username ?: "")
+            .addField(
+                PasswordFormFieldName.USERNAME, FormField(
+                    validator = Validator(),
+                    value = mutableStateOf(password?.username ?: "")
+                )
             )
-        )
-        .addField(
-            PasswordFormFieldName.EMAIL, FormField(
-                validator = Validator()
-                    .addRule(emailIfNotNullRule),
-                value = mutableStateOf(password?.email ?: "")
+            .addField(
+                PasswordFormFieldName.EMAIL, FormField(
+                    validator = Validator()
+                            .addRule(emailIfNotNullRule),
+                    value = mutableStateOf(password?.email ?: "")
+                )
             )
-        )
-        .addField(
-            PasswordFormFieldName.PASSWORD, FormField(
-                validator = Validator()
-                    .addRule(notNullRule(PasswordFormFieldName.PASSWORD.fieldName))
-                    .addRule(passwordRule),
-                value = mutableStateOf(password?.password ?: "")
+            .addField(
+                PasswordFormFieldName.PASSWORD, FormField(
+                    validator = Validator()
+                            .addRule(notNullRule(PasswordFormFieldName.PASSWORD.fieldName)),
+                    value = mutableStateOf(password?.password ?: "")
+                )
             )
-        )
-        .addField(
-            PasswordFormFieldName.NAME, FormField(
-                validator = Validator()
-                    .addRule(notNullRule(PasswordFormFieldName.NAME.fieldName))
-                    .addRule(lengthRule(PasswordFormFieldName.NAME.fieldName, 1)),
-                value = mutableStateOf(password?.name ?: "")
+            .addField(
+                PasswordFormFieldName.NAME, FormField(
+                    validator = Validator()
+                            .addRule(notNullRule(PasswordFormFieldName.NAME.fieldName))
+                            .addRule(lengthRule(PasswordFormFieldName.NAME.fieldName, 1)),
+                    value = mutableStateOf(password?.name ?: "")
+                )
             )
-        )
-        .addField(
-            PasswordFormFieldName.WEBSITE_URL, FormField(
-                validator = Validator()
-                    .addRule(notNullRule(PasswordFormFieldName.WEBSITE_URL.fieldName))
-                    .addRule(lengthRule(PasswordFormFieldName.WEBSITE_URL.fieldName, 1))
-                    .addRule(urlRule),
-                value = mutableStateOf(password?.website ?: "")
+            .addField(
+                PasswordFormFieldName.WEBSITE_URL, FormField(
+                    validator = Validator()
+                            .addRule(notNullRule(PasswordFormFieldName.WEBSITE_URL.fieldName))
+                            .addRule(lengthRule(PasswordFormFieldName.WEBSITE_URL.fieldName, 1))
+                            .addRule(urlRule),
+                    value = mutableStateOf(password?.website ?: "")
+                )
             )
-        )
-        .addField(
-            PasswordFormFieldName.WEBSITE_ICON_URL, FormField(
-                validator = Validator()
-                    .addRule(urlRule),
-                value = mutableStateOf(password?.websiteIcon ?: "")
+            .addField(
+                PasswordFormFieldName.WEBSITE_ICON_URL, FormField(
+                    validator = Validator()
+                            .addRule(urlRule),
+                    value = mutableStateOf(password?.websiteIcon ?: "")
+                )
+            ).addField(
+                PasswordFormFieldName.PASSWORD_CATEGORY, FormField(
+                    validator = Validator(),
+                    value = mutableStateOf(password?.passwordCategory ?: "")
+                )
             )
-        )
 
     validator.getField(PasswordFormFieldName.USERNAME)?.validator
-        ?.addRule(
-            conditionalRule(
-                { validator.getField(PasswordFormFieldName.EMAIL)!! },
-                listOf(notNullRule(PasswordFormFieldName.USERNAME.fieldName))
+            ?.addRule(
+                conditionalRule(
+                    { validator.getField(PasswordFormFieldName.EMAIL)!! },
+                    listOf(notNullRule(PasswordFormFieldName.USERNAME.fieldName))
+                )
             )
-        )
 
     validator.getField(PasswordFormFieldName.EMAIL)?.validator
-        ?.addRule(
-            conditionalRule(
-                { validator.getField(PasswordFormFieldName.USERNAME)!! },
-                listOf(notNullRule(PasswordFormFieldName.EMAIL.fieldName))
+            ?.addRule(
+                conditionalRule(
+                    { validator.getField(PasswordFormFieldName.USERNAME)!! },
+                    listOf(notNullRule(PasswordFormFieldName.EMAIL.fieldName))
+                )
             )
-        )
 
     return validator.validateAllFields()
 }
@@ -83,6 +87,7 @@ fun toPasswordDto(formValidator: FormValidator, user: User): PasswordDto {
         formValidator.getField(PasswordFormFieldName.NAME)?.value?.value!!,
         formValidator.getField(PasswordFormFieldName.WEBSITE_URL)?.value?.value,
         formValidator.getField(PasswordFormFieldName.WEBSITE_ICON_URL)?.value?.value,
+        formValidator.getField(PasswordFormFieldName.PASSWORD_CATEGORY)?.value?.value,
         user
     )
 }
@@ -93,5 +98,6 @@ enum class PasswordFormFieldName(val fieldName: String) : FormFieldName {
     PASSWORD("Password"),
     NAME("Name"),
     WEBSITE_URL("Website URL"),
-    WEBSITE_ICON_URL("Website Icon URL");
+    WEBSITE_ICON_URL("Website Icon URL"),
+    PASSWORD_CATEGORY("Password Category"),
 }
