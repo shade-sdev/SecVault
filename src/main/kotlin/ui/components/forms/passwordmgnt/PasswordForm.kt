@@ -223,13 +223,15 @@ fun PasswordForm(
                         val items = PasswordCategory.entries.toSet()
 
                         val savedCategories =
-                            passwordCategory?.value?.value?.split(",")?.map { PasswordCategory.valueOf(it) }?.sorted()
-                                    ?.toSet() ?: emptySet()
+                            passwordCategory?.value?.value?.takeIf { it.isNotEmpty() }
+                                    ?.split(",")?.map { PasswordCategory.valueOf(it) }
+                                    ?.sorted()?.toSet() ?: emptySet()
+
 
                         var selectedItems by remember { mutableStateOf(savedCategories) }
 
                         LaunchedEffect(selectedItems) {
-                            passwordCategory?.value?.value = selectedItems.joinToString(",") { it.name }
+                            passwordCategory?.value?.value = selectedItems.joinToString(", ") { it.name }
                         }
 
                         MultiSelectDropdown(

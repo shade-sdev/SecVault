@@ -45,8 +45,8 @@ class CreditCardForm(creditCard: CreditCard?, formType: FormType) : Screen {
     @Composable
     override fun Content() {
 
-        val formValidator = remember { creditCardFormValidator(_creditCard) }
         val screenModel = koinScreenModel<PasswordMgntScreenModel>()
+        val formValidator = remember { creditCardFormValidator(_creditCard, screenModel::decryptPassword) }
         val passwordState by screenModel.passwordState.collectAsState()
         val navigator = LocalNavigator.current
         val toaster = rememberToasterState()

@@ -8,7 +8,7 @@ import core.models.dto.CreditCardDto
 import repository.creditcard.CreditCard
 import repository.user.User
 
-fun creditCardFormValidator(creditCard: CreditCard?): FormValidator {
+fun creditCardFormValidator(creditCard: CreditCard?, decrypt: (String) -> String): FormValidator {
     return FormValidator()
             .addField(
                 CreditCardFormFieldName.CARD_NAME, FormField(
@@ -33,14 +33,14 @@ fun creditCardFormValidator(creditCard: CreditCard?): FormValidator {
                 CreditCardFormFieldName.CARD_PIN, FormField(
                     validator = Validator().addRule(creditCardPinRule)
                             .addRule(notNullRule(CreditCardFormFieldName.CARD_PIN.fieldName)),
-                    value = mutableStateOf(creditCard?.pin?.toString() ?: "")
+                    value = mutableStateOf(creditCard?.pin?.let { decrypt(it) } ?: "")
                 )
             )
             .addField(
                 CreditCardFormFieldName.CARD_CVC, FormField(
                     validator = Validator().addRule(creditCardPinRule)
                             .addRule(notNullRule(CreditCardFormFieldName.CARD_CVC.fieldName)),
-                    value = mutableStateOf(creditCard?.cvc?.toString() ?: "")
+                    value = mutableStateOf(creditCard?.cvc?.let { decrypt(it) } ?: "")
                 )
             )
             .addField(

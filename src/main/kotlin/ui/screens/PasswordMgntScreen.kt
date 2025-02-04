@@ -28,8 +28,8 @@ class PasswordMgntScreen(password: Password?, formType: FormType) : Screen {
     @Composable
     override fun Content() {
 
-        val formValidator = remember { passwordFormValidator(_password) }
         val screenModel = koinScreenModel<PasswordMgntScreenModel>()
+        val formValidator = remember { passwordFormValidator(_password, screenModel::decryptPassword) }
         val passwordState by screenModel.passwordState.collectAsState()
         val navigator = LocalNavigator.current
         val isFormValid by formValidator.isValid

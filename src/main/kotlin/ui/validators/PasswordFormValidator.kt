@@ -8,7 +8,7 @@ import core.models.dto.PasswordDto
 import repository.password.Password
 import repository.user.User
 
-fun passwordFormValidator(password: Password?): FormValidator {
+fun passwordFormValidator(password: Password?, decrypt: (String) -> String): FormValidator {
     val validator = FormValidator()
             .addField(
                 PasswordFormFieldName.USERNAME, FormField(
@@ -27,7 +27,7 @@ fun passwordFormValidator(password: Password?): FormValidator {
                 PasswordFormFieldName.PASSWORD, FormField(
                     validator = Validator()
                             .addRule(notNullRule(PasswordFormFieldName.PASSWORD.fieldName)),
-                    value = mutableStateOf(password?.password ?: "")
+                    value = mutableStateOf(password?.password?.let { decrypt(it) } ?: "")
                 )
             )
             .addField(

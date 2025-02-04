@@ -70,6 +70,14 @@ class PasswordMgntScreenModel(
         _passwordState.value = UiState.Idle
     }
 
+    fun decryptPassword(text: String?): String {
+        return try {
+            appState.decryptPassword(text)
+        } catch (e: Exception) {
+            "FUCK U"
+        }
+    }
+
     private fun <T, R> saveOrUpdate(
         id: UUID?,
         dto: T,
