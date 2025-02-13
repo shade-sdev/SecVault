@@ -70,7 +70,7 @@ fun MasterPasswordDialog(
             )
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Button(
-                    enabled = true,
+                    enabled = masterPassword.isNotBlank(),
                     onClick = {
                         viewModel.setMasterPassword(masterPassword)
                         dialogState.value = false
@@ -85,6 +85,7 @@ fun MasterPasswordDialog(
                 )
                 {
                     Text(
+                        color = Color.White,
                         text = "Apply",
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Normal,
