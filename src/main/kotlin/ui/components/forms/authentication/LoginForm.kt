@@ -19,6 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import core.form.FormField
+import core.form.validation.FormValidator
 import core.models.UiState
 import repository.user.User
 import ui.components.CloseButton
@@ -28,15 +30,15 @@ import ui.components.PasswordTextField
 import ui.theme.Font
 import ui.theme.secondary
 import ui.theme.tertiary
+import ui.validators.LoginFormFieldName
 
 @Composable
 fun LoginForm(
-    username: String,
-    onUsernameChange: (String) -> Unit,
-    password: String,
-    onPasswordChange: (String) -> Unit,
-    masterPassword: String,
-    onMasterPassword: (String) -> Unit,
+    username: FormField?,
+    password: FormField?,
+    masterPassword: FormField?,
+    formValidator: FormValidator,
+    isFormValid: Boolean,
     loginState: UiState<User>,
     onLoginClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
@@ -84,25 +86,76 @@ fun LoginForm(
                     textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                FormTextField(
-                    value = username,
-                    onValueChange = onUsernameChange,
-                    label = "Username",
-                    icon = Icons.Filled.AccountCircle,
-                    modifier = Modifier.height(40.dp).width(360.dp)
-                )
-                PasswordTextField(
-                    value = password,
-                    onValueChange = onPasswordChange,
-                    label = "Password",
-                    modifier = Modifier.height(40.dp).width(360.dp)
-                )
-                PasswordTextField(
-                    value = masterPassword,
-                    onValueChange = onMasterPassword,
-                    label = "Master Password",
-                    modifier = Modifier.height(40.dp).width(360.dp)
-                )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    FormTextField(
+                        value = username?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            username?.value?.value = newValue
+                            formValidator.validateField(LoginFormFieldName.USERNAME)
+                        },
+                        label = "Username",
+                        icon = Icons.Filled.AccountCircle,
+                        modifier = Modifier.height(40.dp).width(360.dp)
+                    )
+                    username?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    PasswordTextField(
+                        value = password?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            password?.value?.value = newValue
+                            formValidator.validateField(LoginFormFieldName.PASSWORD)
+                        },
+                        label = "Password",
+                        modifier = Modifier.height(40.dp).width(360.dp)
+                    )
+                    password?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    PasswordTextField(
+                        value = masterPassword?.value?.value ?: "",
+                        onValueChange = { newValue ->
+                            masterPassword?.value?.value = newValue
+                            formValidator.validateField(LoginFormFieldName.MASTER_PASSWORD)
+                        },
+                        label = "Master Password",
+                        modifier = Modifier.height(40.dp).width(360.dp)
+                    )
+                    masterPassword?.error?.value?.let {
+                        Text(
+                            text = it,
+                            color = Color.Red,
+                            fontFamily = Font.RobotoRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
                 Row(
                     horizontalArrangement = Arrangement.Start,
                     modifier = Modifier.width(360.dp).height(25.dp)
@@ -124,7 +177,7 @@ fun LoginForm(
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Button(
-                        enabled = loginState !is UiState.Loading,
+                        enabled = loginState !is UiState.Loading && isFormValid,
                         onClick = onLoginClick,
                         modifier = Modifier.width(175.dp),
                         colors = ButtonColors(
@@ -136,6 +189,7 @@ fun LoginForm(
                     )
                     {
                         Text(
+                            color = Color.White,
                             text = "Login",
                             fontStyle = FontStyle.Normal,
                             fontWeight = FontWeight.Normal,

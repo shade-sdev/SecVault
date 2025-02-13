@@ -1,6 +1,8 @@
 package ui.components
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import cafe.adriel.voyager.navigator.Navigator
 import core.models.UiState
 import repository.user.User
@@ -10,10 +12,7 @@ import ui.components.forms.authentication.RegisterForm
 import ui.screens.ForgotPasswordScreen
 import ui.screens.LoginScreen
 import ui.screens.RegisterScreen
-import ui.validators.ForgotPasswordFieldName
-import ui.validators.RegisterFieldName
-import ui.validators.forgotPasswordFormValidator
-import ui.validators.registerFormValidator
+import ui.validators.*
 import viewmodel.ForgotPasswordScreenModel
 import viewmodel.LoginScreenModel
 import viewmodel.RegisterScreenModel
@@ -25,19 +24,28 @@ fun LoginScreenContent(
     loginState: UiState<User>
 ) {
 
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var masterPassword by remember { mutableStateOf("") }
+    val formValidator = remember { loginFormValidator() }
+
+    val username = formValidator.getField(LoginFormFieldName.USERNAME)
+    val password = formValidator.getField(LoginFormFieldName.PASSWORD)
+    val masterPassword = formValidator.getField(LoginFormFieldName.MASTER_PASSWORD)
+
+    val isFormValid by formValidator.isValid
 
     LoginForm(
         username = username,
-        onUsernameChange = { username = it },
         password = password,
-        onPasswordChange = { password = it },
         masterPassword = masterPassword,
-        onMasterPassword = { masterPassword = it },
+        isFormValid = isFormValid,
+        formValidator = formValidator,
         loginState = loginState,
-        onLoginClick = { screenModel.login(username, password, masterPassword) },
+        onLoginClick = {
+            screenModel.login(
+                username!!.value.value,
+                password!!.value.value,
+                masterPassword!!.value.value,
+            )
+        },
         onForgotPasswordClick = { navigator?.push(ForgotPasswordScreen()) },
         onRegisterClick = {
             if (navigator?.canPop == true) navigator.pop() else navigator?.push(RegisterScreen())

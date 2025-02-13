@@ -78,12 +78,28 @@ compose.desktop {
         mainClass = "MainKt"
 
         nativeDistributions {
+            includeAllModules = true
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+
             packageName = "SecVault"
             packageVersion = "1.0.0"
+
+            description = "A secure vault application for managing encrypted data."
+            vendor = "Shade Dev"
+            copyright = "© 2024 Shade Dev. All rights reserved."
+
             windows {
                 menuGroup = "SecVault"
-                upgradeUuid = "f9ccedd2-ad1d-4e25-b0ab-830c83259222"
+                shortcut = true
+                perUserInstall = false
+            }
+
+            macOS {
+                dockName = "SecVault"
+            }
+
+            linux {
+                shortcut = true
             }
         }
     }

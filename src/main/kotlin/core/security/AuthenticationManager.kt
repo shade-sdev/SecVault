@@ -33,7 +33,7 @@ class AuthenticationManager(
                     Result.Success(user)
                 }
             } else {
-                result
+                Result.Error("Invalid username or password")
             }
         }
     }
