@@ -3,7 +3,7 @@ name: Build and Release SecVault
 on:
   push:
     branches:
-      - master  # Trigger only on pushes to the master branch
+      - main  # Trigger only on pushes to the master branch
 
 jobs:
   build_and_release:
