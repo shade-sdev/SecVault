@@ -1,5 +1,8 @@
 package core.security
 
+import core.security.MasterPasswordManager.Constants.KEY_ALGORITHM
+import core.security.MasterPasswordManager.Constants.SECRET_KEY_ALGORITHM
+import core.security.MasterPasswordManager.Constants.TRANSFORMATION
 import java.nio.charset.StandardCharsets
 import java.security.SecureRandom
 import java.security.spec.KeySpec
@@ -14,6 +17,12 @@ import javax.crypto.spec.SecretKeySpec
  * Object responsible for managing master passwords, including encryption and decryption.
  */
 object MasterPasswordManager {
+
+    object Constants {
+        const val TRANSFORMATION = "AES/GCM/NoPadding"
+        const val KEY_ALGORITHM = "PBKDF2WithHmacSHA256"
+        const val SECRET_KEY_ALGORITHM = "AES"
+    }
 
     /**
      * Converts a plain string to a secure character array.
@@ -39,9 +48,9 @@ object MasterPasswordManager {
      * @return The encrypted string, encoded in Base64.
      */
     fun encryptString(plainText: String, key: ByteArray): String {
-        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        val cipher = Cipher.getInstance(TRANSFORMATION)
         val iv = ByteArray(12).apply { SecureRandom().nextBytes(this) }
-        cipher.init(Cipher.ENCRYPT_MODE, SecretKeySpec(key, "AES"), GCMParameterSpec(128, iv))
+        cipher.init(Cipher.ENCRYPT_MODE, SecretKeySpec(key, SECRET_KEY_ALGORITHM), GCMParameterSpec(128, iv))
         val encrypted = cipher.doFinal(plainText.toByteArray(StandardCharsets.UTF_8))
         return Base64.getEncoder().encodeToString(iv + encrypted)
     }
@@ -57,8 +66,8 @@ object MasterPasswordManager {
         val combined = Base64.getDecoder().decode(encryptedText)
         val iv = combined.copyOf(12)
         val encrypted = combined.copyOfRange(12, combined.size)
-        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
-        cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(key, "AES"), GCMParameterSpec(128, iv))
+        val cipher = Cipher.getInstance(TRANSFORMATION)
+        cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(key, SECRET_KEY_ALGORITHM), GCMParameterSpec(128, iv))
         return String(cipher.doFinal(encrypted), StandardCharsets.UTF_8)
     }
 
@@ -71,7 +80,7 @@ object MasterPasswordManager {
     fun getKey(secretKey: String): ByteArray {
         val salt = secretKey.toByteArray(StandardCharsets.UTF_8)
         val spec: KeySpec = PBEKeySpec(secretKey.toCharArray(), salt, 65536, 256)
-        return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(spec).encoded
+        return SecretKeyFactory.getInstance(KEY_ALGORITHM).generateSecret(spec).encoded
     }
 
 }
