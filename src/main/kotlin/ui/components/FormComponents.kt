@@ -49,8 +49,8 @@ fun FormTextField(
             onValueChange = onValueChange,
             interactionSource = interactionSource,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 14.dp, bottom = 3.dp),
+                    .fillMaxSize()
+                    .padding(start = 14.dp, bottom = 3.dp),
             textStyle = TextStyle(
                 fontFamily = Font.RussoOne,
                 color = Color.White,
@@ -119,8 +119,8 @@ fun FormTextArea(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 14.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 14.dp)
         ) {
             if (label.isNotEmpty()) {
                 Text(
@@ -137,8 +137,8 @@ fun FormTextArea(
                 onValueChange = onValueChange,
                 interactionSource = interactionSource,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
                 textStyle = TextStyle(
                     fontFamily = Font.RussoOne,
                     color = Color.White,
@@ -174,8 +174,8 @@ fun <T> FormDropdown(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .clickable { expanded = true }
+                    .fillMaxSize()
+                    .clickable { expanded = true }
         ) {
             TextFieldDefaults.DecorationBox(
                 value = selectedItem?.displayText ?: "",
@@ -183,8 +183,8 @@ fun <T> FormDropdown(
                     Text(
                         text = selectedItem?.displayText ?: "",
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 14.dp, bottom = 3.dp),
+                                .fillMaxWidth()
+                                .padding(start = 14.dp, bottom = 3.dp),
                         style = TextStyle(
                             fontFamily = Font.RussoOne,
                             color = Color.White,
@@ -232,8 +232,8 @@ fun <T> FormDropdown(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
                 modifier = Modifier
-                    .background(secondary)
-                    .width(IntrinsicSize.Min)
+                        .background(secondary)
+                        .width(IntrinsicSize.Min)
             ) {
                 items.forEach { item ->
                     DropdownMenuItem(
@@ -250,11 +250,11 @@ fun <T> FormDropdown(
                             expanded = false
                         },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                if (item.id == selectedItem?.id) Color.White.copy(alpha = 0.1f)
-                                else Color.Transparent
-                            )
+                                .fillMaxWidth()
+                                .background(
+                                    if (item.id == selectedItem?.id) Color.White.copy(alpha = 0.1f)
+                                    else Color.Transparent
+                                )
                     )
                 }
             }
@@ -284,8 +284,8 @@ fun PasswordTextField(
             onValueChange = onValueChange,
             interactionSource = interactionSource,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 14.dp, bottom = 3.dp),
+                    .fillMaxSize()
+                    .padding(start = 14.dp, bottom = 3.dp),
             textStyle = TextStyle(
                 fontFamily = Font.RussoOne,
                 color = Color.White,
@@ -312,7 +312,7 @@ fun PasswordTextField(
                         checked = passwordVisible,
                         onCheckedChange = { passwordVisible = it },
                         modifier = Modifier.hoverable(interactionSource)
-                            .pointerHoverIcon(PointerIcon.Hand)
+                                .pointerHoverIcon(PointerIcon.Hand)
                     )
                     {
                         Icon(
@@ -415,6 +415,7 @@ fun UnderLineTextFiled(
     modifier: Modifier = Modifier,
     label: String,
     field: String,
+    onIconClick: () -> Unit = { },
     onFieldChange: (String) -> Unit,
     isPassword: Boolean = false,
     singleLine: Boolean = true
@@ -468,7 +469,7 @@ fun UnderLineTextFiled(
                                     else Icons.Default.Visibility,
                                     contentDescription = "",
                                     modifier = Modifier.size(width = 15.dp, height = 15.dp)
-                                        .pointerHoverIcon(PointerIcon.Default),
+                                            .pointerHoverIcon(PointerIcon.Default),
                                     tint = Color.Gray
                                 )
                             }
@@ -477,14 +478,14 @@ fun UnderLineTextFiled(
                     Column {
                         IconButton(
                             interactionSource = interactionSource,
-                            onClick = {}
+                            onClick = onIconClick
                         ) {
                             Icon(
                                 imageVector = Icons.Default.ContentCopy,
                                 contentDescription = "",
                                 tint = Color.Gray,
                                 modifier = Modifier.size(width = 15.dp, height = 15.dp)
-                                    .pointerHoverIcon(PointerIcon.Default)
+                                        .pointerHoverIcon(PointerIcon.Default)
                             )
                         }
                     }

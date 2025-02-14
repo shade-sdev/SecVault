@@ -5,13 +5,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import ui.components.UnderLineTextFiled
 import viewmodel.SecVaultScreenModel
 
 @Composable
 fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
     val selectedCredential by screenModel.selectedCredential.collectAsState()
-
+    val clipboardManager: ClipboardManager = LocalClipboardManager.current
+    
     var userName by remember(selectedCredential) {
         mutableStateOf(selectedCredential.password?.username ?: "")
     }
@@ -38,7 +42,8 @@ fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
                 field = userName,
                 onFieldChange = { userName = it },
                 label = "Username",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onIconClick = { clipboardManager.setText(AnnotatedString(userName)) }
             )
         }
 
@@ -48,7 +53,8 @@ fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
                 onFieldChange = { password = it },
                 label = "Password",
                 modifier = Modifier.fillMaxWidth(),
-                isPassword = true
+                isPassword = true,
+                onIconClick = { clipboardManager.setText(AnnotatedString(password)) }
             )
         }
 
@@ -57,7 +63,8 @@ fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
                 field = email,
                 onFieldChange = { email = it },
                 label = "Email",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onIconClick = { clipboardManager.setText(AnnotatedString(email)) }
             )
         }
 
@@ -66,7 +73,8 @@ fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
                 field = website,
                 onFieldChange = { website = it },
                 label = "Website",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onIconClick = { clipboardManager.setText(AnnotatedString(website)) }
             )
         }
 
@@ -76,6 +84,7 @@ fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
 @Composable
 fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
     val selectedCredential by screenModel.selectedCredential.collectAsState()
+    val clipboardManager: ClipboardManager = LocalClipboardManager.current
 
     var bankName by remember(selectedCredential) {
         mutableStateOf(selectedCredential.creditCard?.name ?: "")
@@ -119,7 +128,8 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
                 field = bankName,
                 onFieldChange = { bankName = it },
                 label = "Bank Name",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onIconClick = { clipboardManager.setText(AnnotatedString(bankName)) }
             )
         }
 
@@ -128,7 +138,8 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
                 field = cardOwner,
                 onFieldChange = { cardOwner = it },
                 label = "Card Owner",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onIconClick = { clipboardManager.setText(AnnotatedString(cardOwner)) }
             )
         }
 
@@ -137,7 +148,8 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
                 field = cardNumber,
                 onFieldChange = { cardNumber = it },
                 label = "Card Number",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onIconClick = { clipboardManager.setText(AnnotatedString(cardNumber)) }
             )
         }
 
@@ -147,7 +159,8 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
                 onFieldChange = { cvc = it },
                 label = "CVC",
                 modifier = Modifier.fillMaxWidth(),
-                isPassword = true
+                isPassword = true,
+                onIconClick = { clipboardManager.setText(AnnotatedString(cvc)) }
             )
         }
 
@@ -157,7 +170,8 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
                 onFieldChange = { pin = it },
                 label = "Pin",
                 modifier = Modifier.fillMaxWidth(),
-                isPassword = true
+                isPassword = true,
+                onIconClick = { clipboardManager.setText(AnnotatedString(pin)) }
             )
         }
 
@@ -166,7 +180,8 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
                 field = expiryDate,
                 onFieldChange = { expiryDate = it },
                 label = "Expiry Date",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onIconClick = { clipboardManager.setText(AnnotatedString(expiryDate)) }
             )
         }
 
@@ -176,7 +191,8 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
                 onFieldChange = { notes = it },
                 label = "Notes",
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = false
+                singleLine = false,
+                onIconClick = { clipboardManager.setText(AnnotatedString(notes)) }
             )
         }
     }
