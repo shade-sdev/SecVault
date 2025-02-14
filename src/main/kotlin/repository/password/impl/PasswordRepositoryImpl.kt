@@ -8,10 +8,12 @@ import kotlinx.coroutines.delay
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.Logger
 import repository.common.errors.DatabaseError
+import repository.creditcard.CreditCardTable
 import repository.password.Password
 import repository.password.PasswordRepository
 import repository.password.PasswordsTable
@@ -137,6 +139,37 @@ class PasswordRepositoryImpl(
         } catch (e: Exception) {
             logger.error(e.message, e)
             Result.Error(DatabaseError.fromException(e).extractMessage())
+        }
+    }
+
+    override suspend fun findFirstEncryptedField(userId: UUID, sampleText: String): Result<String> {
+        try {
+            return transaction {
+                val passwordQuery = PasswordsTable
+                    .select(column = PasswordsTable.password)
+                    .where { PasswordsTable.password.isNotNull().and(PasswordsTable.user.eq(userId)) }
+                    .limit(1)
+                    .firstOrNull()
+
+                passwordQuery?.get(PasswordsTable.password) ?: run {
+                    val cvcQuery = CreditCardTable
+                        .select(column = CreditCardTable.cvc)
+                        .where { CreditCardTable.cvc.isNotNull().and(CreditCardTable.user.eq(userId)) }
+                        .limit(1)
+                        .firstOrNull()
+
+                    cvcQuery?.get(CreditCardTable.cvc)
+                }
+            }.let {
+                if (it == null) {
+                    return Result.Success(sampleText)
+                }
+
+                return Result.Success(it)
+            }
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+            return Result.Error(DatabaseError.fromException(e).extractMessage())
         }
     }
 

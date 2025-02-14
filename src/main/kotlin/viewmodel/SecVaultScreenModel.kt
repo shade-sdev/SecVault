@@ -5,7 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import core.AppState
 import core.models.*
 import core.models.criteria.CredentialSearchCriteria
-import core.security.MasterPasswordManager
+import core.security.AuthenticationManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -26,6 +26,7 @@ import java.util.*
 class SecVaultScreenModel(
     private val passwordRepository: PasswordRepository,
     private val creditCardRepository: CreditCardRepository,
+    private val authenticationManager: AuthenticationManager,
     private val appState: AppState,
     private val logger: Logger,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -145,8 +146,8 @@ class SecVaultScreenModel(
         }
     }
 
-    fun setMasterPassword(masterPassword: String) {
-        appState.initializeMasterPassword(MasterPasswordManager.convertToSecureString(masterPassword))
+    suspend fun setMasterPassword(masterPassword: String): Result<Boolean> {
+        return authenticationManager.setMasterPassword(masterPassword)
     }
 
     fun isMasterPasswordPresent(): Boolean {

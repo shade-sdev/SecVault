@@ -5,15 +5,19 @@ import core.AppState
 import core.models.Result
 import kotlinx.coroutines.delay
 import org.mindrot.jbcrypt.BCrypt
+import org.slf4j.Logger
+import repository.password.PasswordRepository
 import repository.user.User
 import repository.user.UserRepository
 import repository.user.projection.UserSummary
 
 class AuthenticationManager(
     private val userRepository: UserRepository,
+    private val passwordRepository: PasswordRepository,
     private val jwtService: JwtService,
     private val twoFactorAuthenticationService: TwoFactorAuthenticationService,
-    private val appState: AppState
+    private val appState: AppState,
+    private val logger: Logger
 ) {
 
     init {
@@ -21,19 +25,41 @@ class AuthenticationManager(
         loadUserFromToken()
     }
 
-    suspend fun login(username: String, password: String, masterPassword: String): Result<User> {
+    suspend fun login(username: String, password: String): Result<User> {
         delay(200)
         return userRepository.findByUsername(username).let { result ->
             if (result is Result.Success && BCrypt.checkpw(password, result.data.password)) {
                 result.data.also {
                     appState.updateCurrentUser(it)
-                    appState.initializeMasterPassword(masterPassword.toCharArray())
                     TokenManager.saveToken(jwtService.generateToken(it))
                 }.let { user ->
                     Result.Success(user)
                 }
             } else {
                 Result.Error("Invalid username or password")
+            }
+        }
+    }
+
+    suspend fun setMasterPassword(masterPassword: String): Result<Boolean> {
+        appState.initializeMasterPassword(MasterPasswordManager.convertToSecureString(masterPassword))
+
+        when (val result = passwordRepository.findFirstEncryptedField(
+            appState.getAuthenticatedUser?.id?.value!!,
+            appState.encryptString("sample")
+        )) {
+            is Result.Success -> {
+                try {
+                    appState.decryptPassword(result.data)
+                    return Result.Success(true)
+                } catch (e: Exception) {
+                    logger.error(e.message, e)
+                    return Result.Error("Invalid Master Password")
+                }
+            }
+
+            is Result.Error -> {
+                return Result.Error("Invalid Master Password")
             }
         }
     }
@@ -79,10 +105,10 @@ class AuthenticationManager(
     }
 
     fun openQRCode(secretKey: String, email: String): Result<BitmapPainter> {
-       return twoFactorAuthenticationService.generateQRCodeImage(secretKey, email)
+        return twoFactorAuthenticationService.generateQRCodeImage(secretKey, email)
     }
 
-    private fun logout() {
+    fun logout() {
         appState.clearCurrentUser()
         TokenManager.clearToken()
     }

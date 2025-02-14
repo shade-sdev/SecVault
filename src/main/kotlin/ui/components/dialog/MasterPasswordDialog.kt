@@ -17,19 +17,35 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.model.screenModelScope
+import com.dokar.sonner.ToastType
+import com.dokar.sonner.Toaster
+import com.dokar.sonner.rememberToasterState
+import core.models.Result
+import kotlinx.coroutines.launch
 import ui.components.PasswordTextField
 import ui.components.SecVaultDialog
 import ui.theme.Font
 import ui.theme.secondary
 import ui.theme.tertiary
 import viewmodel.SecVaultScreenModel
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun MasterPasswordDialog(
     viewModel: SecVaultScreenModel,
     dialogState: MutableState<Boolean>
 ) {
+    val toaster = rememberToasterState()
     var masterPassword by remember { mutableStateOf("") }
+
+    Toaster(
+        state = toaster,
+        alignment = Alignment.TopEnd,
+        darkTheme = true,
+        showCloseButton = true,
+        richColors = true
+    )
 
     SecVaultDialog(
         onDismissRequest = { dialogState.value = false },
@@ -72,8 +88,21 @@ fun MasterPasswordDialog(
                 Button(
                     enabled = masterPassword.isNotBlank(),
                     onClick = {
-                        viewModel.setMasterPassword(masterPassword)
-                        dialogState.value = false
+                        viewModel.screenModelScope.launch {
+                            when (val result = viewModel.setMasterPassword(masterPassword)) {
+                                is Result.Success -> {
+                                    dialogState.value = false
+                                }
+
+                                is Result.Error -> {
+                                    toaster.show(
+                                        message = result.message,
+                                        type = ToastType.Error,
+                                        duration = 5.seconds
+                                    )
+                                }
+                            }
+                        }
                     },
                     modifier = Modifier.width(175.dp),
                     colors = ButtonColors(

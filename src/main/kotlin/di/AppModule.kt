@@ -44,7 +44,7 @@ val appModule = module {
 
     single { TwoFactorAuthenticationService(get()) }
 
-    single { AuthenticationManager(get(), get(), get(), get()) } withOptions {
+    single { AuthenticationManager(get(), get(), get(), get(), get(), get { parametersOf(AuthenticationManager::class.java) }) } withOptions {
         createdAtStart()
     }
 
@@ -78,7 +78,7 @@ val viewModelModule = module {
 
     factory { ForgotPasswordScreenModel(get()) }
 
-    factory { SecVaultScreenModel(get(), get(), get(), get { parametersOf(SecVaultScreenModel::class.java) }) }
+    factory { SecVaultScreenModel(get(), get(), get(), get(), get { parametersOf(SecVaultScreenModel::class.java) }) }
 
     factory { PasswordMgntScreenModel(get(), get(), get(), get()) }
 

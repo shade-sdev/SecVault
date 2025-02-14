@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import core.models.NotificationType
 import kotlinx.coroutines.delay
 import ui.theme.Font
@@ -44,7 +45,7 @@ fun CloseButton() {
     Button(
         onClick = { exitProcess(0) },
         modifier = Modifier.size(30.dp)
-                .hoverable(interactionSource),
+            .hoverable(interactionSource),
         shape = RoundedCornerShape(topEnd = 10.dp),
         colors = ButtonColors(
             containerColor = if (isHovered) Color(0xFFb91919) else secondary,
@@ -104,7 +105,10 @@ fun SecVaultDialog(
     backgroundColor: Color,
     content: @Composable () -> Unit,
 ) {
-    Dialog(onDismissRequest = { onDismissRequest() }) {
+    Dialog(
+        onDismissRequest = { onDismissRequest() },
+        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+    ) {
         Card(
             modifier = modifier,
             shape = RoundedCornerShape(roundedSize),
@@ -124,8 +128,8 @@ fun LoadingScreen(
 ) {
     Box(
         modifier = modifier
-                .fillMaxSize()
-                .background(backgroundColor),
+            .fillMaxSize()
+            .background(backgroundColor),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -178,15 +182,15 @@ fun TopRightNotification(
     if (visible) {
         Box(
             modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
+                .fillMaxSize()
+                .padding(16.dp),
             contentAlignment = Alignment.TopEnd
         ) {
             Surface(
                 modifier = Modifier
-                        .fillMaxHeight(0.12f)
-                        .fillMaxWidth(0.3f)
-                        .padding(18.dp),
+                    .fillMaxHeight(0.12f)
+                    .fillMaxWidth(0.3f)
+                    .padding(18.dp),
                 shape = RoundedCornerShape(8.dp),
                 shadowElevation = 4.dp,
                 color = backgroundColor
@@ -264,17 +268,17 @@ fun ShimmerShape(modifier: Modifier, shape: Shape, radius: Float?) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = modifier.clip(shape)
-                    .drawBehind {
-                        val brush = Brush.linearGradient(
-                            colors = shimmerColors,
-                            start = Offset.Zero,
-                            end = Offset(x = translateAnim.value, y = translateAnim.value)
-                        )
-                        if (shape == CircleShape)
-                            drawCircle(brush = brush, radius = radius!!)
-                        else
-                            drawRect(brush = brush, size = Size(size.width, size.height))
-                    }
+                .drawBehind {
+                    val brush = Brush.linearGradient(
+                        colors = shimmerColors,
+                        start = Offset.Zero,
+                        end = Offset(x = translateAnim.value, y = translateAnim.value)
+                    )
+                    if (shape == CircleShape)
+                        drawCircle(brush = brush, radius = radius!!)
+                    else
+                        drawRect(brush = brush, size = Size(size.width, size.height))
+                }
         )
     }
 }
@@ -310,13 +314,13 @@ fun <T> MultiSelectDropdown(
                 ),
                 shape = RoundedCornerShape(8.dp),
                 value = if (selectedItems.isEmpty()) placeholder else selectedItems.sortedBy(itemToString)
-                        .joinToString(", ") { itemToString(it) },
+                    .joinToString(", ") { itemToString(it) },
                 onValueChange = { },
                 textStyle = TextStyle(color = foregroundColor, fontSize = 12.sp, fontFamily = Font.RussoOne),
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .height(45.dp)
-                        .onSizeChanged { textFieldSize = it.toSize() },
+                    .fillMaxWidth()
+                    .height(45.dp)
+                    .onSizeChanged { textFieldSize = it.toSize() },
                 placeholder = { Text(placeholder, color = Color.White, fontSize = 12.sp) },
                 trailingIcon = {
                     IconButton(onClick = { expanded = !expanded }) {
@@ -334,13 +338,13 @@ fun <T> MultiSelectDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                    .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
-                    .heightIn(max = 250.dp)
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+                .heightIn(max = 250.dp)
         ) {
             Box(
                 modifier = Modifier
-                        .heightIn(max = 250.dp)
-                        .padding(vertical = 4.dp)
+                    .heightIn(max = 250.dp)
+                    .padding(vertical = 4.dp)
             ) {
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState())

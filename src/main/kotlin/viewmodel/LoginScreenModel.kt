@@ -24,11 +24,17 @@ class LoginScreenModel(
     fun login(username: String, password: String, masterPassword: String) {
         screenModelScope.launch(dispatcher) {
             _loginState.value = UiState.Loading
-            when (val result = authenticationManager.login(username, password, masterPassword)) {
+            when (val loginResult = authenticationManager.login(username, password)) {
                 is Result.Success -> {
-                    _loginState.value = UiState.Success(result.data)
+                    val masterPasswordResult = authenticationManager.setMasterPassword(masterPassword)
+                    if (masterPasswordResult is Result.Error) {
+                        authenticationManager.logout()
+                        _loginState.value = UiState.Error(masterPasswordResult.message)
+                        return@launch
+                    }
+                    _loginState.value = UiState.Success(loginResult.data)
                 }
-                is Result.Error -> _loginState.value = UiState.Error(result.message)
+                is Result.Error -> _loginState.value = UiState.Error(loginResult.message)
             }
         }
     }

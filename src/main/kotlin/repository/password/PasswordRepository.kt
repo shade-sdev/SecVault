@@ -18,4 +18,6 @@ interface PasswordRepository {
 
     suspend fun favorite(id: UUID, user: String): Result<Boolean>
 
+    suspend fun findFirstEncryptedField(userId: UUID, sampleText: String): Result<String>
+
 }
