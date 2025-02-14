@@ -23,7 +23,7 @@ sealed class UiState<out T> {
      * @param T The type of data.
      * @property data The data associated with the success state.
      */
-    data class Success<T>(val data: T) : UiState<T>()
+    data class Success<T>(val data: T, val message: String? = "") : UiState<T>()
 
     /**
      * Represents the error state of the UI with an error message.

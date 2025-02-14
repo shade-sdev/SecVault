@@ -17,6 +17,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import repository.creditcard.CreditCardRepository
 import repository.creditcard.impl.CreditCardRepositoryImpl
+import repository.google.GoogleDriveConfig
+import repository.google.GoogleDriveConfigRepository
+import repository.google.impl.GoogleDriveConfigRepositoryImpl
 import repository.password.PasswordRepository
 import repository.password.impl.PasswordRepositoryImpl
 import repository.user.UserRepository
@@ -44,7 +47,15 @@ val appModule = module {
 
     single { TwoFactorAuthenticationService(get()) }
 
-    single { AuthenticationManager(get(), get(), get(), get(), get(), get { parametersOf(AuthenticationManager::class.java) }) } withOptions {
+    single {
+        AuthenticationManager(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get { parametersOf(AuthenticationManager::class.java) })
+    } withOptions {
         createdAtStart()
     }
 
@@ -63,7 +74,17 @@ val repositoryModule = module {
 
     single<PasswordRepository> { PasswordRepositoryImpl(get(), get { parametersOf(PasswordRepository::class.java) }) }
 
-    single<CreditCardRepository> { CreditCardRepositoryImpl(get(), get { parametersOf(CreditCardRepository::class.java) }) }
+    single<CreditCardRepository> {
+        CreditCardRepositoryImpl(
+            get(),
+            get { parametersOf(CreditCardRepository::class.java) })
+    }
+
+    single<GoogleDriveConfigRepository> {
+        GoogleDriveConfigRepositoryImpl(
+            get(),
+            get { parametersOf(GoogleDriveConfig::class.java) })
+    }
 
 }
 
@@ -81,6 +102,8 @@ val viewModelModule = module {
     factory { SecVaultScreenModel(get(), get(), get(), get(), get { parametersOf(SecVaultScreenModel::class.java) }) }
 
     factory { PasswordMgntScreenModel(get(), get(), get(), get()) }
+
+    factory { SettingScreenModel(get()) }
 
 }
 

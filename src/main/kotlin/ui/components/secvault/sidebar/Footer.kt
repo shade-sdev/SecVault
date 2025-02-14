@@ -18,12 +18,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import ui.screens.SettingScreen
 import ui.theme.Font
 
 @Composable
 fun Footer() {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
+    val navigator = LocalNavigator.current
 
     Row(
         horizontalArrangement = Arrangement.Start,
@@ -32,7 +35,7 @@ fun Footer() {
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .hoverable(interactionSource)
-                .clickable(onClick = { println("Settings") }, indication = null, interactionSource = interactionSource)
+                .clickable(onClick = { navigator?.push(SettingScreen()) }, indication = null, interactionSource = interactionSource)
     )
     {
         Row(
