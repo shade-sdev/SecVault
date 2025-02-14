@@ -6,7 +6,7 @@ import java.security.spec.KeySpec
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
@@ -39,9 +39,9 @@ object MasterPasswordManager {
      * @return The encrypted string, encoded in Base64.
      */
     fun encryptString(plainText: String, key: ByteArray): String {
-        val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
-        val iv = ByteArray(cipher.blockSize).apply { SecureRandom().nextBytes(this) }
-        cipher.init(Cipher.ENCRYPT_MODE, SecretKeySpec(key, "AES"), IvParameterSpec(iv))
+        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        val iv = ByteArray(12).apply { SecureRandom().nextBytes(this) }
+        cipher.init(Cipher.ENCRYPT_MODE, SecretKeySpec(key, "AES"), GCMParameterSpec(128, iv))
         val encrypted = cipher.doFinal(plainText.toByteArray(StandardCharsets.UTF_8))
         return Base64.getEncoder().encodeToString(iv + encrypted)
     }
@@ -55,10 +55,10 @@ object MasterPasswordManager {
      */
     fun decryptString(encryptedText: String, key: ByteArray): String {
         val combined = Base64.getDecoder().decode(encryptedText)
-        val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
-        val iv = combined.copyOf(cipher.blockSize)
-        val encrypted = combined.copyOfRange(cipher.blockSize, combined.size)
-        cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(key, "AES"), IvParameterSpec(iv))
+        val iv = combined.copyOf(12)
+        val encrypted = combined.copyOfRange(12, combined.size)
+        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(key, "AES"), GCMParameterSpec(128, iv))
         return String(cipher.doFinal(encrypted), StandardCharsets.UTF_8)
     }
 
@@ -70,7 +70,7 @@ object MasterPasswordManager {
      */
     fun getKey(secretKey: String): ByteArray {
         val salt = secretKey.toByteArray(StandardCharsets.UTF_8)
-        val spec: KeySpec = PBEKeySpec(secretKey.toCharArray(), salt, 10000, 256)
+        val spec: KeySpec = PBEKeySpec(secretKey.toCharArray(), salt, 65536, 256)
         return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(spec).encoded
     }
 
