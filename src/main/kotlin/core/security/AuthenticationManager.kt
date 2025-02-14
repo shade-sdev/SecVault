@@ -60,6 +60,7 @@ class AuthenticationManager(
             }
 
             is Result.Error -> {
+                appState.clearMasterPassword()
                 return Result.Error("Invalid Master Password")
             }
         }
