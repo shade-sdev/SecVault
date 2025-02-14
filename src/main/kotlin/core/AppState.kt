@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
 import core.security.MasterPasswordManager
-import repository.user.User
+import core.security.SecurityContext
 import ui.screens.LoginScreen
 import ui.screens.LoginSplashScreen
 import ui.screens.RegisterScreen
@@ -16,29 +16,14 @@ import ui.screens.RegisterScreen
  */
 class AppState {
 
-    private var currentUser by mutableStateOf<User?>(null)
     private var userExists by mutableStateOf(false)
     private var masterPassword by mutableStateOf<CharArray?>(null)
-
-    /**
-     * Gets the authenticated user.
-     */
-    val getAuthenticatedUser: User?
-        get() = currentUser
 
     /**
      * Gets the username of the current user if they exist, otherwise returns "system".
      */
     val userName: String
-        get() = currentUser?.userName.takeIf { userExists } ?: "system"
-
-    /**
-     * Updates the current user.
-     * @param user The user to set as the current user.
-     */
-    fun updateCurrentUser(user: User?) {
-        currentUser = user
-    }
+        get() = SecurityContext.authenticatedUser?.userName.takeIf { userExists } ?: "system"
 
     /**
      * Sets whether a user exists.
@@ -49,18 +34,11 @@ class AppState {
     }
 
     /**
-     * Clears the current user.
-     */
-    fun clearCurrentUser() {
-        currentUser = null
-    }
-
-    /**
      * Determines the initial screen to display based on user existence and authentication status.
      * @return The initial screen to display.
      */
     fun initialScreen(): Screen = when {
-        userExists && isAuthenticated -> LoginSplashScreen()
+        userExists && SecurityContext.isAuthenticated -> LoginSplashScreen()
         userExists -> LoginScreen()
         else -> RegisterScreen()
     }
@@ -72,14 +50,6 @@ class AppState {
     fun initializeMasterPassword(password: CharArray) {
         clearMasterPassword()
         masterPassword = password.copyOf()
-    }
-
-    /**
-     * Fetches the master password.
-     * @return A copy of the master password.
-     */
-    fun fetchMasterPassword(): CharArray? {
-        return masterPassword?.copyOf()
     }
 
     /**
@@ -131,10 +101,11 @@ class AppState {
     }
 
     /**
-     * Checks if the user is authenticated.
-     * @return True if the user is authenticated, false otherwise.
+     * Fetches the master password.
+     * @return A copy of the master password.
      */
-    private val isAuthenticated: Boolean
-        get() = currentUser != null
+    private fun fetchMasterPassword(): CharArray? {
+        return masterPassword?.copyOf()
+    }
 
 }

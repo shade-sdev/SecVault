@@ -30,7 +30,7 @@ class AuthenticationManager(
         return userRepository.findByUsername(username).let { result ->
             if (result is Result.Success && BCrypt.checkpw(password, result.data.password)) {
                 result.data.also {
-                    appState.updateCurrentUser(it)
+                    SecurityContext.setAuthenticatedUser(it)
                     TokenManager.saveToken(jwtService.generateToken(it))
                 }.let { user ->
                     Result.Success(user)
@@ -45,7 +45,7 @@ class AuthenticationManager(
         appState.initializeMasterPassword(MasterPasswordManager.convertToSecureString(masterPassword))
 
         when (val result = passwordRepository.findFirstEncryptedField(
-            appState.getAuthenticatedUser?.id?.value!!,
+            SecurityContext.authenticatedUser?.id?.value!!,
             appState.encryptString("sample")
         )) {
             is Result.Success -> {
@@ -111,14 +111,14 @@ class AuthenticationManager(
     }
 
     fun logout() {
-        appState.clearCurrentUser()
+        SecurityContext.clearAuthenticatedUser()
         TokenManager.clearToken()
     }
 
     private fun loadUserFromToken() {
         TokenManager.loadToken()?.let { token ->
             jwtService.validateToken(token)?.let { userId ->
-                appState.updateCurrentUser(userRepository.findById(userId))
+                SecurityContext.setAuthenticatedUser(userRepository.findById(userId))
             } ?: run {
                 this.logout()
             }

@@ -143,7 +143,7 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
 
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = cvc.toString(),
+                field = cvc,
                 onFieldChange = { cvc = it },
                 label = "CVC",
                 modifier = Modifier.fillMaxWidth(),
@@ -153,7 +153,7 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
 
         Row(modifier = Modifier.weight(1f)) {
             UnderLineTextFiled(
-                field = pin.toString(),
+                field = pin,
                 onFieldChange = { pin = it },
                 label = "Pin",
                 modifier = Modifier.fillMaxWidth(),

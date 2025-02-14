@@ -14,14 +14,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import core.AppState
-import org.koin.java.KoinJavaComponent.inject
+import core.security.SecurityContext
 import ui.theme.Font
 
 @Composable
 fun Header() {
-    val appState by inject<AppState>(clazz = AppState::class.java)
-
     Column(
         modifier = Modifier
                 .fillMaxWidth()
@@ -81,7 +78,7 @@ fun Header() {
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = appState.getAuthenticatedUser?.userName ?: "User",
+                        text = SecurityContext.authenticatedUser?.userName ?: "User",
                         color = Color.White,
                         fontFamily = Font.RussoOne,
                         fontWeight = FontWeight.Normal,

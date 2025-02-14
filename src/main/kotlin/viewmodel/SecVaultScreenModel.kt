@@ -6,6 +6,7 @@ import core.AppState
 import core.models.*
 import core.models.criteria.CredentialSearchCriteria
 import core.security.AuthenticationManager
+import core.security.SecurityContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -155,7 +156,7 @@ class SecVaultScreenModel(
     }
 
     private suspend fun loadPasswords(sort: CredentialSort) {
-        val criteria = CredentialSearchCriteria(appState.getAuthenticatedUser?.id?.value, sort)
+        val criteria = CredentialSearchCriteria(SecurityContext.authenticatedUser?.id?.value, sort)
         _passwordItems.value = when (val passwords = passwordRepository.findSummaries(criteria)) {
             is Result.Success -> {
                 _secVaultState.value = UiState.Success("Successfully loaded passwords")
@@ -170,7 +171,7 @@ class SecVaultScreenModel(
     }
 
     private suspend fun loadCreditCards(sort: CredentialSort) {
-        val criteria = CredentialSearchCriteria(appState.getAuthenticatedUser?.id?.value, sort)
+        val criteria = CredentialSearchCriteria(SecurityContext.authenticatedUser?.id?.value, sort)
         _creditCardItems.value = when (val creditCards = creditCardRepository.findSummaries(criteria)) {
             is Result.Success -> {
                 _secVaultState.value = UiState.Success("Successfully loaded credit cards")

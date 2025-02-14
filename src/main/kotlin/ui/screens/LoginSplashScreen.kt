@@ -18,9 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import core.AppState
+import core.security.SecurityContext
 import kotlinx.coroutines.delay
-import org.koin.java.KoinJavaComponent.inject
 import ui.theme.Font
 import ui.theme.secondary
 
@@ -29,8 +28,6 @@ class LoginSplashScreen : Screen {
     @Preview
     @Composable
     override fun Content() {
-
-        val appState by inject<AppState>(clazz = AppState::class.java)
 
         val navigator = LocalNavigator.current
         var isVisible by remember { mutableStateOf(false) }
@@ -93,7 +90,7 @@ class LoginSplashScreen : Screen {
                             tint = Color.White
                         )
                         Text(
-                            text = appState.getAuthenticatedUser?.userName ?: "User",
+                            text = SecurityContext.authenticatedUser?.userName ?: "User",
                             fontStyle = FontStyle.Normal,
                             fontWeight = FontWeight.Normal,
                             color = Color.White,

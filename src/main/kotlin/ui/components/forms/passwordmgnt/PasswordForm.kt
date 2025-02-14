@@ -16,6 +16,7 @@ import core.form.validation.FormValidator
 import core.models.FormType
 import core.models.PasswordCategory
 import core.models.dto.PasswordDto
+import core.security.SecurityContext
 import ui.components.FormTextField
 import ui.components.MultiSelectDropdown
 import ui.components.PasswordTextField
@@ -259,7 +260,7 @@ fun PasswordForm(
             horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
         ) {
             Footer(
-                { onSaveClick(toPasswordDto(formValidator, screenModel.getAuthenticatedUser())) },
+                { onSaveClick(toPasswordDto(formValidator, SecurityContext.authenticatedUser!!)) },
                 onCancelClick,
                 isFormValid
             )

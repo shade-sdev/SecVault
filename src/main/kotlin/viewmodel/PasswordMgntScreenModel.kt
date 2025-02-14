@@ -62,10 +62,6 @@ class PasswordMgntScreenModel(
         return userRepository.findAll()
     }
 
-    fun getAuthenticatedUser(): User {
-        return appState.getAuthenticatedUser!!
-    }
-
     fun clearError() {
         _passwordState.value = UiState.Idle
     }

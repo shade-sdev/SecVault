@@ -22,6 +22,7 @@ import core.form.validation.FormValidator
 import core.models.FormType
 import core.models.FormType.CREATION
 import core.models.UiState
+import core.security.SecurityContext
 import kotlinx.coroutines.delay
 import repository.creditcard.CreditCard
 import repository.user.User
@@ -334,8 +335,8 @@ class CreditCardForm(creditCard: CreditCard?, formType: FormType) : Screen {
                             _creditCard?.id?.value,
                             toCreditCardDto(
                                 formValidator,
-                                screenModel.getAuthenticatedUser(),
-                                selectedItem?.id!!
+                                SecurityContext.authenticatedUser!!,
+                            selectedItem?.id!!
                             ),
                             formType
                         )
