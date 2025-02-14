@@ -53,6 +53,7 @@ class AuthenticationManager(
                     appState.decryptPassword(result.data)
                     return Result.Success(true)
                 } catch (e: Exception) {
+                    appState.clearMasterPassword()
                     logger.error(e.message, e)
                     return Result.Error("Invalid Master Password")
                 }
