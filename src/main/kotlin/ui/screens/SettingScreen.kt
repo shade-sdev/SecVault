@@ -21,10 +21,10 @@ class SettingScreen : Screen {
     @Composable
     override fun Content() {
         val screenModel = koinScreenModel<SettingScreenModel>()
-        val settingState by screenModel.settingState.collectAsState()
-        val toasterState = rememberToasterState()
 
+        val settingState by screenModel.settingState.collectAsState()
         val fileDialogState by screenModel.fileDialogState.collectAsState()
+        val toasterState = rememberToasterState()
 
         Toaster(
             state = toasterState,

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import core.AppState
 import core.DatabaseFactory
+import core.external.google.GoogleAuthManager
 import core.loadConfigs
 import core.security.AuthenticationManager
 import core.security.JwtService
@@ -59,6 +60,8 @@ val appModule = module {
         createdAtStart()
     }
 
+    single { GoogleAuthManager(get { parametersOf(GoogleAuthManager::class.java) }) }
+
     factory { (clazz: Class<*>) ->
         LoggerFactory.getLogger(clazz)
     }
@@ -70,9 +73,17 @@ val appModule = module {
  */
 val repositoryModule = module {
 
-    single<UserRepository> { UserRepositoryImpl(get(), get { parametersOf(UserRepository::class.java) }) }
+    single<UserRepository> {
+        UserRepositoryImpl(
+            get(),
+            get { parametersOf(UserRepository::class.java) })
+    }
 
-    single<PasswordRepository> { PasswordRepositoryImpl(get(), get { parametersOf(PasswordRepository::class.java) }) }
+    single<PasswordRepository> {
+        PasswordRepositoryImpl(
+            get(),
+            get { parametersOf(PasswordRepository::class.java) })
+    }
 
     single<CreditCardRepository> {
         CreditCardRepositoryImpl(
@@ -99,11 +110,30 @@ val viewModelModule = module {
 
     factory { ForgotPasswordScreenModel(get()) }
 
-    factory { SecVaultScreenModel(get(), get(), get(), get(), get { parametersOf(SecVaultScreenModel::class.java) }) }
+    factory {
+        SecVaultScreenModel(
+            get(),
+            get(),
+            get(),
+            get(),
+            get { parametersOf(SecVaultScreenModel::class.java) })
+    }
 
-    factory { PasswordMgntScreenModel(get(), get(), get(), get()) }
+    factory {
+        PasswordMgntScreenModel(
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
 
-    factory { SettingScreenModel(get()) }
+    factory {
+        SettingScreenModel(
+            get(),
+            get()
+        )
+    }
 
 }
 

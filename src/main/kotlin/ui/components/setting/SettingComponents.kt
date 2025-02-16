@@ -7,6 +7,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FileUpload
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,6 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import core.external.google.GoogleAppState
+import core.security.SecurityContext
 import ui.components.HorizontalSpacer
 import ui.theme.Font
 import ui.theme.secondary
@@ -24,6 +28,8 @@ import viewmodel.SettingScreenModel
 @Preview
 @Composable
 fun SettingScreenContent(screenModel: SettingScreenModel) {
+
+    val googleAppState by screenModel.googleAppState.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -100,14 +106,15 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
                     ) {
                         Row(
                             modifier = Modifier.fillMaxSize(),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+                            horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.Start),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             FilledIconButton(
                                 shape = IconButtonDefaults.filledShape,
                                 onClick = { screenModel.openDialog() },
                                 enabled = true,
-                                modifier = Modifier.height(35.dp).width(100.dp),
+                                modifier = Modifier.height(35.dp)
+                                        .width(100.dp),
                                 colors = IconButtonColors(
                                     containerColor = Color.White,
                                     contentColor = tertiary,
@@ -120,7 +127,8 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
 
                             Button(
                                 onClick = { screenModel.authenticateGoogleDrive() },
-                                modifier = Modifier.height(35.dp).width(100.dp),
+                                modifier = Modifier.height(35.dp)
+                                        .width(100.dp),
                                 colors = ButtonColors(
                                     containerColor = Color.White,
                                     contentColor = tertiary,
@@ -137,12 +145,48 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
                                     fontFamily = Font.RussoOne
                                 )
                             }
+                            Column(
+                                modifier = Modifier.height(45.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                SecurityContext.getGooglePersonDisplayName?.let {
+                                    Text(
+                                        text = it,
+                                        fontStyle = FontStyle.Normal,
+                                        fontWeight = FontWeight.Normal,
+                                        fontSize = 10.sp,
+                                        fontFamily = Font.RobotoThin,
+                                        color = Color.White,
+                                    )
+                                }
+
+                                val (text, color) = when (val state = googleAppState) {
+                                    is GoogleAppState.Authenticated -> "Authenticated" to state.color
+                                    is GoogleAppState.AuthenticationError -> state.message to state.color
+                                    is GoogleAppState.NotAuthenticated -> "Not Authenticated" to state.color
+                                    is GoogleAppState.Authenticating -> "Authenticating..." to state.color
+                                    else -> "Unknown State" to Color.Gray
+                                }
+
+                                Text(
+                                    text = text,
+                                    fontStyle = FontStyle.Normal,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 12.sp,
+                                    fontFamily = Font.RobotoThin,
+                                    color = color
+                                )
+
+                            }
+
                         }
 
                     }
                 }
                 Row(
-                    modifier = Modifier.fillMaxHeight(0.1f).fillMaxWidth()
+                    modifier = Modifier.fillMaxHeight(0.1f)
+                            .fillMaxWidth()
 
                 ) {
                     HorizontalSpacer(width = 0.8f)

@@ -2,6 +2,8 @@ package viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import core.external.google.GoogleAppState
+import core.external.google.GoogleAuthManager
 import core.models.Result
 import core.models.UiState
 import core.models.dto.GoogleDriveConfigDto
@@ -19,6 +21,7 @@ import java.io.File
 
 class SettingScreenModel(
     private val googleDriveConfigRepository: GoogleDriveConfigRepository,
+    private val googleAuthManager: GoogleAuthManager,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ScreenModel {
 
@@ -27,6 +30,9 @@ class SettingScreenModel(
 
     private val _fileDialogState = MutableStateFlow(false)
     val fileDialogState: StateFlow<Boolean> = _fileDialogState.asStateFlow()
+
+    private val _googleAppState = MutableStateFlow<GoogleAppState?>(GoogleAppState.getInitialAppState())
+    val googleAppState: StateFlow<GoogleAppState?> = _googleAppState.asStateFlow()
 
     fun openDialog() {
         _fileDialogState.value = true
@@ -65,20 +71,25 @@ class SettingScreenModel(
     }
 
     fun authenticateGoogleDrive() {
+        _googleAppState.value = GoogleAppState.Authenticating()
         screenModelScope.launch(dispatcher) {
             _settingState.value = UiState.Loading
             when (val result =
-                googleDriveConfigRepository.findByUserId(SecurityContext.authenticatedUser!!.id.value)
+                googleDriveConfigRepository.findByUserId(SecurityContext.getUserId!!)
             ) {
                 is Result.Success -> {
                     result.data.let { googleDriveConfig ->
                         val bytes = googleDriveConfig.configFile.bytes
-                        bytes
+                        googleAuthManager.authenticate(bytes.inputStream())
                     }
+                    _googleAppState.value = GoogleAppState.Authenticated()
                     _settingState.value = UiState.Success(true, "Successfully authenticated")
                 }
 
-                is Result.Error -> _settingState.value = UiState.Error(result.message)
+                is Result.Error -> {
+                    _googleAppState.value = GoogleAppState.AuthenticationError(result.message)
+                    _settingState.value = UiState.Error(result.message)
+                }
             }
         }
     }

@@ -11,6 +11,7 @@ import java.util.*
 object GoogleDriveConfigTable : IdTable<UUID>(name = "google_drive_config") {
     override val id = uuid("user_id").entityId().references(UsersTable.id)
     val configFile = blob("config_file")
+    val credential = blob("stored_credential")
 }
 
 class GoogleDriveConfig(id: EntityID<UUID>) : Entity<UUID>(id) {
@@ -18,4 +19,5 @@ class GoogleDriveConfig(id: EntityID<UUID>) : Entity<UUID>(id) {
 
     var user by User referencedOn GoogleDriveConfigTable.id
     var configFile by GoogleDriveConfigTable.configFile
+    var credential by GoogleDriveConfigTable.credential
 }

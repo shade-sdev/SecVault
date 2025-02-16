@@ -16,6 +16,11 @@ val oneTimeVersion: String by project
 val zxingVersion: String by project
 val toastVersion: String by project
 val richEditorVersion: String by project
+val googleApiClient: String by project
+val googleOAuthClient: String by project
+val googleDriveApi: String by project
+val googleAuthLibrary: String by project
+val googlePersonApi: String by project
 
 plugins {
     kotlin("jvm")
@@ -63,8 +68,14 @@ dependencies {
     implementation("com.auth0", "java-jwt", jwtVersion)
     implementation("org.mindrot", "jbcrypt", bcryptVersion)
     implementation("com.atlassian", "onetime", oneTimeVersion)
+
     implementation("com.google.zxing", "core", zxingVersion)
     implementation("com.google.zxing", "javase", zxingVersion)
+    implementation("com.google.api-client", "google-api-client", googleApiClient)
+    implementation("com.google.oauth-client", "google-oauth-client-jetty", googleOAuthClient)
+    implementation("com.google.apis", "google-api-services-drive", googleDriveApi)
+    implementation("com.google.auth", "google-auth-library-oauth2-http", googleAuthLibrary)
+    implementation("com.google.apis", "google-api-services-people", googlePersonApi)
 
     implementation("io.github.dokar3", "sonner", toastVersion)
     implementation("com.mohamedrejeb.richeditor", "richeditor-compose", richEditorVersion)

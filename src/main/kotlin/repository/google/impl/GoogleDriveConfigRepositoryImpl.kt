@@ -28,6 +28,7 @@ class GoogleDriveConfigRepositoryImpl(
                     GoogleDriveConfig.new {
                         user = config.user
                         configFile = ExposedBlob(config.configFile)
+                        credential = ExposedBlob(ByteArray(0))
                     }
                 }
             }
