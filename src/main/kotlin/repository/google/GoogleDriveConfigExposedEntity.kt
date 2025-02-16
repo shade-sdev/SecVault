@@ -10,8 +10,8 @@ import java.util.*
 
 object GoogleDriveConfigTable : IdTable<UUID>(name = "google_drive_config") {
     override val id = uuid("user_id").entityId().references(UsersTable.id)
-    val configFile = blob("config_file")
-    val credential = blob("stored_credential")
+    val configFile = blob("config_file").nullable()
+    val credential = blob("stored_credential").nullable()
 }
 
 class GoogleDriveConfig(id: EntityID<UUID>) : Entity<UUID>(id) {

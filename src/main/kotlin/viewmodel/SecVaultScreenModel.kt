@@ -3,6 +3,7 @@ package viewmodel
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import core.AppState
+import core.external.google.GoogleAuthManager
 import core.models.*
 import core.models.criteria.CredentialSearchCriteria
 import core.security.AuthenticationManager
@@ -28,6 +29,7 @@ class SecVaultScreenModel(
     private val passwordRepository: PasswordRepository,
     private val creditCardRepository: CreditCardRepository,
     private val authenticationManager: AuthenticationManager,
+    private val googleAuthManager: GoogleAuthManager,
     private val appState: AppState,
     private val logger: Logger,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -61,6 +63,7 @@ class SecVaultScreenModel(
 
     init {
         handleEvents()
+        initGoogleAuth()
     }
 
     fun selectMenuItem(item: DefaultMenuItem) {
@@ -182,6 +185,12 @@ class SecVaultScreenModel(
                 _secVaultState.value = UiState.Error(creditCards.message)
                 emptyList()
             }
+        }
+    }
+
+    private fun initGoogleAuth() {
+        screenModelScope.launch(dispatcher) {
+            googleAuthManager.authenticate()
         }
     }
 

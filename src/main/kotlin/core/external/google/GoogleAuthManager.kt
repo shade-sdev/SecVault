@@ -9,16 +9,19 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.people.v1.PeopleService
 import com.google.api.services.people.v1.model.Person
+import core.models.Result
 import core.security.SecurityContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.slf4j.Logger
+import repository.google.GoogleDriveConfig
+import repository.google.GoogleDriveConfigRepository
 import java.awt.Desktop
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.URI
 
 class GoogleAuthManager(
+    private val googleDriveConfigRepository: GoogleDriveConfigRepository,
     val logger: Logger
 ) {
 
@@ -34,67 +37,83 @@ class GoogleAuthManager(
 
     }
 
-    suspend fun authenticate(config: InputStream): AuthState = withContext(Dispatchers.IO) {
+    suspend fun authenticate(): AuthState = withContext(Dispatchers.IO) {
         try {
-            val clientSecrets = GoogleClientSecrets.load(
-                JSON_FACTORY,
-                InputStreamReader(config)
-            )
+            when (val result = googleDriveConfigRepository.findByUserId(SecurityContext.getUserId!!)) {
+                is Result.Error -> {
+                    AuthState.Failed("Config not found")
+                }
 
-            val flow = GoogleAuthorizationCodeFlow.Builder(
-                GoogleNetHttpTransport.newTrustedTransport(),
-                JSON_FACTORY,
-                clientSecrets,
-                SCOPES
-            )
-                    .apply {
-                        setDataStoreFactory(DatabaseDataStoreFactory())
-                        accessType = "offline"
-                        approvalPrompt = "force"
+                is Result.Success<GoogleDriveConfig> -> {
+                    val configFile = result.data.configFile
+
+                    if (configFile == null || configFile.bytes.isEmpty()) {
+                        return@withContext AuthState.Failed("Credential is empty or not available")
                     }
-                    .build()
 
-            val userId = SecurityContext.getUserId.toString()
-            var credential = flow.loadCredential(userId)
+                    val clientSecrets = GoogleClientSecrets.load(
+                        JSON_FACTORY,
+                        InputStreamReader(configFile.bytes.inputStream())
+                    )
 
-            if (credential == null) {
-                val receiver = LocalServerReceiver.Builder()
-                        .setPort(8888)
-                        .setCallbackPath("/oauth2callback")
-                        .build()
-
-                try {
-                    val authorizationUrl = flow.newAuthorizationUrl()
-                            .setRedirectUri(receiver.redirectUri)
+                    val flow = GoogleAuthorizationCodeFlow.Builder(
+                        GoogleNetHttpTransport.newTrustedTransport(),
+                        JSON_FACTORY,
+                        clientSecrets,
+                        SCOPES
+                    )
+                            .apply {
+                                setDataStoreFactory(DatabaseDataStoreFactory())
+                                accessType = "offline"
+                                approvalPrompt = "force"
+                            }
                             .build()
 
-                    Desktop.getDesktop()
-                            .browse(URI(authorizationUrl))
+                    val userId = SecurityContext.getUserId.toString()
+                    var credential = flow.loadCredential(userId)
 
-                    val code = receiver.waitForCode()
+                    if (credential == null) {
+                        val receiver = LocalServerReceiver.Builder()
+                                .setPort(8888)
+                                .setCallbackPath("/oauth2callback")
+                                .build()
 
-                    receiver.stop()
+                        try {
+                            val authorizationUrl = flow.newAuthorizationUrl()
+                                    .setRedirectUri(receiver.redirectUri)
+                                    .build()
 
-                    val response = flow.newTokenRequest(code)
-                            .setRedirectUri(receiver.redirectUri)
-                            .execute()
+                            Desktop.getDesktop()
+                                    .browse(URI(authorizationUrl))
 
-                    credential = flow.createAndStoreCredential(
-                        response,
-                        userId
-                    )
-                } finally {
-                    receiver.stop()
+                            val code = receiver.waitForCode()
+
+                            receiver.stop()
+
+                            val response = flow.newTokenRequest(code)
+                                    .setRedirectUri(receiver.redirectUri)
+                                    .execute()
+
+                            credential = flow.createAndStoreCredential(
+                                response,
+                                userId
+                            )
+                        } finally {
+                            receiver.stop()
+                        }
+                    }
+
+                    if (credential != null) {
+                        SecurityContext.setGoogleCredential(credential)
+                        SecurityContext.setGooglePerson(getUserInfo(credential))
+                        AuthState.Authorized(credential)
+                    } else {
+                        AuthState.Failed("Authentication error: Failed to obtain credentials")
+                    }
                 }
             }
 
-            if (credential != null) {
-                SecurityContext.setGoogleCredential(credential)
-                SecurityContext.setGooglePerson(getUserInfo(credential))
-                AuthState.Authorized(credential)
-            } else {
-                AuthState.Failed("Authentication error: Failed to obtain credentials")
-            }
+
         } catch (e: Exception) {
             logger.error(e.message, e)
             AuthState.Failed("Authentication error: ${e.message}")

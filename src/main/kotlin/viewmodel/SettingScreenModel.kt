@@ -2,6 +2,7 @@ package viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import core.external.google.AuthState
 import core.external.google.GoogleAppState
 import core.external.google.GoogleAuthManager
 import core.models.Result
@@ -74,21 +75,16 @@ class SettingScreenModel(
         _googleAppState.value = GoogleAppState.Authenticating()
         screenModelScope.launch(dispatcher) {
             _settingState.value = UiState.Loading
-            when (val result =
-                googleDriveConfigRepository.findByUserId(SecurityContext.getUserId!!)
+            when (val result = googleAuthManager.authenticate()
             ) {
-                is Result.Success -> {
-                    result.data.let { googleDriveConfig ->
-                        val bytes = googleDriveConfig.configFile.bytes
-                        googleAuthManager.authenticate(bytes.inputStream())
-                    }
+                is AuthState.Authorized -> {
                     _googleAppState.value = GoogleAppState.Authenticated()
                     _settingState.value = UiState.Success(true, "Successfully authenticated")
                 }
 
-                is Result.Error -> {
-                    _googleAppState.value = GoogleAppState.AuthenticationError(result.message)
-                    _settingState.value = UiState.Error(result.message)
+                is AuthState.Failed -> {
+                    _googleAppState.value = GoogleAppState.AuthenticationError(result.error)
+                    _settingState.value = UiState.Error(result.error)
                 }
             }
         }

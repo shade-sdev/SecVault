@@ -60,7 +60,7 @@ val appModule = module {
         createdAtStart()
     }
 
-    single { GoogleAuthManager(get { parametersOf(GoogleAuthManager::class.java) }) }
+    single { GoogleAuthManager(get(), get { parametersOf(GoogleAuthManager::class.java) }) }
 
     factory { (clazz: Class<*>) ->
         LoggerFactory.getLogger(clazz)
@@ -112,6 +112,7 @@ val viewModelModule = module {
 
     factory {
         SecVaultScreenModel(
+            get(),
             get(),
             get(),
             get(),

@@ -31,7 +31,7 @@ class GoogleDataStore<V : Serializable>(private val id: String) : DataStore<V> {
     override fun containsValue(value: V): Boolean = transaction {
         GoogleDriveConfig.all()
                 .any { config ->
-                    config.credential.inputStream.use {
+                    config.credential?.inputStream.use {
                         ObjectInputStream(it).readObject() == value
                     }
                 }
