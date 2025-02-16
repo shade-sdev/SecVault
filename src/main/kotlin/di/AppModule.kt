@@ -5,10 +5,12 @@ import androidx.compose.runtime.remember
 import core.AppState
 import core.DatabaseFactory
 import core.external.google.GoogleAuthManager
+import core.job.BackupJob
 import core.loadConfigs
 import core.security.AuthenticationManager
 import core.security.JwtService
 import core.security.TwoFactorAuthenticationService
+import core.service.ExcelExportService
 import org.koin.core.module.dsl.createdAtStart
 import org.koin.core.module.dsl.withOptions
 import org.koin.core.parameter.parametersOf
@@ -61,6 +63,10 @@ val appModule = module {
     }
 
     single { GoogleAuthManager(get(), get { parametersOf(GoogleAuthManager::class.java) }) }
+
+    single { ExcelExportService(get(), get(), get()) }
+
+    single { BackupJob(get(), get(), get()) }
 
     factory { (clazz: Class<*>) ->
         LoggerFactory.getLogger(clazz)
@@ -117,6 +123,7 @@ val viewModelModule = module {
             get(),
             get(),
             get(),
+            get(),
             get { parametersOf(SecVaultScreenModel::class.java) })
     }
 
@@ -131,6 +138,7 @@ val viewModelModule = module {
 
     factory {
         SettingScreenModel(
+            get(),
             get(),
             get()
         )

@@ -5,11 +5,7 @@ import core.models.Result
 import core.models.criteria.CredentialSearchCriteria
 import core.models.dto.PasswordDto
 import kotlinx.coroutines.delay
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Expression
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.Logger
 import repository.common.errors.DatabaseError
@@ -31,6 +27,20 @@ class PasswordRepositoryImpl(
             return transaction(db) {
                 Password.findById(id)
             }?.let { Result.Success(it) } ?: Result.Error("Password not found")
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+            Result.Error(DatabaseError.fromException(e).extractMessage())
+        }
+    }
+
+    override suspend fun findAllByUserId(userId: UUID): Result<List<Password>> {
+        return try {
+            return transaction(db) {
+                Password.find {
+                    PasswordsTable.user eq userId
+                }.orderBy(PasswordsTable.name to SortOrder.ASC)
+                    .toList()
+            }.let { Result.Success(it) }
         } catch (e: Exception) {
             logger.error(e.message, e)
             Result.Error(DatabaseError.fromException(e).extractMessage())

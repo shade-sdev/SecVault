@@ -36,6 +36,20 @@ class CreditCardRepositoryImpl(
         }
     }
 
+    override suspend fun findAllByUserId(userId: UUID): Result<List<CreditCard>> {
+        return try {
+            return transaction(db) {
+                CreditCard.find {
+                    CreditCardTable.user eq userId
+                }.orderBy(CreditCardTable.name to SortOrder.ASC)
+                    .toList()
+            }.let { Result.Success(it) }
+        } catch (e: Exception) {
+            logger.error(e.message, e)
+            Result.Error(DatabaseError.fromException(e).extractMessage())
+        }
+    }
+
     override suspend fun findSummaries(searchCriteria: CredentialSearchCriteria): Result<List<CreditCardSummary>> {
         delay(550)
         return try {
@@ -56,7 +70,11 @@ class CreditCardRepositoryImpl(
                 query.orderBy(toSort(searchCriteria.sort), toOrder(searchCriteria.sort)).map { resultRow ->
                     CreditCardSummary(
                         id = resultRow[CreditCardTable.id].value,
-                        name = resultRow[CreditCardTable.name].replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
+                        name = resultRow[CreditCardTable.name].replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        },
                         number = resultRow[CreditCardTable.number],
                         favorite = resultRow[CreditCardTable.favorite]
                     )

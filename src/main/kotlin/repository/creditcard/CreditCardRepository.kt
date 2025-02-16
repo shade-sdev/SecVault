@@ -10,6 +10,8 @@ interface CreditCardRepository {
 
     suspend fun findById(id: UUID): Result<CreditCard>
 
+    suspend fun findAllByUserId(userId: UUID): Result<List<CreditCard>>
+
     suspend fun findSummaries(searchCriteria: CredentialSearchCriteria): Result<List<CreditCardSummary>>
 
     suspend fun save(creditCardDto: CreditCardDto): Result<Boolean>

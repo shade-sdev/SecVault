@@ -21,6 +21,7 @@ val googleOAuthClient: String by project
 val googleDriveApi: String by project
 val googleAuthLibrary: String by project
 val googlePersonApi: String by project
+val apachePoiApi: String by project
 
 plugins {
     kotlin("jvm")
@@ -79,6 +80,8 @@ dependencies {
 
     implementation("io.github.dokar3", "sonner", toastVersion)
     implementation("com.mohamedrejeb.richeditor", "richeditor-compose", richEditorVersion)
+
+    implementation("org.apache.poi", "poi-ooxml", apachePoiApi)
 
     implementation("org.slf4j", "slf4j-api", sl4jVersion)
     implementation("ch.qos.logback", "logback-classic", logbackVersion)

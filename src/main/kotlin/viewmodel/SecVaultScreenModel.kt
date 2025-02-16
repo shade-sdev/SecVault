@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import core.AppState
 import core.external.google.GoogleAuthManager
+import core.job.BackupJob
 import core.models.*
 import core.models.criteria.CredentialSearchCriteria
 import core.security.AuthenticationManager
@@ -30,6 +31,7 @@ class SecVaultScreenModel(
     private val creditCardRepository: CreditCardRepository,
     private val authenticationManager: AuthenticationManager,
     private val googleAuthManager: GoogleAuthManager,
+    private val backupJob: BackupJob,
     private val appState: AppState,
     private val logger: Logger,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -107,7 +109,8 @@ class SecVaultScreenModel(
                     passwordRepository.findById(id).let { result ->
                         when (result) {
                             is Result.Error -> _secVaultState.value = UiState.Error(result.message)
-                            is Result.Success<Password> -> _selectedCredential.value = SelectedCredential(result.data, null)
+                            is Result.Success<Password> -> _selectedCredential.value =
+                                SelectedCredential(result.data, null)
                         }
                     }
                 }
@@ -116,7 +119,8 @@ class SecVaultScreenModel(
                     creditCardRepository.findById(id).let { result ->
                         when (result) {
                             is Result.Error -> _secVaultState.value = UiState.Error(result.message)
-                            is Result.Success<CreditCard> -> _selectedCredential.value = SelectedCredential(null, result.data)
+                            is Result.Success<CreditCard> -> _selectedCredential.value =
+                                SelectedCredential(null, result.data)
                         }
                     }
                 }
@@ -158,6 +162,10 @@ class SecVaultScreenModel(
         return appState.isMasterPasswordPresent()
     }
 
+    suspend fun backupJob() {
+        backupJob.start()
+    }
+
     private suspend fun loadPasswords(sort: CredentialSort) {
         val criteria = CredentialSearchCriteria(SecurityContext.authenticatedUser?.id?.value, sort)
         _passwordItems.value = when (val passwords = passwordRepository.findSummaries(criteria)) {
@@ -191,6 +199,7 @@ class SecVaultScreenModel(
     private fun initGoogleAuth() {
         screenModelScope.launch(dispatcher) {
             googleAuthManager.authenticate()
+            backupJob.start()
         }
     }
 

@@ -33,13 +33,13 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
 
     Column(
         modifier = Modifier.fillMaxSize()
-                .background(color = tertiary)
+            .background(color = tertiary)
     ) {
         Row(
             modifier = Modifier.weight(1.5f)
-                    .fillMaxSize()
-                    .background(color = secondary)
-                    .padding(26.dp)
+                .fillMaxSize()
+                .background(color = secondary)
+                .padding(26.dp)
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
@@ -66,18 +66,18 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
 
         Row(
             modifier = Modifier.weight(8.5f)
-                    .fillMaxSize()
+                .fillMaxSize()
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
 
                 Row(
                     modifier = Modifier
-                            .fillMaxHeight(0.2f)
+                        .fillMaxHeight(0.2f)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize()
-                                .weight(3f)
-                                .padding(PaddingValues(horizontal = 50.dp, vertical = 20.dp)),
+                            .weight(3f)
+                            .padding(PaddingValues(horizontal = 50.dp, vertical = 20.dp)),
                         verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
                     ) {
                         Text(
@@ -100,8 +100,8 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
 
                     Column(
                         modifier = Modifier.fillMaxSize()
-                                .weight(7f)
-                                .padding(20.dp),
+                            .weight(7f)
+                            .padding(20.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically)
                     ) {
                         Row(
@@ -114,7 +114,7 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
                                 onClick = { screenModel.openDialog() },
                                 enabled = true,
                                 modifier = Modifier.height(35.dp)
-                                        .width(100.dp),
+                                    .width(100.dp),
                                 colors = IconButtonColors(
                                     containerColor = Color.White,
                                     contentColor = tertiary,
@@ -128,7 +128,7 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
                             Button(
                                 onClick = { screenModel.authenticateGoogleDrive() },
                                 modifier = Modifier.height(35.dp)
-                                        .width(100.dp),
+                                    .width(100.dp),
                                 colors = ButtonColors(
                                     containerColor = Color.White,
                                     contentColor = tertiary,
@@ -139,6 +139,46 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
                             {
                                 Text(
                                     text = "Login",
+                                    fontStyle = FontStyle.Normal,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 12.sp,
+                                    fontFamily = Font.RussoOne
+                                )
+                            }
+                            Button(
+                                onClick = { screenModel.resetFolderId() },
+                                modifier = Modifier.height(35.dp)
+                                    .width(125.dp),
+                                colors = ButtonColors(
+                                    containerColor = Color.White,
+                                    contentColor = tertiary,
+                                    disabledContentColor = Color.Gray,
+                                    disabledContainerColor = Color.Gray,
+                                )
+                            )
+                            {
+                                Text(
+                                    text = "Reset Folder",
+                                    fontStyle = FontStyle.Normal,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 12.sp,
+                                    fontFamily = Font.RussoOne
+                                )
+                            }
+                            Button(
+                                onClick = { screenModel.initBackup() },
+                                modifier = Modifier.height(35.dp)
+                                    .width(125.dp),
+                                colors = ButtonColors(
+                                    containerColor = Color.White,
+                                    contentColor = tertiary,
+                                    disabledContentColor = Color.Gray,
+                                    disabledContainerColor = Color.Gray,
+                                )
+                            )
+                            {
+                                Text(
+                                    text = "Backup",
                                     fontStyle = FontStyle.Normal,
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 12.sp,
@@ -186,7 +226,7 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
                 }
                 Row(
                     modifier = Modifier.fillMaxHeight(0.1f)
-                            .fillMaxWidth()
+                        .fillMaxWidth()
 
                 ) {
                     HorizontalSpacer(width = 0.8f)

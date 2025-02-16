@@ -1,10 +1,15 @@
 package core.models.dto
 
 import repository.user.User
+import java.time.LocalDateTime
 
 data class GoogleDriveConfigDto(
     val user: User,
     val configFile: ByteArray,
+    val storedCredential: ByteArray? = null,
+    val folderId: String? = null,
+    val lastBackupId: String? = null,
+    val lastBackupDate: LocalDateTime? = null,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

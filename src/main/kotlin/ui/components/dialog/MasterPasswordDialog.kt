@@ -22,6 +22,7 @@ import com.dokar.sonner.ToastType
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
 import core.models.Result
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ui.components.PasswordTextField
 import ui.components.SecVaultDialog
@@ -88,9 +89,12 @@ fun MasterPasswordDialog(
                 Button(
                     enabled = masterPassword.isNotBlank(),
                     onClick = {
-                        viewModel.screenModelScope.launch {
+                        viewModel.screenModelScope.launch(Dispatchers.IO) {
                             when (val result = viewModel.setMasterPassword(masterPassword)) {
                                 is Result.Success -> {
+                                    viewModel.screenModelScope.launch(Dispatchers.IO) {
+                                        viewModel.backupJob()
+                                    }
                                     dialogState.value = false
                                 }
 

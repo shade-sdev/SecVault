@@ -31,6 +31,7 @@ class GoogleAuthManager(
 
         val SCOPES = listOf(
             DriveScopes.DRIVE_FILE,
+            DriveScopes.DRIVE,
             PeopleScopes.PEOPLE_PROFILE,
             PeopleScopes.PEOPLE_EMAIL
         )

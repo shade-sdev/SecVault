@@ -8,6 +8,8 @@ interface GoogleDriveConfigRepository {
 
     suspend fun save(config: GoogleDriveConfigDto): Result<Boolean>
 
+    suspend fun resetFolder(userId: UUID): Result<Boolean>
+
     suspend fun findByUserId(userId: UUID): Result<GoogleDriveConfig>
 
 }

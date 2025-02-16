@@ -10,6 +10,8 @@ interface PasswordRepository {
 
     suspend fun findById(id: UUID): Result<Password>
 
+    suspend fun findAllByUserId(userId: UUID): Result<List<Password>>
+
     suspend fun findSummaries(searchCriteria: CredentialSearchCriteria): Result<List<PasswordSummary>>
 
     suspend fun save(password: PasswordDto): Result<Boolean>

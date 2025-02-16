@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import core.external.google.AuthState
 import core.external.google.GoogleAppState
 import core.external.google.GoogleAuthManager
+import core.job.BackupJob
 import core.models.Result
 import core.models.UiState
 import core.models.dto.GoogleDriveConfigDto
@@ -23,6 +24,7 @@ import java.io.File
 class SettingScreenModel(
     private val googleDriveConfigRepository: GoogleDriveConfigRepository,
     private val googleAuthManager: GoogleAuthManager,
+    private val backupJob: BackupJob,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ScreenModel {
 
@@ -66,6 +68,27 @@ class SettingScreenModel(
             when (val result =
                 googleDriveConfigRepository.save(GoogleDriveConfigDto(SecurityContext.authenticatedUser!!, file))) {
                 is Result.Success -> _settingState.value = UiState.Success(result.data, "File successfully saved")
+                is Result.Error -> _settingState.value = UiState.Error(result.message)
+            }
+        }
+    }
+
+    fun resetFolderId() {
+        screenModelScope.launch(dispatcher) {
+            _settingState.value = UiState.Loading
+            when (val result =
+                googleDriveConfigRepository.resetFolder(SecurityContext.getUserId!!)) {
+                is Result.Success -> _settingState.value = UiState.Success(result.data, "Folder reset successful")
+                is Result.Error -> _settingState.value = UiState.Error(result.message)
+            }
+        }
+    }
+
+    fun initBackup() {
+        screenModelScope.launch(dispatcher) {
+            _settingState.value = UiState.Loading
+            when (val result = backupJob.start()) {
+                is Result.Success -> _settingState.value = UiState.Success(result.data, "Backup successful")
                 is Result.Error -> _settingState.value = UiState.Error(result.message)
             }
         }
