@@ -9,6 +9,12 @@ import repository.google.GoogleDriveConfigTable
 import java.io.*
 import java.util.*
 
+/**
+ * Implementation of the DataStore interface for storing Google credentials in a database.
+ *
+ * @param V The type of the value to be stored, which must be serializable.
+ * @property id The unique identifier for this data store.
+ */
 class GoogleDataStore<V : Serializable>(private val id: String) : DataStore<V> {
 
     override fun getDataStoreFactory(): DataStoreFactory {

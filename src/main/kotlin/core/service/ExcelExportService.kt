@@ -4,6 +4,7 @@ import core.AppState
 import core.models.Result
 import core.models.dto.ExcelExportResult
 import core.security.SecurityContext
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.poi.ss.usermodel.Cell
@@ -18,13 +19,26 @@ import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * Service for exporting data to Excel files.
+ *
+ * @property passwordRepository Repository for accessing password data.
+ * @property creditCardRepository Repository for accessing credit card data.
+ * @property appState Application state.
+ */
 class ExcelExportService(
     private val passwordRepository: PasswordRepository,
     private val creditCardRepository: CreditCardRepository,
-    private val appState: AppState
+    private val appState: AppState,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
-    suspend fun exportExcel(): Result<ExcelExportResult> = withContext(Dispatchers.IO) {
+    /**
+     * Exports data to an Excel file.
+     *
+     * @return Result containing the Excel export result or an error message.
+     */
+    suspend fun exportExcel(): Result<ExcelExportResult> = withContext(dispatcher) {
         if (SecurityContext.getGoogleCredential == null) {
             return@withContext Result.Error("Google Integration not setup.")
         }
@@ -57,6 +71,13 @@ class ExcelExportService(
         return@withContext Result.Error("Export failed.")
     }
 
+    /**
+     * Creates a sheet for passwords in the Excel workbook.
+     *
+     * @param workbook The Excel workbook.
+     * @param passwords The list of passwords to be included in the sheet.
+     * @return The created sheet.
+     */
     private fun createPasswordSheet(workbook: XSSFWorkbook, passwords: List<Password>): Sheet {
         val passwordSheet = workbook.createSheet("Passwords")
         val passwordHeader = listOf(
@@ -84,6 +105,13 @@ class ExcelExportService(
         return passwordSheet
     }
 
+    /**
+     * Creates a sheet for credit cards in the Excel workbook.
+     *
+     * @param workbook The Excel workbook.
+     * @param creditCards The list of credit cards to be included in the sheet.
+     * @return The created sheet.
+     */
     private fun createCreditCardSheet(workbook: XSSFWorkbook, creditCards: List<CreditCard>): Sheet {
         val creditCardSheet = workbook.createSheet("Credit Cards")
         val creditCardHeader = listOf(
@@ -113,6 +141,13 @@ class ExcelExportService(
         return creditCardSheet
     }
 
+    /**
+     * Creates a sheet in the Excel workbook with the given header and data.
+     *
+     * @param sheet The sheet to be created.
+     * @param header The header row for the sheet.
+     * @param data The data to be included in the sheet.
+     */
     private fun createSheet(
         sheet: Sheet,
         header: List<String>,

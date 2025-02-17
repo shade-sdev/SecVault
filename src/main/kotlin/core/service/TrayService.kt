@@ -5,6 +5,9 @@ import java.awt.SystemTray
 import java.awt.Toolkit
 import java.awt.TrayIcon
 
+/**
+ * Service for managing system tray notifications.
+ */
 object TrayService {
 
     private var trayIcon: TrayIcon? = null
@@ -19,6 +22,13 @@ object TrayService {
         tray.add(trayIcon)
     }
 
+    /**
+     * Displays a notification message in the system tray.
+     *
+     * @param title The title of the notification.
+     * @param message The message content of the notification.
+     * @param messageType The type of the message (e.g., INFO, WARNING, ERROR).
+     */
     fun showNotification(title: String, message: String, messageType: TrayIcon.MessageType) {
         trayIcon?.displayMessage(title, message, messageType)
     }

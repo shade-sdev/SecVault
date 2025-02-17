@@ -7,6 +7,9 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import core.models.dto.ExcelExportResult
 
+/**
+ * Service object for interacting with Google Drive.
+ */
 object GoogleDriveService {
 
     fun create(credential: Credential): Drive {

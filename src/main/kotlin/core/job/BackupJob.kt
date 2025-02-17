@@ -15,6 +15,14 @@ import repository.google.GoogleDriveConfigRepository
 import java.awt.TrayIcon
 import java.time.LocalDateTime
 
+/**
+ * Job responsible for backing up data to Google Drive.
+ *
+ * @property googleDriveConfigRepository Repository for accessing Google Drive configuration.
+ * @property exportService Service for exporting data to Excel.
+ * @property appState Application state.
+ * @property logger Logger for logging messages.
+ */
 class BackupJob(
     private val googleDriveConfigRepository: GoogleDriveConfigRepository,
     private val exportService: ExcelExportService,
@@ -22,6 +30,11 @@ class BackupJob(
     private val logger: Logger = LoggerFactory.getLogger(BackupJob::class.java)
 ) {
 
+    /**
+     * Starts the backup job.
+     *
+     * @return Result indicating success or failure of the backup operation.
+     */
     suspend fun start(): Result<Boolean> {
         if (SecurityContext.getGoogleCredential == null || !appState.isMasterPasswordPresent()) {
             logger.error("Google Credential is not setup.", RuntimeException())
