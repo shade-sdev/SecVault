@@ -4,6 +4,7 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.outlined.FileUpload
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.navigator.LocalNavigator
 import core.external.google.GoogleAppState
 import core.security.SecurityContext
 import ui.components.HorizontalSpacer
@@ -30,7 +32,7 @@ import viewmodel.SettingScreenModel
 fun SettingScreenContent(screenModel: SettingScreenModel) {
 
     val googleAppState by screenModel.googleAppState.collectAsState()
-
+    val navigator = LocalNavigator.current
     Column(
         modifier = Modifier.fillMaxSize()
             .background(color = tertiary)
@@ -38,11 +40,12 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
         Row(
             modifier = Modifier.weight(1.5f)
                 .fillMaxSize()
-                .background(color = secondary)
-                .padding(26.dp)
+                .background(color = secondary),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
+                modifier = Modifier.padding(26.dp),
+                verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically),
             ) {
                 Text(
                     text = "Settings",
@@ -62,6 +65,19 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
                 )
             }
 
+            Column(
+                modifier = Modifier.width(40.dp).background(Color.LightGray),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.End
+            ) {
+                IconButton(onClick = { navigator?.pop() }, modifier = Modifier.size(40.dp)) {
+                    Icon(
+                        Icons.Default.ChevronLeft,
+                        contentDescription = "Back",
+                        tint = tertiary
+                    )
+                }
+            }
         }
 
         Row(
@@ -148,7 +164,7 @@ fun SettingScreenContent(screenModel: SettingScreenModel) {
                             Button(
                                 onClick = { screenModel.resetFolderId() },
                                 modifier = Modifier.height(35.dp)
-                                    .width(125.dp),
+                                    .width(145.dp),
                                 colors = ButtonColors(
                                     containerColor = Color.White,
                                     contentColor = tertiary,
