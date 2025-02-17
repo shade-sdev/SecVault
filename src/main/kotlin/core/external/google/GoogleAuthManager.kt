@@ -30,9 +30,9 @@ import java.net.URI
  */
 class GoogleAuthManager(
     private val googleDriveConfigRepository: GoogleDriveConfigRepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val logger: Logger = LoggerFactory.getLogger(GoogleAuthManager::class.java)
-) {
+    private val logger: Logger = LoggerFactory.getLogger(GoogleAuthManager::class.java),
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    ) {
 
     /**
      * Companion object containing constants used in GoogleAuthManager.

@@ -62,7 +62,7 @@ val appModule = module {
         createdAtStart()
     }
 
-    single { GoogleAuthManager(get(), get { parametersOf(GoogleAuthManager::class.java) }) }
+    single { GoogleAuthManager(get()) }
 
     single { ExcelExportService(get(), get(), get()) }
 
