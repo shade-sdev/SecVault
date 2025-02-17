@@ -105,7 +105,6 @@ class CreditCardForm(creditCard: CreditCard?, formType: FormType) : Screen {
         formType: FormType
     ) {
 
-        val isFormValid by formValidator.isValid
         val users by remember { mutableStateOf<List<User>?>(screenModel.fetchUsers()) }
         var selectedItem by remember { mutableStateOf<DropdownItem<User>?>(null) }
 
@@ -132,13 +131,13 @@ class CreditCardForm(creditCard: CreditCard?, formType: FormType) : Screen {
 
         Column(
             modifier = Modifier.fillMaxSize()
-                    .background(secondary)
+                .background(secondary)
         )
         {
 
             Row(
                 modifier = Modifier.weight(1f)
-                        .fillMaxSize(),
+                    .fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -151,14 +150,14 @@ class CreditCardForm(creditCard: CreditCard?, formType: FormType) : Screen {
 
             Row(
                 modifier = Modifier.weight(7.5f)
-                        .background(primary)
-                        .fillMaxSize(),
+                    .background(primary)
+                    .fillMaxSize(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     modifier = Modifier.background(primary)
-                            .padding(PaddingValues(end = 20.dp)),
+                        .padding(PaddingValues(end = 20.dp)),
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
                 ) {
@@ -324,25 +323,27 @@ class CreditCardForm(creditCard: CreditCard?, formType: FormType) : Screen {
 
             Row(
                 modifier = Modifier.weight(1.5f)
-                        .fillMaxSize()
-                        .background(tertiary),
+                    .fillMaxSize()
+                    .background(tertiary),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
             ) {
                 Footer(
                     {
-                        screenModel.saveCreditCard(
-                            _creditCard?.id?.value,
-                            toCreditCardDto(
-                                formValidator,
-                                SecurityContext.authenticatedUser!!,
-                            selectedItem?.id!!
-                            ),
-                            formType
-                        )
+                        formValidator.validateAllFields()
+                        if (formValidator.isValid()) {
+                            screenModel.saveCreditCard(
+                                _creditCard?.id?.value,
+                                toCreditCardDto(
+                                    formValidator,
+                                    SecurityContext.authenticatedUser!!,
+                                    selectedItem?.id!!
+                                ),
+                                formType
+                            )
+                        }
                     },
                     { navigator?.popUntil { screen: Screen -> screen.key == SecVaultScreen().key } },
-                    isFormValid
                 )
             }
 

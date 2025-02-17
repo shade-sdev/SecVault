@@ -50,13 +50,13 @@ fun PasswordForm(
 
     Column(
         modifier = Modifier.fillMaxSize()
-                .background(secondary)
+            .background(secondary)
     )
     {
 
         Row(
             modifier = Modifier.weight(1f)
-                    .fillMaxSize(),
+                .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -69,15 +69,15 @@ fun PasswordForm(
 
         Row(
             modifier = Modifier.weight(7.5f)
-                    .background(primary)
-                    .fillMaxSize(),
+                .background(primary)
+                .fillMaxSize(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Column(
                 modifier = Modifier.background(primary)
-                        .padding(PaddingValues(end = 20.dp)),
+                    .padding(PaddingValues(end = 20.dp)),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
             ) {
@@ -225,8 +225,8 @@ fun PasswordForm(
 
                         val savedCategories =
                             passwordCategory?.value?.value?.takeIf { it.isNotEmpty() }
-                                    ?.split(",")?.map { PasswordCategory.valueOf(it) }
-                                    ?.sorted()?.toSet() ?: emptySet()
+                                ?.split(",")?.map { PasswordCategory.valueOf(it) }
+                                ?.sorted()?.toSet() ?: emptySet()
 
 
                         var selectedItems by remember { mutableStateOf(savedCategories) }
@@ -254,15 +254,19 @@ fun PasswordForm(
 
         Row(
             modifier = Modifier.weight(1.5f)
-                    .fillMaxSize()
-                    .background(tertiary),
+                .fillMaxSize()
+                .background(tertiary),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally)
         ) {
             Footer(
-                { onSaveClick(toPasswordDto(formValidator, SecurityContext.authenticatedUser!!)) },
-                onCancelClick,
-                isFormValid
+                {
+                    formValidator.validateAllFields()
+                    if (formValidator.isValid()) {
+                        onSaveClick(toPasswordDto(formValidator, SecurityContext.authenticatedUser!!))
+                    }
+                },
+                onCancelClick
             )
         }
 

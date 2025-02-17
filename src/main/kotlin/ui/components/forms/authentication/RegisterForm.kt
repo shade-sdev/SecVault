@@ -34,7 +34,6 @@ fun RegisterForm(
     email: FormField?,
     password: FormField?,
     formValidator: FormValidator,
-    isFormValid: Boolean,
     onRegisterClick: () -> Unit,
     onLoginClick: () -> Unit
 ) {
@@ -153,7 +152,6 @@ fun RegisterForm(
                     Button(
                         onClick = onRegisterClick,
                         modifier = Modifier.width(175.dp),
-                        enabled = isFormValid,
                         colors = ButtonColors(
                             containerColor = secondary,
                             contentColor = Color.White,

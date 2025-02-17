@@ -6,8 +6,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import ui.screens.SettingScreen
 import ui.theme.Font
+import kotlin.system.exitProcess
 
 @Composable
 fun Footer() {
@@ -32,30 +35,47 @@ fun Footer() {
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Bottom,
         modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .hoverable(interactionSource)
-                .clickable(onClick = { navigator?.push(SettingScreen()) }, indication = null, interactionSource = interactionSource)
+            .fillMaxWidth()
+            .fillMaxHeight()
     )
     {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.End),
         ) {
-            Icon(
-                imageVector = Icons.Default.Settings,
-                contentDescription = "Setting button",
-                modifier = Modifier.size(18.dp),
-                tint = if (isHovered) Color.Gray else Color.White,
-            )
-            Text(
-                modifier = Modifier,
-                text = "Settings",
-                color = if (isHovered) Color.Gray else Color.White,
-                fontFamily = Font.RussoOne,
-                fontWeight = FontWeight.Normal,
-                fontSize = 14.sp,
-            )
+            IconButton(onClick = { exitProcess(0) }, modifier = Modifier.size(18.dp)) {
+                Icon(
+                    Icons.Filled.PowerSettingsNew,
+                    contentDescription = "Close",
+                    tint = Color.Red
+                )
+            }
+
+            Row(
+                modifier = Modifier.hoverable(interactionSource)
+                    .clickable(
+                        onClick = { navigator?.push(SettingScreen()) },
+                        indication = null,
+                        interactionSource = interactionSource
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "Setting button",
+                    modifier = Modifier.size(18.dp),
+                    tint = if (isHovered) Color.Gray else Color.White,
+                )
+                Text(
+                    modifier = Modifier,
+                    text = "Settings",
+                    color = if (isHovered) Color.Gray else Color.White,
+                    fontFamily = Font.RussoOne,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 14.sp,
+                )
+            }
         }
     }
 }

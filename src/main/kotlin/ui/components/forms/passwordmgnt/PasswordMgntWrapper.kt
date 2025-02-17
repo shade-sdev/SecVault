@@ -68,12 +68,10 @@ fun Header(
 fun Footer(
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit,
-    isFormValid: Boolean
 ) {
     Button(
         onClick = { onSaveClick() },
         modifier = Modifier.width(175.dp),
-        enabled = isFormValid,
         colors = ButtonColors(
             containerColor = primary,
             contentColor = Color.White,

@@ -1,6 +1,5 @@
 package ui.components.setting
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -27,7 +26,6 @@ import ui.theme.secondary
 import ui.theme.tertiary
 import viewmodel.SettingScreenModel
 
-@Preview
 @Composable
 fun SettingScreenContent(screenModel: SettingScreenModel) {
 

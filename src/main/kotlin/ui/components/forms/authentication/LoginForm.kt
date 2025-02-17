@@ -38,7 +38,6 @@ fun LoginForm(
     password: FormField?,
     masterPassword: FormField?,
     formValidator: FormValidator,
-    isFormValid: Boolean,
     loginState: UiState<User>,
     onLoginClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
@@ -177,7 +176,7 @@ fun LoginForm(
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Button(
-                        enabled = loginState !is UiState.Loading && isFormValid,
+                        enabled = loginState !is UiState.Loading,
                         onClick = onLoginClick,
                         modifier = Modifier.width(175.dp),
                         colors = ButtonColors(

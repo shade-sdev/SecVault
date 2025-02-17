@@ -138,8 +138,7 @@ class NoteForm : Screen {
             ) {
                 Footer(
                     { },
-                    { navigator?.popUntil { screen: Screen -> screen.key == SecVaultScreen().key } },
-                    true
+                    { navigator?.popUntil { screen: Screen -> screen.key == SecVaultScreen().key } }
                 )
             }
 

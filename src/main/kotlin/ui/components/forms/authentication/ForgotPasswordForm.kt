@@ -34,7 +34,6 @@ fun ForgotPasswordForm(
     newPassword: FormField?,
     otp: FormField?,
     formValidator: FormValidator,
-    isFormValid: Boolean,
     onResetClick: () -> Unit,
     onLoginClick: () -> Unit
 ) {
@@ -153,7 +152,6 @@ fun ForgotPasswordForm(
                     Button(
                         onClick = onResetClick,
                         modifier = Modifier.width(175.dp),
-                        enabled = isFormValid,
                         colors = ButtonColors(
                             containerColor = secondary,
                             contentColor = Color.White,

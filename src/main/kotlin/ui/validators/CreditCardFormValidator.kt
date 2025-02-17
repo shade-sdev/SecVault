@@ -56,7 +56,6 @@ fun creditCardFormValidator(creditCard: CreditCard?, decrypt: (String) -> String
                     value = mutableStateOf(creditCard?.notes ?: "")
                 )
             )
-            .validateAllFields()
 }
 
 fun toCreditCardDto(formValidator: FormValidator, user: User, owner: User): CreditCardDto {

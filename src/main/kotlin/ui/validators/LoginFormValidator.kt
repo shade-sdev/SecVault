@@ -25,7 +25,7 @@ fun loginFormValidator(): FormValidator {
                     validator = Validator()
                             .addRule(notNullRule(LoginFormFieldName.MASTER_PASSWORD.fieldName))
                 )
-            ).validateAllFields()
+            )
 }
 
 enum class LoginFormFieldName(val fieldName: String) : FormFieldName {

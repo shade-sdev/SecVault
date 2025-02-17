@@ -29,7 +29,6 @@ fun registerFormValidator(): FormValidator {
                             .addRule(passwordRule)
                 )
             )
-            .validateAllFields()
 }
 
 enum class RegisterFieldName(val fieldName: String) : FormFieldName {

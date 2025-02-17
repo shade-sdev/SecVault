@@ -76,7 +76,7 @@ fun passwordFormValidator(password: Password?, decrypt: (String) -> String): For
                 )
             )
 
-    return validator.validateAllFields()
+    return validator
 }
 
 fun toPasswordDto(formValidator: FormValidator, user: User): PasswordDto {

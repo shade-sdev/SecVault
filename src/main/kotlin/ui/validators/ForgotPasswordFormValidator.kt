@@ -33,7 +33,7 @@ fun forgotPasswordFormValidator(): FormValidator {
                                 )
                             )
                 )
-            ).validateAllFields()
+            )
 }
 
 enum class ForgotPasswordFieldName(val fieldName: String) : FormFieldName {
