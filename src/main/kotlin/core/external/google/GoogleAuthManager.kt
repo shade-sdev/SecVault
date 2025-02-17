@@ -14,7 +14,8 @@ import core.security.SecurityContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.slf4j.Logger
+import org.sqlite.util.Logger
+import org.sqlite.util.LoggerFactory
 import repository.google.GoogleDriveConfig
 import repository.google.GoogleDriveConfigRepository
 import java.awt.Desktop
@@ -30,7 +31,7 @@ import java.net.URI
 class GoogleAuthManager(
     private val googleDriveConfigRepository: GoogleDriveConfigRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val logger: Logger
+    private val logger: Logger = LoggerFactory.getLogger(GoogleAuthManager::class.java)
 ) {
 
     /**
