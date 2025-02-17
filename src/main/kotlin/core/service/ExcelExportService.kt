@@ -48,10 +48,18 @@ class ExcelExportService(
 
         if (passwordResult is Result.Success && creditCardResult is Result.Success) {
             val workbook = XSSFWorkbook()
+            val fileOutputStream = ByteArrayOutputStream()
+
             createPasswordSheet(workbook, passwordResult.data)
             createCreditCardSheet(workbook, creditCardResult.data)
 
-            val fileOutputStream = ByteArrayOutputStream()
+            workbook.sheetIterator().forEach { sheet ->
+                val numberOfColumns = sheet.getRow(0)?.physicalNumberOfCells ?: 0
+                for (columnIndex in 0 until numberOfColumns) {
+                    sheet.autoSizeColumn(columnIndex)
+                }
+            }
+
             workbook.write(fileOutputStream)
             workbook.close()
 

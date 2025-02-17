@@ -100,12 +100,13 @@ compose.desktop {
 
             description = "A secure vault application for managing encrypted data."
             vendor = "Shade Dev"
-            copyright = "© 2024 Shade Dev. All rights reserved."
+            copyright = "© 2025 Shade Dev. All rights reserved."
 
             windows {
                 menuGroup = "SecVault"
                 shortcut = true
                 perUserInstall = false
+                iconFile.set(project.file("src/main/resources/assets/icon.ico"))
             }
 
             macOS {
@@ -114,6 +115,7 @@ compose.desktop {
 
             linux {
                 shortcut = true
+                iconFile.set(project.file("src/main/resources/assets/icon.png"))
             }
         }
     }
