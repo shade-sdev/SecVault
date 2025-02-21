@@ -43,3 +43,4 @@ bin/
 /gradlew
 /gradlew.bat
 /secvault.db
+/*.db
