@@ -1,14 +1,14 @@
 database:
-  driverClassName: "org.sqlite.JDBC"
-  jdbcUrl: "jdbc:sqlite:secvault.db"
-  username: "admin"
-  password: "admin"
-  maximumPoolSize: 10
-  isAutoCommit: true
-  isReadOnly: false
-  transactionIsolation: "TRANSACTION_SERIALIZABLE"
+  driverClassName: ${DRIVER_CLASS_NAME}
+  jdbcUrl: ${JDBC_URL}
+  username: ${DB_USERNAME}
+  password: ${DB_PASSWORD}
+  maximumPoolSize: ${MAX_POOL_SIZE}
+  isAutoCommit: ${AUTO_COMMIT}
+  isReadOnly: ${IS_READ_ONLY}
+  transactionIsolation: ${TRANSACTION_ISOLATION}
 
 jwt:
-  issuer: SHADE-SOFTWARE
-  expiration: 86400000
-  secret: d56d9e98eddf914b95d670cd4991afda46f943fb7d28fa64d6170fb45cf1ad11771ca8f7104b824809bccbfc834a39170a0fe14397f0bde8cbdb9e54cc3344f2
+  issuer: ${JWT_ISSUER}
+  expiration: ${JWT_EXPIRATION}
+  secret: ${JWT_SECRET}
