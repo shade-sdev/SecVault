@@ -1,5 +1,6 @@
 ;aiu;
-[update]
-version=1.2.0
-url=https://github.com/username/repository/releases/download/v1.2.0/setup-1.2.0.exe
-description=New features and bug fixes.
+
+[Update]
+Name = SecVault
+ProductVersion = 1.0.0
+URL = https://www.alexandrumarin.com/download/NewUpdaterFunctionality3.msi
