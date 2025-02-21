@@ -1,6 +1,0 @@
-;aiu;
-
-[Update]
-Name = SecVault
-ProductVersion = 1.0.0
-URL = https://www.alexandrumarin.com/download/NewUpdaterFunctionality3.msi
