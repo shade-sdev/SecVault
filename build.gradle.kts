@@ -90,6 +90,7 @@ dependencies {
 compose.desktop {
     application {
         mainClass = "MainKt"
+        jvmArgs += listOf("-Dapp.profile=prod")
 
         nativeDistributions {
             includeAllModules = true
