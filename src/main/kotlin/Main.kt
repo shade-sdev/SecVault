@@ -19,7 +19,7 @@ import ui.App
 
 /**
  * Main entry point of the application.
- * Initializes Koin for dependency injection and sets up the main app window.
+ * Initializes Koin for dependency injection and sets up the main application window.
  */
 fun main() = application {
 
