@@ -36,11 +36,11 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-/.idea/
-/.run/
-/gradle/
-/.kotlin/
-/gradlew
-/gradlew.bat
-/secvault.db
-/*.db
+.idea/
+.run/
+gradle/
+.kotlin/
+gradlew
+gradlew.bat
+secvault.db
+*.db

@@ -21,6 +21,7 @@ import repository.google.GoogleDriveConfigRepository
 import java.awt.Desktop
 import java.io.InputStreamReader
 import java.net.URI
+import java.time.LocalDateTime
 
 /**
  * Manager for handling Google authentication.
@@ -93,7 +94,7 @@ class GoogleAuthManager(
                     val userId = SecurityContext.getUserId.toString()
                     var credential = flow.loadCredential(userId)
 
-                    if (credential == null) {
+                    if (credential == null /**|| credential.expirationTimeMilliseconds <= System.currentTimeMillis() */) {
                         val receiver = LocalServerReceiver.Builder()
                             .setPort(8888)
                             .setCallbackPath("/oauth2callback")
@@ -125,6 +126,7 @@ class GoogleAuthManager(
                     }
 
                     if (credential != null) {
+                        credential.refreshToken()
                         SecurityContext.setGoogleCredential(credential)
                         SecurityContext.setGooglePerson(getUserInfo(credential))
                         AuthState.Authorized(credential)
