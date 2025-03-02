@@ -1,0 +1,124 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SecVaultUpdater.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" Width="450" Height="300"
+        x:Class="SecVaultUpdater.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/icon.ico"
+        Title="SecVault Updater">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel />
+    </Window.DataContext>
+
+    <Window.Styles>
+        <Style Selector="Window">
+            <Setter Property="Background" Value="#2A2A2A" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#E1E1E1" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+
+        <Style Selector="ProgressBar">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Background" Value="#444444" />
+            <Setter Property="Foreground" Value="#5C5CFF" />
+            <Setter Property="CornerRadius" Value="15" />
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="Width" Value="250" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Background" Value="#5C5CFF" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="#4A4AFF" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="20" />
+        </Style>
+
+        <!-- Button Hover Style -->
+        <Style Selector="Button:hover">
+            <Setter Property="Background" Value="#4A4AFF" />
+            <Setter Property="BorderBrush" Value="#3A3AFF" />
+        </Style>
+
+        <!-- Grid Layout -->
+        <Style Selector="Grid">
+            <Setter Property="Margin" Value="20" />
+        </Style>
+    </Window.Styles>
+
+    <!-- Main UI Layout using Grid -->
+    <Grid HorizontalAlignment="Center" 
+          VerticalAlignment="Center" 
+          ColumnDefinitions="Auto"
+          RowDefinitions="Auto,Auto,Auto, Auto">
+
+        <!-- Status Text -->
+        <TextBlock Text="{Binding StatusText}"
+                   Grid.Row="0"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="10"
+                   FontSize="16"
+                   Foreground="#E1E1E1"
+                   TextWrapping="Wrap"
+                   MaxWidth="400" />
+        
+        <!-- Progress Bar -->
+        <ProgressBar Minimum="0" 
+                     Maximum="100" 
+                     Value="{Binding ProgressValue}" 
+                     Grid.Row="1"
+                     HorizontalAlignment="Center" 
+                     VerticalAlignment="Center" 
+                     Width="300" 
+                     Height="30" 
+                     Margin="10"
+                     Background="#444444" 
+                     Foreground="#5C5CFF" 
+                     CornerRadius="15" />
+
+        <!-- Update Button -->
+        <Button Content="Check for Updates" 
+                Command="{Binding CheckForUpdatesCommand}" 
+                Grid.Row="2"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Margin="20" 
+                Width="250" 
+                Height="40" 
+                Background="#5C5CFF" 
+                Foreground="White" 
+                BorderBrush="#4A4AFF" 
+                BorderThickness="1" 
+                CornerRadius="20"
+                HorizontalContentAlignment="Center" 
+                VerticalContentAlignment="Center" />
+        
+        <!-- Launch App Button -->
+        <Button Content="Launch SecVault" 
+                Command="{Binding CheckForUpdatesCommand}" 
+                Grid.Row="3"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Margin="0" 
+                Width="250" 
+                Height="40" 
+                Background="#5C5CFF" 
+                Foreground="White" 
+                BorderBrush="#4A4AFF" 
+                BorderThickness="1" 
+                CornerRadius="20"
+                HorizontalContentAlignment="Center" 
+                VerticalContentAlignment="Center" />
+        
+    </Grid>
+    
+</Window>
