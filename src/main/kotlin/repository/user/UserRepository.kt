@@ -12,6 +12,8 @@ interface UserRepository {
 
     fun hasUser(): Boolean
 
+    fun hasUserData(userId: UUID): Boolean
+
     suspend fun findByUsername(username: String): Result<User>
 
     suspend fun findByEmail(email: String): Result<User>

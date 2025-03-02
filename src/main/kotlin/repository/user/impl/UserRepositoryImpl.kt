@@ -2,6 +2,7 @@ package repository.user.impl
 
 import core.models.Result
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.UUIDColumnType
 import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.Logger
@@ -38,6 +39,20 @@ class UserRepositoryImpl(
                 rs.getBoolean(1)
             } == true
         }
+    }
+
+    override fun hasUserData(userId: UUID): Boolean {
+        return transaction(db) {
+            exec(
+                UserQueries.USER_EXIST_DATA_QUERY, args = listOf(
+                    Pair(UUIDColumnType(), userId),
+                    Pair(UUIDColumnType(), userId)
+                )
+            ) { rs ->
+                rs.next()
+                rs.getBoolean(1)
+            }
+        } == true
     }
 
     override suspend fun findByUsername(username: String): Result<User> {
