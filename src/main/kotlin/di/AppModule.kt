@@ -11,6 +11,7 @@ import core.security.AuthenticationManager
 import core.security.JwtService
 import core.security.TwoFactorAuthenticationService
 import core.service.ExcelExportService
+import core.service.ExcelImportService
 import org.koin.core.module.dsl.createdAtStart
 import org.koin.core.module.dsl.withOptions
 import org.koin.core.parameter.parametersOf
@@ -65,6 +66,8 @@ val appModule = module {
     single { GoogleAuthManager(get()) }
 
     single { ExcelExportService(get(), get(), get()) }
+
+    single { ExcelImportService(get()) }
 
     single { BackupJob(get(), get(), get()) }
 
@@ -138,6 +141,7 @@ val viewModelModule = module {
 
     factory {
         SettingScreenModel(
+            get(),
             get(),
             get(),
             get()

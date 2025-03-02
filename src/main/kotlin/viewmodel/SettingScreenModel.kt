@@ -9,7 +9,9 @@ import core.job.BackupJob
 import core.models.Result
 import core.models.UiState
 import core.models.dto.GoogleDriveConfigDto
+import core.models.enumeration.FileExtensions
 import core.security.SecurityContext
+import core.service.ExcelImportService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +26,7 @@ import java.io.File
 class SettingScreenModel(
     private val googleDriveConfigRepository: GoogleDriveConfigRepository,
     private val googleAuthManager: GoogleAuthManager,
+    private val importExcelImportService: ExcelImportService,
     private val backupJob: BackupJob,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ScreenModel {
@@ -31,29 +34,43 @@ class SettingScreenModel(
     private val _settingState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
     val settingState: StateFlow<UiState<Boolean>> = _settingState.asStateFlow()
 
-    private val _fileDialogState = MutableStateFlow(false)
-    val fileDialogState: StateFlow<Boolean> = _fileDialogState.asStateFlow()
+    private val _jsonFileDialogState = MutableStateFlow(false)
+    val jsonFileDialogState: StateFlow<Boolean> = _jsonFileDialogState.asStateFlow()
+
+    private val _importExcelFileDialogState = MutableStateFlow(false)
+    val importExcelFileDialogState: StateFlow<Boolean> = _importExcelFileDialogState.asStateFlow()
+
+    private val _saveExcelFileDialogState = MutableStateFlow(false)
+    val saveExcelFileDialogState: StateFlow<Boolean> = _saveExcelFileDialogState.asStateFlow()
 
     private val _googleAppState = MutableStateFlow<GoogleAppState?>(GoogleAppState.getInitialAppState())
     val googleAppState: StateFlow<GoogleAppState?> = _googleAppState.asStateFlow()
 
-    fun openDialog() {
-        _fileDialogState.value = true
+    fun onJsonDialog() {
+        _jsonFileDialogState.value = !_jsonFileDialogState.value
     }
 
-    fun closeDialog() {
-        _fileDialogState.value = false
+    fun onImportExcelDialog() {
+        _importExcelFileDialogState.value = !_importExcelFileDialogState.value
     }
 
-    fun showSelectFileDialog(): File? {
+    fun onExportExcelTemplateDialog() {
+        _saveExcelFileDialogState.value = !_saveExcelFileDialogState.value
+    }
+
+    fun showSelectFileDialog(extension: FileExtensions): File? {
         val dialog = FileDialog(null as Frame?, "Select a JSON File", FileDialog.LOAD).apply {
-            file = "*.json"
+            file = extension.filter
             isVisible = true
         }
         dialog.directory?.let { dir ->
             dialog.file?.let { fileName ->
                 val selectedFile = File(dir, fileName)
-                if (selectedFile.exists() && selectedFile.extension.equals("json", ignoreCase = true)) {
+                if (selectedFile.exists() && selectedFile.extension.equals(
+                        extension.fileExtension,
+                        ignoreCase = true
+                    )
+                ) {
                     return selectedFile
                 }
             }
@@ -62,12 +79,37 @@ class SettingScreenModel(
         return null
     }
 
+    fun saveTemplateDialog(): File {
+        FileDialog(null as Frame?, "Save Template", FileDialog.SAVE).apply {
+            file = "SecVault_Import_Template.xlsx"
+            isVisible = true
+        }.let { dialog ->
+            dialog.directory?.let { dir ->
+                dialog.file?.let { file ->
+                    return File(dir, file)
+                }
+            }
+        }
+        return File("SecVault_Import_Template.xlsx")
+    }
+
     fun saveConfigFile(file: ByteArray) {
         screenModelScope.launch(dispatcher) {
             _settingState.value = UiState.Loading
             when (val result =
                 googleDriveConfigRepository.save(GoogleDriveConfigDto(SecurityContext.authenticatedUser!!, file))) {
                 is Result.Success -> _settingState.value = UiState.Success(result.data, "File successfully saved")
+                is Result.Error -> _settingState.value = UiState.Error(result.message)
+            }
+        }
+    }
+
+    fun importPasswords(file: ByteArray) {
+        screenModelScope.launch(dispatcher) {
+            _settingState.value = UiState.Loading
+            when (val result =
+                importExcelImportService.importExcel(file)) {
+                is Result.Success -> _settingState.value = UiState.Success(true, "File successfully imported")
                 is Result.Error -> _settingState.value = UiState.Error(result.message)
             }
         }
