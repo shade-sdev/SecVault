@@ -11,6 +11,7 @@ import com.dokar.sonner.ToastType
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
 import core.models.UiState
+import core.models.enumeration.FileExtensions
 import ui.components.setting.SettingScreenContent
 import viewmodel.SettingScreenModel
 import kotlin.time.Duration
@@ -23,7 +24,9 @@ class SettingScreen : Screen {
         val screenModel = koinScreenModel<SettingScreenModel>()
 
         val settingState by screenModel.settingState.collectAsState()
-        val fileDialogState by screenModel.fileDialogState.collectAsState()
+        val jsonFileDialogState by screenModel.jsonFileDialogState.collectAsState()
+        val excelFileDialogState by screenModel.importExcelFileDialogState.collectAsState()
+        val saveExcelFileDialogState by screenModel.saveExcelFileDialogState.collectAsState()
         val toasterState = rememberToasterState()
 
         Toaster(
@@ -35,10 +38,29 @@ class SettingScreen : Screen {
         )
 
         when {
-            fileDialogState -> {
-                screenModel.showSelectFileDialog()?.readBytes()?.let {
+            jsonFileDialogState -> {
+                screenModel.showSelectFileDialog(FileExtensions.JSON)?.readBytes()?.let {
                     screenModel.saveConfigFile(it)
-                    screenModel.closeDialog()
+                    screenModel.onJsonDialog()
+                }
+            }
+        }
+
+        when {
+            excelFileDialogState -> {
+                screenModel.showSelectFileDialog(FileExtensions.XLSX)?.readBytes()?.let {
+                    screenModel.importPasswords(it)
+                    screenModel.onImportExcelDialog()
+                }
+            }
+        }
+
+        when {
+            saveExcelFileDialogState -> {
+                screenModel.saveTemplateDialog().let {
+                    javaClass.classLoader.getResourceAsStream("assets/SecVault_Import_Template.xlsx")?.readBytes()
+                        ?.let { excelFile -> it.writeBytes(excelFile) }
+                    screenModel.onExportExcelTemplateDialog()
                 }
             }
         }
