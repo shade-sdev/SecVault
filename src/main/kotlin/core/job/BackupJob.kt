@@ -12,6 +12,7 @@ import org.sqlite.util.Logger
 import org.sqlite.util.LoggerFactory
 import repository.google.GoogleDriveConfig
 import repository.google.GoogleDriveConfigRepository
+import repository.user.UserRepository
 import java.awt.TrayIcon
 import java.time.LocalDateTime
 
@@ -24,6 +25,7 @@ import java.time.LocalDateTime
  * @property logger Logger for logging messages.
  */
 class BackupJob(
+    private val userRepository: UserRepository,
     private val googleDriveConfigRepository: GoogleDriveConfigRepository,
     private val exportService: ExcelExportService,
     private val appState: AppState,
@@ -39,6 +41,11 @@ class BackupJob(
         if (SecurityContext.getGoogleCredential == null || !appState.isMasterPasswordPresent()) {
             logger.error("Google Credential is not setup.", RuntimeException())
             return Result.Error("No google credential.")
+        }
+
+        if (!userRepository.hasUserData(SecurityContext.getUserId!!)) {
+            logger.warn("No data skipping backup job.")
+            return Result.Error("No data skipping backup job.")
         }
 
         when (val configResult = googleDriveConfigRepository.findByUserId(SecurityContext.getUserId!!)) {

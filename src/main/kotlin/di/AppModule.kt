@@ -69,7 +69,7 @@ val appModule = module {
 
     single { ExcelImportService(get()) }
 
-    single { BackupJob(get(), get(), get()) }
+    single { BackupJob(get(), get(), get(), get()) }
 
     factory { (clazz: Class<*>) ->
         LoggerFactory.getLogger(clazz)
