@@ -6,6 +6,7 @@ import core.models.criteria.CredentialSearchCriteria
 import core.models.dto.CreditCardDto
 import kotlinx.coroutines.delay
 import org.jetbrains.exposed.dao.load
+import org.jetbrains.exposed.dao.with
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.SortOrder
@@ -41,7 +42,8 @@ class CreditCardRepositoryImpl(
             return transaction(db) {
                 CreditCard.find {
                     CreditCardTable.user eq userId
-                }.orderBy(CreditCardTable.name to SortOrder.ASC)
+                }.with(CreditCard::owner)
+                    .orderBy(CreditCardTable.name to SortOrder.ASC)
                     .toList()
             }.let { Result.Success(it) }
         } catch (e: Exception) {
