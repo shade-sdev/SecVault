@@ -44,3 +44,4 @@ gradlew
 gradlew.bat
 secvault.db
 *.db
+**/obj/
