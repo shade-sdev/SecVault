@@ -48,6 +48,6 @@ public static class UpdaterModel
 
 public class VersionInfo
 {
-    public string Version     { get; set; }
-    public string DownloadUrl { get; set; }
+    public required string Version     { get; set; }
+    public required string DownloadUrl { get; set; }
 }
