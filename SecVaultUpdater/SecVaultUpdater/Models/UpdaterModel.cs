@@ -44,10 +44,21 @@ public static class UpdaterModel
         ZipFile.ExtractToDirectory(zipFilePath, installDir);
     }
     
-}
-
-public class VersionInfo
-{
-    public required string Version     { get; set; }
-    public required string DownloadUrl { get; set; }
+    public static string GetCurrentVersion()
+    {
+        try
+        {
+            var jsonPath = Path.Combine(AppContext.BaseDirectory, "app.json");
+            if (!File.Exists(jsonPath)) return "0.0.0";
+            var json    = File.ReadAllText(jsonPath);
+            var appInfo = JsonConvert.DeserializeObject<AppInfo>(json);
+            return appInfo?.Version ?? "0.0.0";
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reading version file: {ex.Message}");
+            return "0.0.0";
+        }
+    }
+    
 }

@@ -59,8 +59,7 @@ public class MainWindowViewModel : ViewModelBase
                     UpdaterModel
                         .GetUpdateInfo("https://raw.githubusercontent.com/yourusername/yourrepo/main/version.json");
 
-            var currentVersion = "1.0.0"; // Replace this with actual version retrieval logic.
-            if (Version.Parse(updateInfo.Version) > Version.Parse(currentVersion))
+            if (Version.Parse(updateInfo.Version) > Version.Parse(UpdaterModel.GetCurrentVersion()))
             {
                 UpdateState = UpdateState.UpdateFound;
                 await DownloadUpdate(updateInfo.DownloadUrl);
