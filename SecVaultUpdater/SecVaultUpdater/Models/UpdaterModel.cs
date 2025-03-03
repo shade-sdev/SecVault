@@ -101,4 +101,5 @@ public static class UpdaterModel
             return "0.0.0";
         }
     }
+    
 }
