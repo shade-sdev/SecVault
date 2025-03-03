@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
+using MsBox.Avalonia;
 using ReactiveUI;
 using SecVaultUpdater.Models;
 
@@ -13,9 +14,14 @@ public class MainWindowViewModel : ViewModelBase
     private UpdateState _updateState;
     private int         _progressValue;
     private bool        _isInstalling;
+    private string?     _statusText;
 
-    public string? StatusText { get; private set; }
-
+    public string? StatusText
+    {
+        get => _statusText;
+        private set => this.RaiseAndSetIfChanged(ref _statusText, value);
+    }
+    
     public UpdateState UpdateState
     {
         get => _updateState;
@@ -54,10 +60,7 @@ public class MainWindowViewModel : ViewModelBase
         try
         {
             UpdateState = UpdateState.CheckingUpdates;
-            var updateInfo =
-                await
-                    UpdaterModel
-                        .GetUpdateInfo("https://raw.githubusercontent.com/yourusername/yourrepo/main/version.json");
+            var updateInfo = await UpdaterModel.GetUpdateInfo(UpdaterModel.UpdateJsonUrl);
 
             if (Version.Parse(updateInfo.Version) > Version.Parse(UpdaterModel.GetCurrentVersion()))
             {
@@ -72,6 +75,7 @@ public class MainWindowViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
+            await ShowErrorMessage(ex.Message);
             Console.WriteLine(ex.Message, ex.StackTrace);
             StatusText = $"Error: {ex.Message}";
         }
@@ -82,16 +86,37 @@ public class MainWindowViewModel : ViewModelBase
         try
         {
             IsInstalling = true;
-            var tempFolder = Path.GetTempPath();
+            var tempFolder = Path.Combine(Path.GetTempPath(), "SecVaultUpdater");
+            
+            if (!Directory.Exists(tempFolder))
+            {
+                Directory.CreateDirectory(tempFolder);
+            }
+            
+            var updateZipPath = Path.Combine(tempFolder, "update.zip");
             await UpdaterModel.DownloadAndUpdate(downloadUrl, tempFolder, progress => ProgressValue = progress);
-
+            
             UpdateState = UpdateState.InstallationComplete;
             UpdaterModel.ExtractAndInstall(Path.Combine(tempFolder, "update.zip"), AppContext.BaseDirectory);
 
+            if (File.Exists(updateZipPath))
+            {
+                try
+                {
+                    File.Delete(updateZipPath);
+                }
+                catch (Exception ex)
+                {
+                    await ShowErrorMessage(ex.Message);
+                    Console.WriteLine($"Failed to delete update.zip: {ex.Message}");
+                }
+            }
+            
             LaunchMainApp();
         }
         catch (Exception ex)
         {
+            await ShowErrorMessage(ex.Message);
             Console.WriteLine(ex.Message, ex.StackTrace);
             UpdateState = UpdateState.InstallationComplete;
         }
@@ -105,6 +130,12 @@ public class MainWindowViewModel : ViewModelBase
     {
         Process.Start(Path.Combine(AppContext.BaseDirectory, "SecVault.exe"));
         Environment.Exit(0);
+    }
+    
+    private static async Task ShowErrorMessage(string message)
+    {
+        var messageBox = MessageBoxManager.GetMessageBoxStandard(title: "Error", text: message);
+        await messageBox.ShowAsync();
     }
     
 }
