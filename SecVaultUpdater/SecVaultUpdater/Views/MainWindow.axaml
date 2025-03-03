@@ -104,7 +104,7 @@
         
         <!-- Launch App Button -->
         <Button Content="Launch SecVault" 
-                Command="{Binding CheckForUpdatesCommand}" 
+                Command="{Binding LaunchMainAppCommand}" 
                 Grid.Row="3"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center" 

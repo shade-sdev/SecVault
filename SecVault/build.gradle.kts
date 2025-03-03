@@ -23,6 +23,10 @@ val googleAuthLibrary: String by project
 val googlePersonApi: String by project
 val apachePoiApi: String by project
 
+val applicationName: String by project
+val applicationVersion: String by project
+val outputDir = layout.buildDirectory.dir("compose/binaries/main/app/SecVault")
+
 plugins {
     kotlin("jvm")
     id("org.jetbrains.compose")
@@ -96,22 +100,22 @@ compose.desktop {
             includeAllModules = true
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.AppImage)
 
-            packageName = "SecVault"
-            packageVersion = "1.0.0"
+            packageName = applicationName
+            packageVersion = applicationVersion
 
             description = "A secure vault application for managing encrypted data."
             vendor = "Shade Dev"
             copyright = "© 2025 Shade Dev. All rights reserved."
 
             windows {
-                menuGroup = "SecVault"
+                menuGroup = applicationName
                 shortcut = true
                 perUserInstall = false
                 iconFile.set(project.file("src/main/resources/assets/icon.ico"))
             }
 
             macOS {
-                dockName = "SecVault"
+                dockName = applicationName
             }
 
             linux {
@@ -120,4 +124,22 @@ compose.desktop {
             }
         }
     }
+}
+
+tasks.register("releaseAppImage") {
+    val jsonFile = outputDir.map { it.file("app.json") }
+    doLast {
+        jsonFile.get().asFile.parentFile.mkdirs()
+        jsonFile.get().asFile.writeText("""
+            {
+                "name": "$applicationName",
+                "version": "$applicationVersion"
+            }
+        """.trimIndent())
+        println("Generated app.json: ${jsonFile.get().asFile.absolutePath}")
+    }
+}
+
+tasks.named("releaseAppImage") {
+    dependsOn(tasks.matching { it.name.startsWith("packageAppImage") })
 }

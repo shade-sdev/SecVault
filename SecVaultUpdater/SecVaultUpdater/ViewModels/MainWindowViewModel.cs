@@ -10,16 +10,20 @@ namespace SecVaultUpdater.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    public ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; }
+    private UpdateState _updateState;
+    private int         _progressValue;
+    private bool        _isInstalling;
 
-    private string? _statusText;
-    private int     _progressValue;
-    private bool    _isInstalling;
+    public string? StatusText { get; private set; }
 
-    public string? StatusText
+    public UpdateState UpdateState
     {
-        get => _statusText;
-        set => this.RaiseAndSetIfChanged(ref _statusText, value);
+        get => _updateState;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _updateState, value);
+            StatusText = value.GetDisplayText();
+        }
     }
 
     public int ProgressValue
@@ -33,10 +37,15 @@ public class MainWindowViewModel : ViewModelBase
         get => _isInstalling;
         set => this.RaiseAndSetIfChanged(ref _isInstalling, value);
     }
-    
+
+    public ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; }
+
+    public ReactiveCommand<Unit, Unit> LaunchMainAppCommand { get; }
+
     public MainWindowViewModel()
     {
         CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(CheckForUpdates);
+        LaunchMainAppCommand   = ReactiveCommand.Create(LaunchMainApp);
         Task.Run(CheckForUpdates);
     }
 
@@ -44,25 +53,26 @@ public class MainWindowViewModel : ViewModelBase
     {
         try
         {
-            StatusText = "Checking for updates...";
+            UpdateState = UpdateState.CheckingUpdates;
             var updateInfo =
                 await
                     UpdaterModel
                         .GetUpdateInfo("https://raw.githubusercontent.com/yourusername/yourrepo/main/version.json");
 
-            var currentVersion = "1.0.0"; // Replace this with actual version retrieval logic.
-            if (Version.Parse(updateInfo.Version) > Version.Parse(currentVersion))
+            if (Version.Parse(updateInfo.Version) > Version.Parse(UpdaterModel.GetCurrentVersion()))
             {
-                StatusText = "Update found! Downloading...";
+                UpdateState = UpdateState.UpdateFound;
                 await DownloadUpdate(updateInfo.DownloadUrl);
             }
             else
             {
-                StatusText = "You are up-to-date!";
+                UpdateState = UpdateState.UpToDate;
+                LaunchMainApp();
             }
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex.Message, ex.StackTrace);
             StatusText = $"Error: {ex.Message}";
         }
     }
@@ -75,21 +85,26 @@ public class MainWindowViewModel : ViewModelBase
             var tempFolder = Path.GetTempPath();
             await UpdaterModel.DownloadAndUpdate(downloadUrl, tempFolder, progress => ProgressValue = progress);
 
-            StatusText = "Installation complete! Launching app...";
-            UpdaterModel.ExtractAndInstall(Path.Combine(tempFolder, "update.zip"), @"C:\path\to\installation");
+            UpdateState = UpdateState.InstallationComplete;
+            UpdaterModel.ExtractAndInstall(Path.Combine(tempFolder, "update.zip"), AppContext.BaseDirectory);
 
-            // Launch the Jetpack Compose app
-            Process.Start(@"C:\path\to\installation\yourapp.exe");
-            Environment.Exit(0); // Exit updater
+            LaunchMainApp();
         }
         catch (Exception ex)
         {
-            StatusText = $"Installation failed: {ex.Message}";
+            Console.WriteLine(ex.Message, ex.StackTrace);
+            UpdateState = UpdateState.InstallationComplete;
         }
         finally
         {
             IsInstalling = false;
         }
+    }
+
+    private static void LaunchMainApp()
+    {
+        Process.Start(Path.Combine(AppContext.BaseDirectory, "SecVault.exe"));
+        Environment.Exit(0);
     }
     
 }
