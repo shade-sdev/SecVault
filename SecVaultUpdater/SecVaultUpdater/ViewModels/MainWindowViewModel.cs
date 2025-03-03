@@ -54,10 +54,7 @@ public class MainWindowViewModel : ViewModelBase
         try
         {
             UpdateState = UpdateState.CheckingUpdates;
-            var updateInfo =
-                await
-                    UpdaterModel
-                        .GetUpdateInfo("https://raw.githubusercontent.com/yourusername/yourrepo/main/version.json");
+            var updateInfo = await UpdaterModel.GetUpdateInfo(UpdaterModel.UpdateJsonUrl);
 
             if (Version.Parse(updateInfo.Version) > Version.Parse(UpdaterModel.GetCurrentVersion()))
             {
@@ -106,5 +103,4 @@ public class MainWindowViewModel : ViewModelBase
         Process.Start(Path.Combine(AppContext.BaseDirectory, "SecVault.exe"));
         Environment.Exit(0);
     }
-    
 }

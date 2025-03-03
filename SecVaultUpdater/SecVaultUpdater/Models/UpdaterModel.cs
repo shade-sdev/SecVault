@@ -10,6 +10,8 @@ namespace SecVaultUpdater.Models;
 public static class UpdaterModel
 {
     
+    public const string UpdateJsonUrl = "https://raw.githubusercontent.com/shade-sdev/SecVault/refs/heads/master/update.json";
+    
     public static async Task<VersionInfo> GetUpdateInfo(string url)
     {
         var client = new HttpClient();
