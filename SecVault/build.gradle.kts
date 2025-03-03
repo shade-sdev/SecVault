@@ -128,6 +128,13 @@ compose.desktop {
 
 tasks.register("releaseAppImage") {
     val jsonFile = outputDir.map { it.file("app.json") }
+
+    val yamlFile = outputDir.map { it.file("application-prod.yaml") }
+    val resourceFile = project.file("src/main/resources/application-prod.yaml")
+
+    val exeSource = file("${projectDir.parent}/SecVaultUpdater/SecVaultUpdater/bin/Release/net9.0/win-x64/publish/SecVaultUpdater.exe")
+    val exeDestination = outputDir.map { it.file("SecVaultUpdater.exe") }
+
     doLast {
         jsonFile.get().asFile.parentFile.mkdirs()
         jsonFile.get().asFile.writeText("""
@@ -137,6 +144,24 @@ tasks.register("releaseAppImage") {
             }
         """.trimIndent())
         println("Generated app.json: ${jsonFile.get().asFile.absolutePath}")
+
+        if (resourceFile.exists()) {
+            yamlFile.get().asFile.writeText(resourceFile.readText())
+            println("Copied application-prod.yaml: ${yamlFile.get().asFile.absolutePath}")
+        } else {
+            println("Warning: application-prod.yaml not found at ${resourceFile.absolutePath}")
+        }
+
+        if (exeSource.exists()) {
+            copy {
+                from(exeSource)
+                into(exeDestination.get().asFile.parentFile)
+            }
+            println("Copied SecVaultUpdater.exe: ${exeDestination.get().asFile.absolutePath}")
+        } else {
+            println("Warning: SecVaultUpdater.exe not found at ${exeSource.absolutePath}")
+        }
+
     }
 }
 
