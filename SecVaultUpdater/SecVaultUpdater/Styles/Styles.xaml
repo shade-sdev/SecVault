@@ -1,0 +1,72 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Window styles -->
+    <Style Selector="Window.MainWindow">
+        <Setter Property="Background" Value="#2A2A2A" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <!-- Text styles -->
+    <Style Selector="TextBlock.StatusText">
+        <Setter Property="Foreground" Value="#E1E1E1" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="MaxWidth" Value="400" />
+    </Style>
+
+    <!-- Progress bar styles -->
+    <Style Selector="ProgressBar.UpdateProgress">
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Width" Value="300" />
+        <Setter Property="Background" Value="#444444" />
+        <Setter Property="Foreground" Value="#5C5CFF" />
+        <Setter Property="CornerRadius" Value="15" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="10" />
+    </Style>
+
+    <!-- Button base styles -->
+    <Style Selector="Button.ActionButton">
+        <Setter Property="Width" Value="250" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Background" Value="#5C5CFF" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="BorderBrush" Value="#4A4AFF" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <!-- Button hover state -->
+    <Style Selector="Button.ActionButton:pointerover">
+        <Setter Property="Background" Value="#4A4AFF" />
+        <Setter Property="BorderBrush" Value="#3A3AFF" />
+    </Style>
+
+    <!-- Check updates button specific styles -->
+    <Style Selector="Button.UpdateButton">
+        <Setter Property="Button.Margin" Value="20" />
+    </Style>
+
+    <!-- Launch button specific styles -->
+    <Style Selector="Button.LaunchButton">
+        <Setter Property="Button.Margin" Value="0" />
+    </Style>
+
+    <!-- Grid layout styles -->
+    <Style Selector="Grid.MainGrid">
+        <Setter Property="Margin" Value="20" />
+        <Setter Property="Grid.HorizontalAlignment" Value="Center" />
+        <Setter Property="Grid.VerticalAlignment" Value="Center" />
+    </Style>
+    
+</Styles>
