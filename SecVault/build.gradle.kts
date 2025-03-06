@@ -98,7 +98,7 @@ compose.desktop {
 
         nativeDistributions {
             includeAllModules = true
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.AppImage)
+            targetFormats(TargetFormat.AppImage)
 
             packageName = applicationName
             packageVersion = applicationVersion
