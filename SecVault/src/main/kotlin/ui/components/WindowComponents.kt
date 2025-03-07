@@ -297,6 +297,7 @@ fun <T> MultiSelectDropdown(
 ) {
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
+    val scrollState = rememberScrollState()
 
     Box(modifier = modifier) {
         Column {
@@ -343,11 +344,14 @@ fun <T> MultiSelectDropdown(
         ) {
             Box(
                 modifier = Modifier
-                    .heightIn(max = 250.dp)
+                    .height(250.dp)
                     .padding(vertical = 4.dp)
             ) {
                 Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState())
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(scrollState)
+                        .padding(end = 12.dp)
                 ) {
                     items.forEach { item ->
                         val isSelected = selectedItems.contains(item)
@@ -375,6 +379,22 @@ fun <T> MultiSelectDropdown(
                         }
                     }
                 }
+
+                VerticalScrollbar(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .fillMaxHeight(),
+                    adapter = rememberScrollbarAdapter(scrollState),
+                    style = ScrollbarStyle(
+                        hoverColor = Color.Black,
+                        unhoverColor = Color(0xFF5203FC),
+                        minimalHeight = 1.dp,
+                        thickness = 6.dp,
+                        shape = RoundedCornerShape(3.dp),
+                        hoverDurationMillis = 1000
+                    )
+                )
+
             }
         }
     }
