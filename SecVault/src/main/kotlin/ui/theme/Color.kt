@@ -1,5 +1,6 @@
 package ui.theme
 
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.ui.graphics.Color
 
 val primary = Color(0xFF191919)
@@ -17,3 +18,8 @@ val surfaceContainerLow = Color(0xFF6C6C6C)
 val inverseOnSurface = Color(0xFFE25C63)
 val onTertiaryContainer = Color(0xFF1C1520)
 val inversePrimary = Color(0xFFFF6363)
+
+val selectionColors = TextSelectionColors(
+    handleColor = Color(0xFF4CAF50),
+    backgroundColor = Color(0x664CAF50)
+)
