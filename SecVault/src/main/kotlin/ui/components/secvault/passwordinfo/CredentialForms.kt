@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
-import ui.components.UnderLineTextFiled
+import ui.components.UnderLineTextField
 import viewmodel.SecVaultScreenModel
 
 @Composable
@@ -38,7 +38,7 @@ fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
 
     Column() {
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = userName,
                 onFieldChange = { userName = it },
                 label = "Username",
@@ -48,7 +48,7 @@ fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
         }
 
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = password,
                 onFieldChange = { password = it },
                 label = "Password",
@@ -59,7 +59,7 @@ fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
         }
 
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = email,
                 onFieldChange = { email = it },
                 label = "Email",
@@ -69,12 +69,13 @@ fun PasswordCredentialForm(screenModel: SecVaultScreenModel) {
         }
 
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = website,
                 onFieldChange = { website = it },
                 label = "Website",
                 modifier = Modifier.fillMaxWidth(),
-                onIconClick = { clipboardManager.setText(AnnotatedString(website)) }
+                onIconClick = { clipboardManager.setText(AnnotatedString(website)) },
+                isAnchorLink = true
             )
         }
 
@@ -124,7 +125,7 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
 
     Column() {
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = bankName,
                 onFieldChange = { bankName = it },
                 label = "Bank Name",
@@ -134,7 +135,7 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
         }
 
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = cardOwner,
                 onFieldChange = { cardOwner = it },
                 label = "Card Owner",
@@ -144,7 +145,7 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
         }
 
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = cardNumber,
                 onFieldChange = { cardNumber = it },
                 label = "Card Number",
@@ -154,7 +155,7 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
         }
 
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = cvc,
                 onFieldChange = { cvc = it },
                 label = "CVC",
@@ -165,7 +166,7 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
         }
 
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = pin,
                 onFieldChange = { pin = it },
                 label = "Pin",
@@ -176,7 +177,7 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
         }
 
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = expiryDate,
                 onFieldChange = { expiryDate = it },
                 label = "Expiry Date",
@@ -186,7 +187,7 @@ fun CreditCardCredentialForm(screenModel: SecVaultScreenModel) {
         }
 
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = notes,
                 onFieldChange = { notes = it },
                 label = "Notes",
@@ -204,7 +205,7 @@ fun NotesCredentialForm() {
 
     Column() {
         Row(modifier = Modifier.weight(1f)) {
-            UnderLineTextFiled(
+            UnderLineTextField(
                 field = userName,
                 onFieldChange = { userName = it },
                 label = "Notes",

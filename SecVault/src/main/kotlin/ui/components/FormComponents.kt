@@ -7,6 +7,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -18,15 +20,21 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ui.theme.Font
 import ui.theme.PasswordColors
 import ui.theme.secondary
+import ui.theme.selectionColors
+import java.awt.Desktop
+import java.net.URI
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,59 +52,63 @@ fun FormTextField(
         color = secondary,
         shape = RoundedCornerShape(8.dp),
     ) {
-        BasicTextField(
-            value = value,
-            onValueChange = onValueChange,
-            interactionSource = interactionSource,
-            modifier = Modifier
+        CompositionLocalProvider(
+            LocalTextSelectionColors provides selectionColors
+        ) {
+            BasicTextField(
+                value = value,
+                onValueChange = onValueChange,
+                interactionSource = interactionSource,
+                modifier = Modifier
                     .fillMaxSize()
                     .padding(start = 14.dp, bottom = 3.dp),
-            textStyle = TextStyle(
-                fontFamily = Font.RussoOne,
-                color = Color.White,
-                textAlign = TextAlign.Start,
-                fontSize = 12.sp
-            ),
-            singleLine = true,
-            cursorBrush = SolidColor(Color.White),
-        ) { innerTextField ->
-
-            TextFieldDefaults.DecorationBox(
-                innerTextField = innerTextField,
-                label = {
-                    Text(
-                        label,
-                        fontSize = 10.sp,
-                        fontFamily = Font.RussoOne,
-                    )
-                },
-                value = value,
-                trailingIcon = {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = "",
-                        tint = Color.White,
-                        modifier = Modifier.size(20.dp)
-                    )
-                },
-                enabled = true,
-                interactionSource = interactionSource,
-                singleLine = true,
-                visualTransformation = VisualTransformation.None,
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledTextColor = Color.LightGray,
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White,
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    focusedLabelColor = Color.Gray
+                textStyle = TextStyle(
+                    fontFamily = Font.RussoOne,
+                    color = Color.White,
+                    textAlign = TextAlign.Start,
+                    fontSize = 12.sp
                 ),
-                contentPadding = PaddingValues(0.dp),
-                container = {}
-            )
+                singleLine = true,
+                cursorBrush = SolidColor(Color.White),
+            ) { innerTextField ->
+
+                TextFieldDefaults.DecorationBox(
+                    innerTextField = innerTextField,
+                    label = {
+                        Text(
+                            label,
+                            fontSize = 10.sp,
+                            fontFamily = Font.RussoOne,
+                        )
+                    },
+                    value = value,
+                    trailingIcon = {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = "",
+                            tint = Color.White,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    },
+                    enabled = true,
+                    interactionSource = interactionSource,
+                    singleLine = true,
+                    visualTransformation = VisualTransformation.None,
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledTextColor = Color.LightGray,
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        unfocusedLabelColor = Color.White,
+                        focusedLabelColor = Color.Gray
+                    ),
+                    contentPadding = PaddingValues(0.dp),
+                    container = {}
+                )
+            }
         }
     }
 }
@@ -119,8 +131,8 @@ fun FormTextArea(
     ) {
         Column(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 14.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp)
         ) {
             if (label.isNotEmpty()) {
                 Text(
@@ -137,8 +149,8 @@ fun FormTextArea(
                 onValueChange = onValueChange,
                 interactionSource = interactionSource,
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
                 textStyle = TextStyle(
                     fontFamily = Font.RussoOne,
                     color = Color.White,
@@ -174,8 +186,8 @@ fun <T> FormDropdown(
     ) {
         Box(
             modifier = Modifier
-                    .fillMaxSize()
-                    .clickable { expanded = true }
+                .fillMaxSize()
+                .clickable { expanded = true }
         ) {
             TextFieldDefaults.DecorationBox(
                 value = selectedItem?.displayText ?: "",
@@ -183,8 +195,8 @@ fun <T> FormDropdown(
                     Text(
                         text = selectedItem?.displayText ?: "",
                         modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 14.dp, bottom = 3.dp),
+                            .fillMaxWidth()
+                            .padding(start = 14.dp, bottom = 3.dp),
                         style = TextStyle(
                             fontFamily = Font.RussoOne,
                             color = Color.White,
@@ -232,8 +244,8 @@ fun <T> FormDropdown(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
                 modifier = Modifier
-                        .background(secondary)
-                        .width(IntrinsicSize.Min)
+                    .background(secondary)
+                    .width(IntrinsicSize.Min)
             ) {
                 items.forEach { item ->
                     DropdownMenuItem(
@@ -250,11 +262,11 @@ fun <T> FormDropdown(
                             expanded = false
                         },
                         modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    if (item.id == selectedItem?.id) Color.White.copy(alpha = 0.1f)
-                                    else Color.Transparent
-                                )
+                            .fillMaxWidth()
+                            .background(
+                                if (item.id == selectedItem?.id) Color.White.copy(alpha = 0.1f)
+                                else Color.Transparent
+                            )
                     )
                 }
             }
@@ -279,69 +291,73 @@ fun PasswordTextField(
         color = secondary,
         shape = RoundedCornerShape(8.dp),
     ) {
-        BasicTextField(
-            value = value,
-            onValueChange = onValueChange,
-            interactionSource = interactionSource,
-            modifier = Modifier
+        CompositionLocalProvider(
+            LocalTextSelectionColors provides selectionColors
+        ) {
+            BasicTextField(
+                value = value,
+                onValueChange = onValueChange,
+                interactionSource = interactionSource,
+                modifier = Modifier
                     .fillMaxSize()
                     .padding(start = 14.dp, bottom = 3.dp),
-            textStyle = TextStyle(
-                fontFamily = Font.RussoOne,
-                color = Color.White,
-                textAlign = TextAlign.Start,
-                fontSize = 12.sp
-            ),
-            singleLine = true,
-            cursorBrush = SolidColor(Color.White),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
-        ) { innerTextField ->
-
-            TextFieldDefaults.DecorationBox(
-                innerTextField = innerTextField,
-                label = {
-                    Text(
-                        label,
-                        fontSize = 10.sp,
-                        fontFamily = Font.RussoOne,
-                    )
-                },
-                value = value,
-                trailingIcon = {
-                    IconToggleButton(
-                        checked = passwordVisible,
-                        onCheckedChange = { passwordVisible = it },
-                        modifier = Modifier.hoverable(interactionSource)
-                                .pointerHoverIcon(PointerIcon.Hand)
-                    )
-                    {
-                        Icon(
-                            imageVector = if (passwordVisible) Icons.Default.VisibilityOff
-                            else Icons.Default.Visibility,
-                            contentDescription = "",
-                            modifier = Modifier.size(width = 15.dp, height = 15.dp),
-                            tint = Color.White
-                        )
-                    }
-                },
-                enabled = true,
-                interactionSource = interactionSource,
-                singleLine = true,
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledTextColor = Color.LightGray,
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White,
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    focusedLabelColor = Color.Gray
+                textStyle = TextStyle(
+                    fontFamily = Font.RussoOne,
+                    color = Color.White,
+                    textAlign = TextAlign.Start,
+                    fontSize = 12.sp
                 ),
-                contentPadding = PaddingValues(0.dp),
-                container = {}
-            )
+                singleLine = true,
+                cursorBrush = SolidColor(Color.White),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+            ) { innerTextField ->
+
+                TextFieldDefaults.DecorationBox(
+                    innerTextField = innerTextField,
+                    label = {
+                        Text(
+                            label,
+                            fontSize = 10.sp,
+                            fontFamily = Font.RussoOne,
+                        )
+                    },
+                    value = value,
+                    trailingIcon = {
+                        IconToggleButton(
+                            checked = passwordVisible,
+                            onCheckedChange = { passwordVisible = it },
+                            modifier = Modifier.hoverable(interactionSource)
+                                .pointerHoverIcon(PointerIcon.Hand)
+                        )
+                        {
+                            Icon(
+                                imageVector = if (passwordVisible) Icons.Default.VisibilityOff
+                                else Icons.Default.Visibility,
+                                contentDescription = "",
+                                modifier = Modifier.size(width = 15.dp, height = 15.dp),
+                                tint = Color.White
+                            )
+                        }
+                    },
+                    enabled = true,
+                    interactionSource = interactionSource,
+                    singleLine = true,
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledTextColor = Color.LightGray,
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        unfocusedLabelColor = Color.White,
+                        focusedLabelColor = Color.Gray
+                    ),
+                    contentPadding = PaddingValues(0.dp),
+                    container = {}
+                )
+            }
         }
     }
 }
@@ -354,154 +370,184 @@ fun RoundedFilledTextField(
 ) {
     var user by remember { mutableStateOf("") }
     val interactionSource = remember { MutableInteractionSource() }
-    BasicTextField(
-        value = user,
-        onValueChange = { user = it },
-        interactionSource = interactionSource,
-        modifier = modifier,
-        textStyle = TextStyle(
-            fontFamily = Font.RussoOne,
-            color = PasswordColors.outlineVariant,
-            textAlign = TextAlign.Start,
-            fontSize = 13.sp
-        ),
-        singleLine = true
-    ) { innerTextField ->
 
-        TextFieldDefaults.DecorationBox(
-            innerTextField = innerTextField,
-            placeholder = {
-                Text(
-                    placeholder,
-                    fontSize = 13.sp,
-                    fontFamily = Font.RussoOne,
-                    modifier = Modifier.padding(PaddingValues(bottom = 3.dp))
-                )
-            },
+    CompositionLocalProvider(
+        LocalTextSelectionColors provides selectionColors
+    ) {
+        BasicTextField(
             value = user,
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "",
-                    tint = PasswordColors.outlineVariant,
-                    modifier = Modifier.width(20.dp).height(20.dp)
-
-                )
-            },
-            enabled = true,
+            onValueChange = { user = it },
             interactionSource = interactionSource,
-            singleLine = true,
-            visualTransformation = VisualTransformation.None,
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledTextColor = Color.LightGray,
-                unfocusedContainerColor = Color.White,
-                focusedContainerColor = Color.White,
-                focusedTextColor = PasswordColors.outlineVariant,
-                unfocusedTextColor = PasswordColors.outlineVariant,
-                focusedPlaceholderColor = PasswordColors.outlineVariant,
-                unfocusedPlaceholderColor = PasswordColors.outlineVariant
+            modifier = modifier,
+            textStyle = TextStyle(
+                fontFamily = Font.RussoOne,
+                color = PasswordColors.outlineVariant,
+                textAlign = TextAlign.Start,
+                fontSize = 13.sp
             ),
-            shape = RoundedCornerShape(20.dp),
-            contentPadding = PaddingValues(0.dp)
-        )
+            singleLine = true
+        ) { innerTextField ->
+
+            TextFieldDefaults.DecorationBox(
+                innerTextField = innerTextField,
+                placeholder = {
+                    Text(
+                        placeholder,
+                        fontSize = 13.sp,
+                        fontFamily = Font.RussoOne,
+                        modifier = Modifier.padding(PaddingValues(bottom = 3.dp))
+                    )
+                },
+                value = user,
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "",
+                        tint = PasswordColors.outlineVariant,
+                        modifier = Modifier.width(20.dp).height(20.dp)
+
+                    )
+                },
+                enabled = true,
+                interactionSource = interactionSource,
+                singleLine = true,
+                visualTransformation = VisualTransformation.None,
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledTextColor = Color.LightGray,
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    focusedTextColor = PasswordColors.outlineVariant,
+                    unfocusedTextColor = PasswordColors.outlineVariant,
+                    focusedPlaceholderColor = PasswordColors.outlineVariant,
+                    unfocusedPlaceholderColor = PasswordColors.outlineVariant
+                ),
+                shape = RoundedCornerShape(20.dp),
+                contentPadding = PaddingValues(0.dp)
+            )
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UnderLineTextFiled(
+fun UnderLineTextField(
     modifier: Modifier = Modifier,
     label: String,
     field: String,
     onIconClick: () -> Unit = { },
     onFieldChange: (String) -> Unit,
     isPassword: Boolean = false,
+    isAnchorLink: Boolean = false,
     singleLine: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    BasicTextField(
-        value = field,
-        onValueChange = onFieldChange,
-        interactionSource = interactionSource,
-        modifier = modifier,
-        textStyle = TextStyle(
-            fontFamily = Font.RussoOne,
-            color = Color.White,
-            textAlign = TextAlign.Start,
-            fontSize = 12.sp
-        ),
-        singleLine = singleLine,
-        cursorBrush = SolidColor(Color.White),
-        visualTransformation = if (!isPassword || passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
-    ) { innerTextField ->
-        TextFieldDefaults.DecorationBox(
-            interactionSource = interactionSource,
-            innerTextField = innerTextField,
-            enabled = true,
+    CompositionLocalProvider(
+        LocalTextSelectionColors provides selectionColors
+    ) {
+        BasicTextField(
             value = field,
-            singleLine = true,
-            visualTransformation = if (!isPassword || passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            label = {
-                Text(
-                    label,
-                    fontFamily = Font.RussoOne,
-                    textAlign = TextAlign.Start,
-                    fontSize = 10.sp,
-                    color = Color.Gray
-                )
-            },
-            trailingIcon = {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(2.dp, Alignment.End),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        if (isPassword) {
-                            IconToggleButton(
-                                checked = passwordVisible,
-                                onCheckedChange = { passwordVisible = it }) {
-                                Icon(
-                                    imageVector = if (passwordVisible) Icons.Default.VisibilityOff
-                                    else Icons.Default.Visibility,
-                                    contentDescription = "",
-                                    modifier = Modifier.size(width = 15.dp, height = 15.dp)
+            onValueChange = onFieldChange,
+            interactionSource = interactionSource,
+            modifier = modifier,
+            textStyle = TextStyle(
+                fontFamily = Font.RussoOne,
+                color = Color.White,
+                textAlign = TextAlign.Start,
+                fontSize = 12.sp
+            ),
+            singleLine = singleLine,
+            cursorBrush = SolidColor(Color.White),
+            visualTransformation = if (!isPassword || passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+        ) { innerTextField ->
+            TextFieldDefaults.DecorationBox(
+                interactionSource = interactionSource,
+                innerTextField = {
+                    if (isAnchorLink) {
+                        ClickableText(
+                            text = AnnotatedString(
+                                text = field,
+                                spanStyle = SpanStyle(
+                                    color = Color(0xFF008CFF),
+                                    textDecoration = TextDecoration.Underline
+                                )
+                            ),
+                            modifier = Modifier.pointerHoverIcon(PointerIcon.Hand),
+                            onClick = {
+                                Desktop.getDesktop().browse(URI(field))
+                            }
+                        )
+                    } else {
+                        Box {
+                            innerTextField()
+                        }
+                    }
+                },
+                enabled = true,
+                value = field,
+                singleLine = true,
+                visualTransformation = if (!isPassword || passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                label = {
+                    Text(
+                        label,
+                        fontFamily = Font.RussoOne,
+                        textAlign = TextAlign.Start,
+                        fontSize = 10.sp,
+                        color = Color.Gray
+                    )
+                },
+                trailingIcon = {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(2.dp, Alignment.End),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            if (isPassword) {
+                                IconToggleButton(
+                                    checked = passwordVisible,
+                                    onCheckedChange = { passwordVisible = it }) {
+                                    Icon(
+                                        imageVector = if (passwordVisible) Icons.Default.VisibilityOff
+                                        else Icons.Default.Visibility,
+                                        contentDescription = "",
+                                        modifier = Modifier.size(width = 15.dp, height = 15.dp)
                                             .pointerHoverIcon(PointerIcon.Default),
-                                    tint = Color.Gray
+                                        tint = Color.Gray
+                                    )
+                                }
+                            }
+                        }
+                        Column {
+                            IconButton(
+                                interactionSource = interactionSource,
+                                onClick = onIconClick
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ContentCopy,
+                                    contentDescription = "",
+                                    tint = Color.Gray,
+                                    modifier = Modifier.size(width = 15.dp, height = 15.dp)
+                                        .pointerHoverIcon(PointerIcon.Default)
                                 )
                             }
                         }
                     }
-                    Column {
-                        IconButton(
-                            interactionSource = interactionSource,
-                            onClick = onIconClick
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.ContentCopy,
-                                contentDescription = "",
-                                tint = Color.Gray,
-                                modifier = Modifier.size(width = 15.dp, height = 15.dp)
-                                        .pointerHoverIcon(PointerIcon.Default)
-                            )
-                        }
-                    }
-                }
-            },
-            contentPadding = TextFieldDefaults.contentPaddingWithLabel(0.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color(0xFF333333),
-                unfocusedIndicatorColor = Color(0xFF333333),
-                disabledTextColor = Color.LightGray,
-                unfocusedContainerColor = Color.Transparent,
-                focusedContainerColor = Color.Transparent,
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White
-            ),
-        )
+                },
+                contentPadding = TextFieldDefaults.contentPaddingWithLabel(0.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color(0xFF333333),
+                    unfocusedIndicatorColor = Color(0xFF333333),
+                    disabledTextColor = Color.LightGray,
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White
+                ),
+            )
+        }
     }
 }
 
