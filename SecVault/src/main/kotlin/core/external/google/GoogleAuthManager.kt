@@ -9,6 +9,8 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.people.v1.PeopleService
 import com.google.api.services.people.v1.model.Person
+import com.google.auth.http.HttpCredentialsAdapter
+import com.google.auth.oauth2.GoogleCredentials
 import core.models.Result
 import core.security.SecurityContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -19,6 +21,7 @@ import org.sqlite.util.LoggerFactory
 import repository.google.GoogleDriveConfig
 import repository.google.GoogleDriveConfigRepository
 import java.awt.Desktop
+import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.net.URI
 import java.time.LocalDateTime
@@ -41,6 +44,7 @@ class GoogleAuthManager(
     companion object Constants {
 
         val JSON_FACTORY: GsonFactory = GsonFactory.getDefaultInstance()
+        val HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport()
 
         /**
          * List of scopes required for Google authentication.
@@ -73,60 +77,10 @@ class GoogleAuthManager(
                         return@withContext AuthState.Failed("Credential is empty or not available")
                     }
 
-                    val clientSecrets = GoogleClientSecrets.load(
-                        JSON_FACTORY,
-                        InputStreamReader(configFile.bytes.inputStream())
-                    )
-
-                    val flow = GoogleAuthorizationCodeFlow.Builder(
-                        GoogleNetHttpTransport.newTrustedTransport(),
-                        JSON_FACTORY,
-                        clientSecrets,
-                        SCOPES
-                    )
-                        .apply {
-                            setDataStoreFactory(DatabaseDataStoreFactory())
-                            accessType = "offline"
-                            approvalPrompt = "force"
-                        }
-                        .build()
-
-                    val userId = SecurityContext.getUserId.toString()
-                    var credential = flow.loadCredential(userId)
-
-                    if (credential == null /**|| credential.expirationTimeMilliseconds <= System.currentTimeMillis() */) {
-                        val receiver = LocalServerReceiver.Builder()
-                            .setPort(8888)
-                            .setCallbackPath("/oauth2callback")
-                            .build()
-
-                        try {
-                            val authorizationUrl = flow.newAuthorizationUrl()
-                                .setRedirectUri(receiver.redirectUri)
-                                .build()
-
-                            Desktop.getDesktop()
-                                .browse(URI(authorizationUrl))
-
-                            val code = receiver.waitForCode()
-
-                            receiver.stop()
-
-                            val response = flow.newTokenRequest(code)
-                                .setRedirectUri(receiver.redirectUri)
-                                .execute()
-
-                            credential = flow.createAndStoreCredential(
-                                response,
-                                userId
-                            )
-                        } finally {
-                            receiver.stop()
-                        }
-                    }
+                    val credential = GoogleCredentials.fromStream(configFile.inputStream)
+                        .createScoped(SCOPES)
 
                     if (credential != null) {
-                        credential.refreshToken()
                         SecurityContext.setGoogleCredential(credential)
                         SecurityContext.setGooglePerson(getUserInfo(credential))
                         AuthState.Authorized(credential)
@@ -149,12 +103,12 @@ class GoogleAuthManager(
      * @param credential The credential used for authentication.
      * @return The user information as a Person object, or null if an error occurs.
      */
-    private suspend fun getUserInfo(credential: Credential): Person? = withContext(dispatcher) {
+    private suspend fun getUserInfo(credential: GoogleCredentials): Person? = withContext(dispatcher) {
         try {
             val peopleService = PeopleService.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
                 GsonFactory.getDefaultInstance(),
-                credential
+                HttpCredentialsAdapter(credential)
             )
                 .setApplicationName("Drive Upload Desktop")
                 .build()

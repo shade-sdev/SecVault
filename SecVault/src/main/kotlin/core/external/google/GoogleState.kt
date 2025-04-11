@@ -2,6 +2,7 @@ package core.external.google
 
 import androidx.compose.ui.graphics.Color
 import com.google.api.client.auth.oauth2.Credential
+import com.google.auth.oauth2.GoogleCredentials
 import core.security.SecurityContext
 
 /**
@@ -68,7 +69,7 @@ sealed class AuthState {
      *
      * @property credential The credential associated with the authorized state.
      */
-    data class Authorized(val credential: Credential) : AuthState()
+    data class Authorized(val credential: GoogleCredentials) : AuthState()
 
     /**
      * State representing that the authentication failed.

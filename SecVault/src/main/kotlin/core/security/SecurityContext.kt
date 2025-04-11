@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.google.api.client.auth.oauth2.Credential
 import com.google.api.services.people.v1.model.Person
+import com.google.auth.oauth2.GoogleCredentials
 import repository.user.User
 import java.util.*
 
@@ -15,7 +16,7 @@ import java.util.*
 object SecurityContext {
 
     private var currentUser by mutableStateOf<User?>(null)
-    private var credential by mutableStateOf<Credential?>(null)
+    private var credential by mutableStateOf<GoogleCredentials?>(null)
     private var person by mutableStateOf<Person?>(null)
 
     /**
@@ -28,14 +29,16 @@ object SecurityContext {
     val getUserId: UUID?
         get() = this.currentUser?.id?.value
 
-    val getGoogleCredential: Credential?
+    val getGoogleCredential: GoogleCredentials?
         get() = this.credential
 
     val getGooglePerson: Person?
         get() = this.person
 
     val getGooglePersonDisplayName: String?
-        get() = this.person?.names?.firstOrNull()?.displayName
+        get() = this.person?.names?.firstOrNull()?.displayName?.let {
+            if ("@" in it) it.substringBefore("@") else it
+        }
 
     /**
      * Sets the authenticated user.
@@ -45,7 +48,7 @@ object SecurityContext {
         this.currentUser = user
     }
 
-    fun setGoogleCredential(credential: Credential) {
+    fun setGoogleCredential(credential: GoogleCredentials) {
         this.credential = credential
     }
 
