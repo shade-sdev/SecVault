@@ -1,9 +1,5 @@
 package core.external.google
 
-import com.google.api.client.auth.oauth2.Credential
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.DriveScopes
@@ -20,11 +16,6 @@ import org.sqlite.util.Logger
 import org.sqlite.util.LoggerFactory
 import repository.google.GoogleDriveConfig
 import repository.google.GoogleDriveConfigRepository
-import java.awt.Desktop
-import java.io.FileInputStream
-import java.io.InputStreamReader
-import java.net.URI
-import java.time.LocalDateTime
 
 /**
  * Manager for handling Google authentication.

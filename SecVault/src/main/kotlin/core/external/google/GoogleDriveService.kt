@@ -1,6 +1,5 @@
 package core.external.google
 
-import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.ByteArrayContent
 import com.google.api.client.json.gson.GsonFactory

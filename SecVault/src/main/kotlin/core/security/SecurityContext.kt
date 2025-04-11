@@ -3,7 +3,6 @@ package core.security
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.google.api.client.auth.oauth2.Credential
 import com.google.api.services.people.v1.model.Person
 import com.google.auth.oauth2.GoogleCredentials
 import repository.user.User

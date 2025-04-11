@@ -1,7 +1,6 @@
 package core.external.google
 
 import androidx.compose.ui.graphics.Color
-import com.google.api.client.auth.oauth2.Credential
 import com.google.auth.oauth2.GoogleCredentials
 import core.security.SecurityContext
 
