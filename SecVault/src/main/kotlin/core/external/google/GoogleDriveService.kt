@@ -1,10 +1,12 @@
 package core.external.google
 
-import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.ByteArrayContent
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
+import com.google.api.services.drive.model.Permission
+import com.google.auth.http.HttpCredentialsAdapter
+import com.google.auth.oauth2.GoogleCredentials
 import core.models.dto.ExcelExportResult
 
 /**
@@ -12,11 +14,11 @@ import core.models.dto.ExcelExportResult
  */
 object GoogleDriveService {
 
-    fun create(credential: Credential): Drive {
+    fun create(credential: GoogleCredentials): Drive {
         return Drive.Builder(
             GoogleNetHttpTransport.newTrustedTransport(),
             GsonFactory.getDefaultInstance(),
-            credential
+            HttpCredentialsAdapter(credential)
         )
             .setApplicationName("Drive Upload Desktop")
             .build()
@@ -30,6 +32,15 @@ object GoogleDriveService {
 
         val folder = drive.files().create(folderMetadata)
             .setFields("id")
+            .execute()
+
+        val permission = Permission().apply {
+            type = "user"
+            role = "writer"
+            emailAddress = "form3pelican@gmail.com"
+        }
+
+        drive.permissions().create(folder.id, permission)
             .execute()
 
         return folder.id
