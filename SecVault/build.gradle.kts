@@ -127,6 +127,9 @@ compose.desktop {
 }
 
 tasks.register("releaseAppImage") {
+    group = "production"
+    description = "Prepares binaries for release"
+
     val jsonFile = outputDir.map { it.file("app.json") }
 
     val yamlFile = outputDir.map { it.file("application-prod.yaml") }
