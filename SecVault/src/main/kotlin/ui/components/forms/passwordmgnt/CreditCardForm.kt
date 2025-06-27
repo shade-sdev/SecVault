@@ -92,7 +92,9 @@ class CreditCardForm(creditCard: CreditCard?, formType: FormType) : Screen {
                 }
             }
 
-            is UiState.Idle -> {}
+            is UiState.Idle -> {
+                //noop
+            }
         }
 
     }

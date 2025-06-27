@@ -34,7 +34,7 @@ class SecVaultScreenModel(
     private val backupJob: BackupJob,
     private val appState: AppState,
     private val logger: Logger,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ScreenModel {
 
     private val eventChannel = Channel<SecVaultEvent>(Channel.BUFFERED)

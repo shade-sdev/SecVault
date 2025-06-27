@@ -94,7 +94,7 @@ fun instanceRule(field: String, type: Class<*>): ValidationRule {
                 String::class.java -> it
                 else -> null
             }
-            Objects.nonNull(value) && type.isInstance(value!!)
+            Objects.nonNull(value) && type.isInstance(value)
         },
         errorMessage = "$field must be of type ${type.simpleName}"
     )

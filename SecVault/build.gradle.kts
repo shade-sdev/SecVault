@@ -31,6 +31,7 @@ plugins {
     kotlin("jvm")
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("org.sonarqube") version "6.2.0.5505"
 }
 
 group = "shade.dev.local"

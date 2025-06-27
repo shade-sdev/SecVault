@@ -26,14 +26,11 @@ import ui.theme.secondary
 import ui.theme.tertiary
 import ui.validators.PasswordFormFieldName
 import ui.validators.toPasswordDto
-import viewmodel.PasswordMgntScreenModel
 
 @Preview
 @Composable
 fun PasswordForm(
     formValidator: FormValidator,
-    screenModel: PasswordMgntScreenModel,
-    isFormValid: Boolean,
     onSaveClick: (PasswordDto) -> Unit,
     onCancelClick: () -> Unit,
     formType: FormType

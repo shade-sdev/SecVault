@@ -62,7 +62,9 @@ class ForgotPasswordScreen : Screen {
                 }
             }
 
-            is UiState.Idle -> {}
+            is UiState.Idle -> {
+                //noop
+            }
         }
     }
 }

@@ -79,8 +79,12 @@ class SettingScreen : Screen {
                 }
             }
 
-            UiState.Idle -> {}
-            UiState.Loading -> {}
+            UiState.Idle -> {
+                //noop
+            }
+            UiState.Loading -> {
+                //noop
+            }
             is UiState.Success<*> -> {
                 LaunchedEffect(toasterState) {
                     toasterState.show(

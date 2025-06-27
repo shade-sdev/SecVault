@@ -32,7 +32,6 @@ class PasswordMgntScreen(password: Password?, formType: FormType) : Screen {
         val formValidator = remember { passwordFormValidator(_password, screenModel::decryptPassword) }
         val passwordState by screenModel.passwordState.collectAsState()
         val navigator = LocalNavigator.current
-        val isFormValid by formValidator.isValid
         val toaster = rememberToasterState()
 
         Toaster(
@@ -45,8 +44,6 @@ class PasswordMgntScreen(password: Password?, formType: FormType) : Screen {
 
         PasswordForm(
             formValidator,
-            screenModel,
-            isFormValid,
             onSaveClick = { password: PasswordDto -> screenModel.savePassword(_password?.id?.value, password, _formType) },
             onCancelClick = { navigator?.pop() },
             _formType
@@ -77,7 +74,9 @@ class PasswordMgntScreen(password: Password?, formType: FormType) : Screen {
                 }
             }
 
-            is UiState.Idle -> {}
+            is UiState.Idle -> {
+                //noop
+            }
         }
 
     }

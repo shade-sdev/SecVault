@@ -57,7 +57,9 @@ class LoginScreen : Screen {
                 }
             }
 
-            is UiState.Idle -> {}
+            is UiState.Idle -> {
+                //noop
+            }
         }
 
     }

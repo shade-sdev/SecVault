@@ -56,7 +56,9 @@ class SecVaultScreen : Screen {
                 }
             }
 
-            is UiState.Idle -> {}
+            is UiState.Idle -> {
+                //noop
+            }
         }
 
         when {
