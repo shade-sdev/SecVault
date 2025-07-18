@@ -60,7 +60,7 @@ class BackupJob(
                 var folderId = configResult.data.folderId
 
                 if (folderId == null) {
-                    folderId = GoogleDriveService.createFolder(drive, "SecVault")
+                    folderId = GoogleDriveService.createFolder(drive, "SecVault", SecurityContext.authenticatedUser?.email)
                 }
 
                 when (val exportResult = exportService.exportExcel()) {

@@ -24,7 +24,7 @@ object GoogleDriveService {
             .build()
     }
 
-    fun createFolder(drive: Drive, folderName: String): String {
+    fun createFolder(drive: Drive, folderName: String, email: String?): String {
         val folderMetadata = com.google.api.services.drive.model.File().apply {
             name = folderName
             mimeType = "application/vnd.google-apps.folder"
@@ -37,7 +37,7 @@ object GoogleDriveService {
         val permission = Permission().apply {
             type = "user"
             role = "writer"
-            emailAddress = "form3pelican@gmail.com"
+            emailAddress = email
         }
 
         drive.permissions().create(folder.id, permission)
