@@ -34,6 +34,7 @@ class LoginScreenModel(
                     }
                     _loginState.value = UiState.Success(loginResult.data)
                 }
+
                 is Result.Error -> _loginState.value = UiState.Error(loginResult.message)
             }
         }

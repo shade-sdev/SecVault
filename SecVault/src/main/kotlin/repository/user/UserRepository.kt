@@ -20,5 +20,5 @@ interface UserRepository {
 
     suspend fun updateUser(user: User, updates: User.() -> Unit): Result<User>
 
-    suspend fun createUser(username: String, email: String, password: String, secretKey: String): Result<UserSummary>
+    suspend fun createUser(username: String, email: String, secretKey: String): Result<UserSummary>
 }

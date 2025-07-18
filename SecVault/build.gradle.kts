@@ -22,6 +22,7 @@ val googleDriveApi: String by project
 val googleAuthLibrary: String by project
 val googlePersonApi: String by project
 val apachePoiApi: String by project
+val jnaVersion: String by project
 
 val applicationName: String by project
 val applicationVersion: String by project
@@ -34,7 +35,7 @@ plugins {
 }
 
 group = "shade.dev.local"
-version = "1.0-SNAPSHOT"
+version = "0.5.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -89,6 +90,9 @@ dependencies {
 
     implementation("org.slf4j", "slf4j-api", sl4jVersion)
     implementation("ch.qos.logback", "logback-classic", logbackVersion)
+
+    implementation("net.java.dev.jna", "jna", jnaVersion)
+    implementation("net.java.dev.jna", "jna-platform", jnaVersion)
 }
 
 compose.desktop {
@@ -140,12 +144,14 @@ tasks.register("releaseAppImage") {
 
     doLast {
         jsonFile.get().asFile.parentFile.mkdirs()
-        jsonFile.get().asFile.writeText("""
+        jsonFile.get().asFile.writeText(
+            """
             {
                 "name": "$applicationName",
                 "version": "$applicationVersion"
             }
-        """.trimIndent())
+        """.trimIndent()
+        )
         println("Generated app.json: ${jsonFile.get().asFile.absolutePath}")
 
         if (resourceFile.exists()) {

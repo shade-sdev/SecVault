@@ -99,7 +99,6 @@ class UserRepositoryImpl(
     override suspend fun createUser(
         username: String,
         email: String,
-        password: String,
         secretKey: String
     ): Result<UserSummary> {
         return try {
@@ -108,7 +107,6 @@ class UserRepositoryImpl(
                     this.userName =
                         username.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                     this.email = email.lowercase()
-                    this.password = password
                     this.secretKey = secretKey
                     this.createdBy = "system"
                     this.lastUpdatedBy = "system"

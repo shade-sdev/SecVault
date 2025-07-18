@@ -3,8 +3,8 @@ package core.security
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import core.AppState
 import core.models.Result
+import core.windows.WindowsAuth
 import kotlinx.coroutines.delay
-import org.mindrot.jbcrypt.BCrypt
 import org.slf4j.Logger
 import repository.password.PasswordRepository
 import repository.user.User
@@ -28,7 +28,7 @@ class AuthenticationManager(
     suspend fun login(username: String, password: String): Result<User> {
         delay(200)
         return userRepository.findByUsername(username).let { result ->
-            if (result is Result.Success && BCrypt.checkpw(password, result.data.password)) {
+            if (result is Result.Success && WindowsAuth.authenticate(username, password)) {
                 result.data.also {
                     SecurityContext.setAuthenticatedUser(it)
                     TokenManager.saveToken(jwtService.generateToken(it))
@@ -68,10 +68,13 @@ class AuthenticationManager(
 
     suspend fun register(username: String, email: String, password: String): Result<UserSummary> {
         delay(200)
+        if (!WindowsAuth.authenticate(username, email, password)) {
+            return Result.Error("Invalid username or password")
+        }
+
         return when (val result = userRepository.createUser(
             username,
             email,
-            BCrypt.hashpw(password, BCrypt.gensalt()),
             twoFactorAuthenticationService.generateSecretKey().base32Encoded
         )) {
             is Result.Success -> {
@@ -97,7 +100,6 @@ class AuthenticationManager(
         }
 
         val updateUserResult = userRepository.updateUser(user) {
-            password = BCrypt.hashpw(newPassword, BCrypt.gensalt())
         }
 
         return when (updateUserResult) {
